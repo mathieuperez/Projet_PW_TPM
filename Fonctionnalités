@@ -1,0 +1,57 @@
+Rôles
+	Agence, Particulier, (Visiteur ?), (Admin ?)
+
+Inscription
+email
+mdp
+agence ou particulier :
+si agence: nom, adresse ?
+si particulier : ?
+
+Connexion
+	Email et mdp nécessaires, rien de plus ?
+	API Rest donc utilisation de token Oauth ?
+
+Page d’accueil (pour un visiteur)
+	Liste des offres ajoutées le plus récemment 
+	Possibilité de rechercher une offre :
+avec une zone géographique (API google maps) : on sélectionne une zone circulaire sur une carte et l’application nous renvoie une liste d’offres situées dans ce cercle OU une destination (pays ou ville)
+avec une durée de séjour et une date de début (mais des agences peuvent avoir des dates pré-fixées dans leurs offres)
+autre chose ?
+
+Page d’accueil (pour les agences et particuliers inscrits)
+	Liste des offres déjà renseignées, de la plus récente à la moins récente
+	Possibilité de gérer ses offres publiées (modifier et supprimer) et d’ajouter de nouvelles offres
+	Possibilité de modifier ses informations personnelles
+	Possibilité de rechercher une offre dans sa liste d’offres (par destination, par date ?)
+
+Sélection d’une offre
+L’utilisateur peut effectuer une réservation après avoir fait une recherche (bouton Réserver ?) :
+si offre d’une agence : rien de plus à demander
+si offre de location d’un particulier : choix du mode de transport et  afficher en fonction des vols ou des covoiturages d’autres sites (puisque le particulier ne gère pas la manière d’un locataire de se déplacer jusqu’au bien en location)  (utilisation d’api ?)
+On enregistre juste sa réservation dans la base
+
+Page d’ajout d’une offre
+	Agence : Détails de l’offre donc nom, destination, dates, (zone géographique ?), description…
+	Particulier : Détails de la location donc nom, lieu, dates, (zone géographique ?), description…
+
+Liste des réservations d’un utilisateur
+	Un utilisateur peut consulter ses réservations (par défaut de la plus récente à la moins récente) pour les supprimer (?)
+
+Liste des offres d’une agence ou d’un particulier
+	Une agence ou un particulier peut accéder à ses offres proposées pour les modifier ou les supprimer (?)
+
+Modification des informations personnelles
+	N’importe qui peut modifier ses propres informations (nom d’agence, nom et prénom d’un particulier, email d’un utilisateur, etc.) (?)
+
+
+
+
+APIs
+
+https://dev.blablacar.com/
+https://www.digital.sncf.com/startup/api
+
+
+TECHNOS
+
