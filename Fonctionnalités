@@ -19,7 +19,6 @@ entre 2 dates(au plus tot, au plus tard)(toutes les offres d’une période donn
 Page d’accueil (pour un prestataire)
 	Liste des offres déjà renseignées, de la plus récente à la moins récente
 	Possibilité de gérer ses offres publiées (modifier et supprimer) et d’ajouter de nouvelles offres
-	Possibilité de modifier ses informations personnelles
 
 Sélection d’une offre
 L’utilisateur peut effectuer une réservation après avoir fait une recherche (bouton Réserver) :
@@ -31,8 +30,10 @@ si il réserve, on lui demande son email et un mdp pour créer son compte de CLI
 On enregistre juste sa réservation dans la base (inscription lors de la réservation)
 
 Page d’ajout d’une offre
-	location : pays, adresse de location, tarif , durée, date de début et options du séjour
-	trajet: tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages 
+	liste deroulante:
+	-location : pays, adresse de location, tarif , durée, date de début et options du séjour
+	-trajet: tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages 
+	-location+trajet: les champs des 2
 
 Liste des réservations d’un utilisateur(BONUS)
 	Un CLIENT peut consulter ses réservations (par défaut de la plus récente à la plus ancienne).
