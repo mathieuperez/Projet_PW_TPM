@@ -59,3 +59,8 @@ Nodejs
 MongoDB
 Mocha(test)
 protractor(test E2E angular)
+
+Balsamiq mockup
+import JSON (pour importer une maquette deja existante et la modifier)
+export JSON. puis coller dans un editeur de texte ce que "export" a mit dans le presse papier. Enregistrer le fichier en ".JSON"!!!!
+export png
