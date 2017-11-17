@@ -21,7 +21,7 @@
 
 | ID | User Story | Difficulté | Priorité | Fait |
 | --- | --- | --- | --- | --- |
-| 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(email, password) | 2 | 1 | :x:
+| 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(email, password, role) | 2 | 1 | :x:
 | 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(email, pw) | 3 | 1 | :x: 
 | 3 | En tant que ***Utilisateur***, je souhaite pouvoir rechercher des offres: Trajet/Location/Voyage (à partir d'une zone géographique, d'une date deb/fin) | 8 | 2 | :x: 
 | 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) | 3 | 2 | :x: 
