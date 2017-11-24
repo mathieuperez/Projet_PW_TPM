@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 
@@ -16,6 +17,7 @@ import { UsersService } from './services/users/users.service';
   imports: [
     BrowserModule,
     HttpModule,
+    NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: '/', pathMatch: 'full' },
       { path: '**', redirectTo: '/', pathMatch: 'full' }

@@ -9,13 +9,13 @@ import { UsersService } from './../../services/users/users.service';
 })
 export class AppComponent {
   title = 'app';
-  users: Array<any>;
+  // users: Array<any>;
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: UsersService) {
 
       // Access the Data Service's getUsers() method we defined
-      this._dataService.getUsers()
-          .subscribe(res => this.users = res);
+      /*this._dataService.getUsers()
+          .subscribe(res => this.users = res);*/
     }
 }

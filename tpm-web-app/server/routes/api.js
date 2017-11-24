@@ -3,6 +3,8 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
+//const users = require("./users");
+
 // Connect
 const connection = (closure) => {
     return MongoClient.connect('mongodb://localhost:27017/tpm-webdb', (err, db) => {
@@ -26,7 +28,7 @@ let response = {
     message: null
 };
 
-// Get users
+/*// Get users
 router.get('/users', (req, res) => {
     connection((db) => {
         db.collection('users')
@@ -40,6 +42,6 @@ router.get('/users', (req, res) => {
                 sendError(err, res);
             });
     });
-});
+});*/
 
 module.exports = router;

@@ -10,8 +10,8 @@ export class UsersService {
 
   constructor(private _http: Http) { }
 
-  getUsers() {
+  /*getUsers() {
     return this._http.get('/api/users')
       .map(result => this.result = result.json().data);
-  }
+  }*/
 }
