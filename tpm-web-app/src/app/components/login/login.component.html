@@ -1,0 +1,69 @@
+<div class="container card-page">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="jumbotron">
+                <h2 class="page-title text-center">Login</h2>
+                <div *ngIf="loginError"
+                     class="alert alert-danger" role="alert">
+                    Vos identifiants ne correspondent pas, veuillez réessayer.
+                </div>
+                <form [formGroup]="loginForm"
+                      novalidate>
+                    <div class="form-group has-feedback"
+                         [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || loginSubmitted) }">
+                        <div class="input-group">
+                            <span class="input-group-addon">Email</span>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="Entrer votre adresse email"
+                                   aria-describedby="basic-addon1"
+                                   formControlName="login"
+                                   [email]="true"/>
+                        </div>
+                        <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"
+                              [ngClass]="{ 'show': login.invalid && (login.dirty || login.touched || loginSubmitted) }"></span>
+                        <div class="col-12 text-danger"
+                             *ngIf="login.invalid && (login.dirty || login.touched || loginSubmitted)">
+                            <span class="validation-message" *ngIf="login.errors.required">Votre adresse email est requis.</span>
+                            <span class="validation-message" *ngIf="login.errors.email">L'adresse email entrée est invalide</span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback"
+                         [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched || loginSubmitted) }">
+                        <div class="input-group">
+                            <span class="input-group-addon">Mot de passe</span>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Veuillez entrer votre mot de passe"
+                                   aria-describedby="basic-addon1"
+                                   formControlName="password"/>
+                        </div>
+                        <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"
+                              [ngClass]="{ 'show': password.invalid && (password.dirty || password.touched || loginSubmitted) }"></span>
+                        <div class="col-12 text-danger"
+                             *ngIf="password.invalid && (password.dirty || password.touched || loginSubmitted)">
+                            <span class="validation-message" *ngIf="password.errors.required">Votre mot de passe est requis.</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-success pointer-cursor ld-ext-left pull-right"
+                                type="submit"
+                                name="login"
+                                [ngClass]="{ 'running': loginLoading }"
+                                (click)="submitLoginForm()">
+                            <i class="ld ld-spin ld-ring"></i>
+                            Se connecter
+                        </button>
+                        <a class="btn btn-primary pointer-cursor" name="signup" routerLink="/signup">Première connexion ?</a>
+                    </div>
+                </form>
+                <br>
+                <div class="row pull-right">
+                    <a type="text">Mot de passe oublié ?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
+import {LoginComponent} from './components/login/login.component';
+//import {SignupComponent} from './components/signup/signup.component';
+import {AppRoutingModule} from './app-routing.module';
 
 // Import the Http Module and our Data Service
 import { HttpModule } from '@angular/http';
@@ -12,16 +13,14 @@ import { UsersService } from './services/users/users.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    //SignupComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    HttpModule,
-    NgbModule.forRoot(),
-    RouterModule.forRoot([
-      { path: '', redirectTo: '/', pathMatch: 'full' },
-      { path: '**', redirectTo: '/', pathMatch: 'full' }
-    ]),
+    AppRoutingModule,
+    HttpModule
   ],
   providers: [UsersService],
   bootstrap: [AppComponent]
