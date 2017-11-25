@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
 
-//const users = require("./users");
-
-// Connect
-const connection = (closure) => {
-    return MongoClient.connect('mongodb://localhost:27017/tpm-webdb', (err, db) => {
-        if (err) return console.log(err);
-
-        closure(db);
-    });
-};
+const users = require('./users');
 
 // Error handling
 const sendError = (err, res) => {
@@ -28,20 +17,11 @@ let response = {
     message: null
 };
 
-/*// Get users
-router.get('/users', (req, res) => {
-    connection((db) => {
-        db.collection('users')
-            .find()
-            .toArray()
-            .then((users) => {
-                response.data = users;
-                res.json(response);
-            })
-            .catch((err) => {
-                sendError(err, res);
-            });
-    });
-});*/
+router.use('/users', users);
+
+// Define the home page route
+router.get('/', function(req, res) {
+    res.json('home page');
+});
 
 module.exports = router;

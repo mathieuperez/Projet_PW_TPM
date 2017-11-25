@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import { UsersService } from './../../services/users/users.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,7 +10,7 @@ export class AppComponent {
   // users: Array<any>;
 
     // Create an instance of the DataService through dependency injection
-    constructor(private _dataService: UsersService) {
+    constructor() {
 
       // Access the Data Service's getUsers() method we defined
       /*this._dataService.getUsers()
