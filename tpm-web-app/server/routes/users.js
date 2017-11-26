@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+
 
 mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
 
@@ -23,12 +25,19 @@ router.post('/', (req, res) => {
     user.email = req.body.email;
     user.password = req.body.password;
     user.role = req.body.role;
+
+
+    user.password = crypto.createHmac('sha256', user.password)
+                   .update('I love cupcakes')
+                   .digest('hex');
+
     user.save(function(err){
       if(err){
         res.send(err);
       }
-      res.json({message : 'Success'});
-    });
+    res.json({message : 'Success'});
+    })
+
 });
 
 router.get('/', (req, res) => {
