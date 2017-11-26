@@ -7,7 +7,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'app';
   /**
      * FormGroup for the search form.

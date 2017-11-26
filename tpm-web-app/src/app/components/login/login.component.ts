@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
-import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {AppConstants} from "../../app-constants";
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {AppConstants} from '../../app-constants';
 
 /**
  * Define logic of the login page of the application.
@@ -61,17 +61,17 @@ export class LoginComponent implements OnInit {
     public submitLoginForm(): void {
         this.loginSubmitted = true;
 
-        if (this.loginForm.valid && !this.loginLoading){
+        if (this.loginForm.valid && !this.loginLoading) {
             this.loginLoading = true;
-            this.httpClient.post("/api/users/token",
-                this.loginForm.value,{
+            this.httpClient.post('/api/users/token',
+                this.loginForm.value, {
                     responseType: 'json'
                 }
             ).subscribe((response: any) => {
                 this.loginLoading = false;
                 localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, response['token']);
                 localStorage.setItem(AppConstants.LOGIN_USER, this.loginForm.value.login);
-                this.router.navigate(['/dashboard']);
+                this.router.navigate(['/app']);
             }, () => {
                 this.loginLoading = false;
                 this.loginError = true;

@@ -11,7 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 // Import the Http Module and our Data Service
 import { HttpModule } from '@angular/http';
 import { SignupComponent } from './components/signup/signup.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -23,7 +23,10 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent]
 })

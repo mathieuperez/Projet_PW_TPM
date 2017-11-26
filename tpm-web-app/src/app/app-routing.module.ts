@@ -11,9 +11,9 @@ import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
     imports: [
         RouterModule.forRoot([
             { path: 'login', component: LoginComponent/*, canActivate: [UnAuthGuard]*/},
-            { path: 'app', component: AppComponent/*canActivate: [AuthGuard]*/ },
             { path: 'signup', component: SignupComponent/*canActivate: [UnAuthGuard]*/ },
-            { path: '**', redirectTo: '/app', pathMatch: 'full' }
+            { path: '**', redirectTo: '/', pathMatch: 'full' },
+            { path: '', redirectTo: '/', pathMatch: 'full' },
         ]),
     ],
     exports: [RouterModule]
