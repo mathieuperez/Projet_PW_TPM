@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
+var app = express();
+
+app.set('superSecret', "12345"); // secret variable
 
 mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
 
@@ -49,7 +53,37 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/token', (req, res) => {
+router.post('/token', function (req, res) => {
+
+    var user = new User();
+    res.setHeader('Content-Type', 'application/json');
+    user.email = req.body.login;
+    user.password = req.body.password;
+
+    if (user.email == null || user.password == null) {
+        res.status(422).send("Missing Arguments.");
+    }
+    else {
+
+    user.password = crypto.createHmac('sha256', user.password)
+                   .update('I love cupcakes')
+                   .digest('hex');
+    User.findOne( {'email': user.email, 'password': user.password},(error, users ) => {
+            if (users.length != 0) {
+                var token = jwt.sign(users, app.get('superSecret'));
+                res.json({
+                    success: true,
+                    message: 'Authentication succeded!',
+                    token: token,
+                    user: users
+                });
+            }
+            else {
+                res.status(400).json({success: false, message: 'Authentication failed. Wrong login/password.'});
+            }
+    });
+
+    }
 
 });
 
