@@ -14,20 +14,20 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group has-feedback"
-                [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || loginSubmitted) }">
+                [ngClass]="{ 'has-error': email.invalid && (email.dirty || email.touched || signupSubmitted) }">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
                         <input  type="email"
                                 name="email"
                                 class="form-control"
                                 placeholder="Entrez votre adresse email"
-                                formControlName="login"
+                                formControlName="email"
                                 [email]="true">
                     </div>
                     <div class="col-12 text-danger"
-                        *ngIf="login.invalid && (login.dirty || login.touched || loginSubmitted)">
-                        <span class="validation-message" *ngIf="login.errors.required">Votre adresse email est requise.</span>
-                        <span class="validation-message" *ngIf="login.errors.email">Votre adresse email est invalide.</span>
+                        *ngIf="email.invalid && (email.dirty || email.touched || signupSubmitted)">
+                        <span class="validation-message" *ngIf="email.errors.required">Votre adresse email est requise.</span>
+                        <span class="validation-message" *ngIf="email.errors.email">Votre adresse email est invalide.</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group has-feedback"
-                    [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched || loginSubmitted) }">
+                    [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched || signupSubmitted) }">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
                         <input  type="password"
@@ -48,7 +48,7 @@
                                 formControlName="password">
                     </div>
                     <div class="col-12 text-danger"
-                        *ngIf="password.invalid && (password.dirty || password.touched || loginSubmitted)">
+                        *ngIf="password.invalid && (password.dirty || password.touched || signupSubmitted)">
                         <span class="validation-message" *ngIf="password.errors.required">Votre mot de passe est requis.</span>
                     </div>
                 </div>
@@ -62,15 +62,18 @@
                 <div class="form-group has-feedback">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                        <input  type="text"
+                        <select class="custom-select"
                                 name="role"
                                 class="form-control"
-                                placeholder="Entrez votre rôle"
                                 formControlName="role">
+                            <option [ngValue]="null">Entrez votre rôle</option>
+                            <option value="Utilisateur">Utilisateur</option>
+                            <option value="Agence">Agence</option>
+                            <option value="Particulier">Particulier</option>
+                        </select>
                     </div>
-                    <span class="help-block">Utilisateur, Agence, Particulier</span>
                     <div class="col-12 text-danger"
-                        *ngIf="role.invalid && (role.dirty || role.touched || loginSubmitted)">
+                        *ngIf="role.invalid && (role.dirty || role.touched || signupSubmitted)">
                         <span class="validation-message" *ngIf="role.errors.required">Votre rôle est requis.</span>
                     </div>
                 </div>
@@ -90,4 +93,23 @@
             </div>
         </div>
     </form>
+
+    <div class="modal fade" #signupModal tabindex="-1" role="dialog" aria-labelledby="signupModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Inscription</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                {{ modalBody }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>

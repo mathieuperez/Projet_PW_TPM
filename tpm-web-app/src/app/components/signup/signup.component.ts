@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+
+declare const $: any;
 
 @Component({
   selector: 'app-signup',
@@ -17,12 +19,18 @@ export class SignupComponent implements OnInit {
     /**
      * True if the form has been submitted at least one.
      */
-    private loginSubmitted: boolean;
+    private signupSubmitted: boolean;
 
     /**
      * If true error for run again the login.
      */
-    private loginError: boolean;
+    private signupError: boolean;
+    private signupLoading: boolean;
+
+    private modalBody: string;
+
+    @ViewChild('signupModal')
+    private signupModal: ElementRef;
 
     /**
      * LoginComponent constructor.
@@ -36,33 +44,41 @@ export class SignupComponent implements OnInit {
      * Initialize FormGroup for login form.
      */
     public ngOnInit(): void {
-        this.loginSubmitted = false;
-        this.loginError = false;
+        this.signupSubmitted = false;
+        this.signupLoading = false;
+        this.signupError = false;
         this.signupForm = new FormGroup({
-            login: new FormControl('', [ Validators.required ]),
+            email: new FormControl('', [ Validators.required ]),
             password: new FormControl('', [ Validators.required ]),
-            role: new FormControl('', [ Validators.required ])
+            role: new FormControl(null, [ Validators.required ])
+        });
+
+        $(this.signupModal.nativeElement).on('hidden.bs.modal', () => {
+            this.router.navigate(['/']);
         });
     }
 
     public submitSignupForm(): void {
-        this.loginSubmitted = true;
+        this.signupSubmitted = true;
 
-        if (this.signupForm.valid) {
-            this.httpClient.post('/api/users', {email: this.signupForm.value.login,
-                password: this.signupForm.value.password,
-                role: this.signupForm.value.role })
-            .subscribe( (response) => {
-                if (response['message'] && response['message'] === 'Success') {
-                    alert("Inscription réalisée avec succès.");
+        if (this.signupForm.valid && !this.signupLoading) {
+            this.signupLoading = true;
+            $(this.signupModal.nativeElement).modal('show');
+            this.httpClient.post('/api/users',
+                this.signupForm.value, {
+                    responseType: 'json'
+                }
+            ).subscribe( (response: any) => {
+                this.signupLoading = false;
+                if (response['success'] === true) {
+                    this.modalBody = "Vous êtes bien inscrit à l'application.";
+                    this.signupForm.reset();
                 }
                 else {
-                    alert("Une erreur est survenue lors de votre inscription.");
+                    this.modalBody = "Une erreur est survenue lors de votre inscription à l'application.";
+                    this.signupForm.reset();
                 }
             });
-        }
-        else {
-
         }
     }
 
@@ -70,7 +86,7 @@ export class SignupComponent implements OnInit {
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get login (): AbstractControl { return this.signupForm.get('login'); }
+    public get email (): AbstractControl { return this.signupForm.get('email'); }
 
     /**
      * Getter for the password FormControl.

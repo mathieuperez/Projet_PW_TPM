@@ -37,9 +37,11 @@ router.post('/', (req, res) => {
 
     user.save(function(err){
       if(err){
-        res.send(err);
+        res.status(400).json({success: false, message: 'Register failed.'});
       }
-    res.json({message : 'Success'});
+    res.json({
+        success: true,
+        message : 'Register completed!'});
     })
 
 });
