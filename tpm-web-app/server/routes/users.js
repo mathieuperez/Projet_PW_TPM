@@ -44,33 +44,22 @@ router.post('/', (req, res) => {
 
 });
 
-router.get('/', (req, res) => {
-    User.find( (error, users ) => {
-        if (error){
-            res.send(error);
-        }
-        res.json(users);
-    });
-});
-
-router.post('/token', function (req, res) => {
-
+router.post('/token', (req, res) => {
     var user = new User();
     res.setHeader('Content-Type', 'application/json');
     user.email = req.body.login;
     user.password = req.body.password;
 
     if (user.email == null || user.password == null) {
-        res.status(422).send("Missing Arguments.");
+        res.status(422).json({success: false, message: 'Missing arguments.'});
     }
     else {
-
-    user.password = crypto.createHmac('sha256', user.password)
-                   .update('I love cupcakes')
-                   .digest('hex');
-    User.findOne( {'email': user.email, 'password': user.password},(error, users ) => {
-            if (users.length != 0) {
-                var token = jwt.sign(users, app.get('superSecret'));
+        user.password = crypto.createHmac('sha256', user.password)
+                    .update('I love cupcakes')
+                    .digest('hex');
+        User.findOne( {'email': user.email, 'password': user.password } , (error, users ) => {
+            if (users) {
+                var token = jwt.sign(users.toJSON(), app.get('superSecret'));
                 res.json({
                     success: true,
                     message: 'Authentication succeded!',
@@ -81,10 +70,8 @@ router.post('/token', function (req, res) => {
             else {
                 res.status(400).json({success: false, message: 'Authentication failed. Wrong login/password.'});
             }
-    });
-
+        });
     }
-
 });
 
 module.exports = router;

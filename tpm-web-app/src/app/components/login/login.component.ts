@@ -70,8 +70,9 @@ export class LoginComponent implements OnInit {
             ).subscribe((response: any) => {
                 this.loginLoading = false;
                 localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, response['token']);
-                localStorage.setItem(AppConstants.LOGIN_USER, this.loginForm.value.login);
-                this.router.navigate(['/app']);
+                localStorage.setItem(AppConstants.LOGIN_USER, response['user'].email);
+                localStorage.setItem(AppConstants.ROLE_USER, response['user'].role);
+                this.router.navigate(['/']);
             }, () => {
                 this.loginLoading = false;
                 this.loginError = true;
