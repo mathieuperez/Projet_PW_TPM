@@ -17,9 +17,21 @@ db.once('open', function (){
 });
 
 var usersSchema = mongoose.Schema({
-    email: String,
-    password: String,
-    role: String
+    email: {
+        type: String,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        required: true
+  },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        required: true
+    }
 });
 
 var User = mongoose.model('User', usersSchema);
