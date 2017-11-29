@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {Router} from '@angular/router';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {AppConstants} from '../../app-constants';
+
+declare const $: any;
 
 /**
  * Define logic of the login page of the application.
@@ -33,6 +35,11 @@ export class LoginComponent implements OnInit {
      * If true error for run again the login.
      */
     private loginError: boolean;
+
+    private modalBody: string;
+
+    @ViewChild('loginModal')
+    private loginModal: ElementRef;
 
     /**
      * LoginComponent constructor.
@@ -74,8 +81,10 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem(AppConstants.ROLE_USER, response['user'].role);
                 this.router.navigate(['/']);
             }, () => {
+                $(this.loginModal.nativeElement).modal('show');
                 this.loginLoading = false;
                 this.loginError = true;
+                this.modalBody = 'Une erreur est survenue lors de votre connexion.';
             });
         }
     }

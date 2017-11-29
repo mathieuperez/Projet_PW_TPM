@@ -1,6 +1,10 @@
+import { Router } from '@angular/router';
+import { AppConstants } from './../../app-constants';
+import { AuthGuard } from './../../guards/auth-guard.guard';
 import { Component, OnInit } from '@angular/core';
 
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Route } from '@angular/router/src/config';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +31,7 @@ export class AppComponent implements OnInit {
   // users: Array<any>;
 
     // Create an instance of the DataService through dependency injection
-    constructor() {
+    constructor(private router: Router) {
 
       // Access the Data Service's getUsers() method we defined
       /*this._dataService.getUsers()
@@ -43,8 +47,27 @@ export class AppComponent implements OnInit {
         this.searchForm = new FormGroup({
 
         });
+        localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
+        localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');
+        localStorage.setItem(AppConstants.ROLE_USER, 'role_user');
     }
 
+    public isLoggedIn(): boolean {
+        if (localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME) !== 'access_cookie') {
+            return true;
+        }
+        return false;
+    }
 
+    public getLogin(): string {
+        return (localStorage.getItem(AppConstants.LOGIN_USER));
+    }
+
+    public logout(): void {
+        localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
+        localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');
+        localStorage.setItem(AppConstants.ROLE_USER, 'role_user');
+        this.router.navigate(['/']);
+    }
 
 }
