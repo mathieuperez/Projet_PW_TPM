@@ -12,13 +12,19 @@ import {AppRoutingModule} from './app-routing.module';
 import { HttpModule } from '@angular/http';
 import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RentingComponent } from './components/renting/renting.component';
+import { RideComponent } from './components/ride/ride.component';
+import { TripComponent } from './components/trip/trip.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    RentingComponent,
+    RideComponent,
+    TripComponent
   ],
   imports: [
     BrowserModule,

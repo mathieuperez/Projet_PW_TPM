@@ -5,15 +5,9 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/">Accueil</a></li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Nos voyages</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Nos trajets</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Nos locations</a>
-      </li>
+      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/trip" >Nos voyages</a></li>
+      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/ride" >Nos trajets</a></li>
+      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/renting" >Nos locations</a></li>
     </ul>
     <ul class="navbar-nav">
         <div *ngIf="!isLoggedIn()">
