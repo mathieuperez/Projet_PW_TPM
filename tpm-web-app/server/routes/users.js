@@ -74,6 +74,7 @@ router.post('/token', (req, res) => {
         User.findOne( {'email': user.email, 'password': user.password } , (error, users ) => {
             if (users) {
                 var token = jwt.sign(users.toJSON(), app.get('superSecret'));
+                //
                 res.json({
                     success: true,
                     message: 'Authentication succeded!',
