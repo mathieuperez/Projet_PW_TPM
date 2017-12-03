@@ -76,7 +76,8 @@ export class LoginComponent implements OnInit {
                 }
             ).subscribe((response: any) => {
                 this.loginLoading = false;
-                localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, response['token']);
+                console.log(response);
+                localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, response['user'].token);
                 localStorage.setItem(AppConstants.LOGIN_USER, response['user'].email);
                 localStorage.setItem(AppConstants.ROLE_USER, response['user'].role);
                 this.router.navigate(['/']);

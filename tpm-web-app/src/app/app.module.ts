@@ -12,9 +12,7 @@ import {AppRoutingModule} from './app-routing.module';
 import { HttpModule } from '@angular/http';
 import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RentingComponent } from './components/renting/renting.component';
-import { RideComponent } from './components/ride/ride.component';
-import { TripComponent } from './components/trip/trip.component';
+import { OffersComponent } from './components/offers/offers.component';
 
 
 @NgModule({
@@ -22,9 +20,7 @@ import { TripComponent } from './components/trip/trip.component';
     AppComponent,
     SignupComponent,
     LoginComponent,
-    RentingComponent,
-    RideComponent,
-    TripComponent
+    OffersComponent
   ],
   imports: [
     BrowserModule,
