@@ -9,7 +9,7 @@ var app = express();
 app.set('superSecret', "12345"); // secret variable
 
 var usersSchema = mongoose.Schema({
-    email: {
+    login:{
         type: String,
         unique: true,
         lowercase: true,
@@ -27,7 +27,8 @@ var usersSchema = mongoose.Schema({
     token: {
         type: String,
         required: false
-    }
+    },
+    offre: [String]
 });
 
 var User = mongoose.model('User', usersSchema);
