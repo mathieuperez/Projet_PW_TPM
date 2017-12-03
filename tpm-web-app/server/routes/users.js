@@ -17,7 +17,7 @@ db.once('open', function (){
 });
 
 var usersSchema = mongoose.Schema({
-    login:{
+    email:{
         type: String,
         unique: true,
         lowercase: true,
@@ -44,13 +44,13 @@ router.post('/', (req, res) => {
     user.password = req.body.password;
     user.role = req.body.role;
 
-    if (user.email == null || user.password == null || user.role == null) {
-        res.status(422).json({message:'Missing Arguments.'});
+    if (user.email == null || user.password == null) {
+        res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
         User.find().where('email').equals(user.email).exec(function(err, users){
             if (err) {
-                res.status(500).json({message:'There was a problem with the database while checking if the email already exists.'});
+                res.status(500).json({success: false, message:'There was a problem with the database while checking if the email already exists.'});
             }
             else {
                 if(users.length==0){
@@ -59,7 +59,7 @@ router.post('/', (req, res) => {
                                    .digest('hex');
                     user.save(function(err){
                       if(err){
-                        res.status(400).json({message: 'Register failed.'});
+                        res.status(401).json({success: false, message: 'Register failed.'});
                       }
                       else{
                         res.status(200).json({success: true, message:'Register successful'});
@@ -67,7 +67,7 @@ router.post('/', (req, res) => {
                     })  
                 }
                 else{
-                    res.status(409).json({message: 'There is already a user with this login.'});
+                    res.status(409).json({success: false, message: 'There is already a user with this email.'});
                 }
             }
         })
