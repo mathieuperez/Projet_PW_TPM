@@ -1,0 +1,75 @@
+## Technologies
+**Front-end** :
+<ul>
+<li>Angular</li> 
+    <li>Bootstrap</li>
+</ul>
+
+**Back-end** :
+<ul>
+<li>Node.js</li> 
+<li>Express</li>
+<li>Base de données : MongoDB</li> 
+</ul>
+
+**Test** :
+<ul>
+<li>Protractor</li> 
+</ul>
+
+## Sprint 1
+
+### Mini Backlog
+
+| ID | User Story | Difficulté | Priorité | Fait |
+| --- | --- | --- | --- | --- |
+| 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(email, password) | 2 | 1 | :x:
+| 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(email, pw) | 3 | 1 | :x: 
+| 3 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) | 3 | 2 | :x: 
+| 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de trajet(tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages) | 3 | 2 | :x: 
+| 5 | En tant que ***Particulier***, je souhaite pouvoir lister mes offres| 1 | 3 | :x: 
+
+### Tâches
+
+| ID_Tache | Description | Affectation | Durée Estimée ( heure homme ) | US Associés | Etat |
+| --- | --- | --- | --- | --- | --- |
+| T1_P | Créer l'interface Front-end de connexion<br><ul><li>Création d'une interface permettant aux utilisateur de remplir les champs e-mail et mot de passe afin de se connecter</li></ul> | Mathieu | 2 | 1 | :x:
+| T2_P | Créer l'interface Front-end de l'accueil<br><ul><li>un bouton de connexion</li><li>oblet vers les pages de recherches (locations, trajets, voyages)</li></ul> | Kevin | 2 | 1 | :x:
+| T3_P | Créer l'interface Front-end de création d'un compte avec les champs : <br><ul><li>e-mail</li><li>Mot de passe</li><li>rôle(agence/Particulier)</li></ul> | Kevin | 3 | 1 | :x:
+| T4_P | Créer l'interface Front-end de la gestion d'un trajet/location pour un particulier connecté<br><ul><li>Création d'une interface permettant aux particuliers de lister tout leurs offres de trajets/location </li></ul> <br><ul><li> Boutton "ajouter trajet"/ "ajouter location" qui permet a un particulier connecté d'ajouter un trajet/location </li></ul> | Kevin | 2 | 1 | :x: 
+| T5_P | Créer l'interface Front-end de l'ajout d'un trajet pour un particulier connecté<br><ul><li>tarif par personne</li><li> date et heure du départ</li><li> durée estimée du trajet</li><li>prise de bagages</li></ul> | Kevin | 2 | 1 | :x: 
+| T6_P | Créer l'interface Front-end de l'ajout d'une location pour un particulier connecté<br><ul><li>pays</li><li> adresse de location</li><li> tarif</li><li> durée du séjour</li><li>date de début</li><li>options du séjour</li></ul> | Kevin | 2 | 1 | :x: 
+| T7_B | Mise en service et test du serveur MongoDB<br><ul><li>Ajouter monk et s'en servir comme lien avec notre base de donnée MongoDB</li><li>Ouvrir un terminal et lancer la commande "mongod --dbpath bepp-project/api/node_modules/data/"</li></ul>| Tous | 3 | 1 et 2 | :x:
+| T9_M | Mettre en place le coté serveur : l'Express et le NodeJS | Kevin | 4 | ∅ | :x:
+| T10_PM | Définir les liaisons entre les placeholders et les services | Kevin | 4 | ∅ | :x:
+| T11_M | Service REST POST  : Créer un utilisateur| Mathieu | 2 | 1 | :x:
+| T12_M | Service REST POST  : Authentification | Zakia | 4 | 2 | :x:
+| T13_M | Service REST POST  : Créer un trajet| Zakia | 2 | 4 | :x:
+| T14_M | Service REST POST  : Créer une location| Zakia | 2 | 3 | :x:
+| T15_M | Service REST GET  : Récupérer les trajets et les locations| Zakia | 4 | 5 | :x:
+| T16_M | Initialiser l'environnement de développement du framework Angular | Kevin | 1/2 | ∅ | :x:
+| T17_DOC | La documentation des services "SWAGGER" | Mathieu | 1/2 | ∅ | :x:
+| T18_TEST | Redaction des tests : E2E(Protractor)| Mathieu | 1 | 1 et 2 | :x:
+| T19_TEST | Effectuer les tests : E2E(Protractor)| Mathieu | 4 | 1 et 2 | :x:
+| T20_PM | Faire le lien entre l'interface de la tâche T1_P et les services de l'api | Tous | 1 | 2 | :x:
+| T21_PM | Faire le lien entre l'interface de la tâche T2_P et les services de l'api | Tous | 1 | 1 | :x:
+| T22_PM | Faire le lien entre l'interface de la tâche T3_P et les services de l'api | Tous | 1 | 2 | :x:
+| T23_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 1 | :x:
+| T24_PM | Faire le lien entre l'interface de la tâche T5_P et les services de l'api | Tous | 1 | 2 | :x:
+| T25_PM | Faire le lien entre l'interface de la tâche T6_P et les services de l'api | Tous | 1 | 1 | :x:
+
+
+### Les tests E2E
+
+sur le [lien suivant](sprint1/tests.md).
+
+### Les dépendances entre les tâches.
+
+sur le [lien suivant](sprint1/dependance.md).
+
+### L'organisation des tâches : Timeline et Kanban
+
+sur le [lien suivant](sprint1/organisation.md).
+
+
+https://www.telerik.com/kendo-angular-ui/components/popup/

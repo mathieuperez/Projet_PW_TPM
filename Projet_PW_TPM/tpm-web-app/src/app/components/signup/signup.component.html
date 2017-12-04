@@ -1,0 +1,115 @@
+<div class="container">
+    <form class="form-horizontal" role="form" [formGroup]="signupForm"
+    novalidate>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Nouvel utilisateur</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="login">login</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback"
+                [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || signupSubmitted) }">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input  type="String"
+                                name="login"
+                                class="form-control"
+                                placeholder="Entrez votre loginl"
+                                formControlName="login"
+                                >
+                    </div>
+                    <div class="col-12 text-danger"
+                        *ngIf="login.invalid && (login.dirty || login.touched || signupSubmitted)">
+                        <span class="validation-message" *ngIf="login.errors.required">Votre login est requise.</span>
+                        <span class="validation-message" *ngIf="login.errors.login">Votre login est invalide.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="password">Mot de passe</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback"
+                    [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched || signupSubmitted) }">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input  type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Entrez votre mot de passe"
+                                formControlName="password">
+                    </div>
+                    <div class="col-12 text-danger"
+                        *ngIf="password.invalid && (password.dirty || password.touched || signupSubmitted)">
+                        <span class="validation-message" *ngIf="password.errors.required">Votre mot de passe est requis.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="password">Rôle</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <select class="custom-select"
+                                name="role"
+                                class="form-control"
+                                formControlName="role">
+                            <option [ngValue]="null">Entrez votre rôle</option>
+                            <option value="Utilisateur">Utilisateur</option>
+                            <option value="Agence">Agence</option>
+                            <option value="Particulier">Particulier</option>
+                        </select>
+                    </div>
+                    <div class="col-12 text-danger"
+                        *ngIf="role.invalid && (role.dirty || role.touched || signupSubmitted)">
+                        <span class="validation-message" *ngIf="role.errors.required">Votre rôle est requis.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button class="btn btn-success"
+                        type="submit"
+                        name="login"
+                        [ngClass]="{ 'running': signupLoading }"
+                        (click)="submitSignupForm()">
+                        <i class="ld ld-spin ld-ring"></i>
+                            Valider
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="modal fade" #signupModal tabindex="-1" role="dialog" aria-labelledby="signupModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Inscription</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                {{ modalBody }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

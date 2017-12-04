@@ -1,0 +1,91 @@
+<div class="container">
+    <form class="form-horizontal" role="form" [formGroup]="loginForm"
+    novalidate>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Connexion</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="login">Login</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback"
+                [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || loginSubmitted) }">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div  class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input  name="login"
+                                type="string"
+                                class="form-control"
+                                placeholder="Entrez votre login"
+                                formControlName="login">
+                    </div>
+                    <div class="col-12 text-danger"
+                        *ngIf="login.invalid && (login.dirty || login.touched || loginSubmitted)">
+                        <span class="validation-message" *ngIf="login.errors.required">Votre login est requise.</span>
+                        <span class="validation-message" *ngIf="login.errors.login">Votre login est invalide.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 field-label-responsive">
+                <label for="password">Mot de passe</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback"
+                    [ngClass]="{ 'has-error': password.invalid && (password.dirty || password.touched || loginSubmitted) }">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input  type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Entrez votre mot de passe"
+                                formControlName="password">
+                    </div>
+                    <div class="col-12 text-danger"
+                    *ngIf="password.invalid && (password.dirty || password.touched || loginSubmitted)">
+                        <span class="validation-message" *ngIf="password.errors.required">Votre mot de passe est requis.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button class="btn btn-success pointer-cursor ld-ext-left pull-right"
+                type="submit"
+                name="login"
+                [ngClass]="{ 'running': loginLoading }"
+                (click)="submitLoginForm()">
+                    <i class="ld ld-spin ld-ring"></i>
+                    Se connecter
+                </button>
+                <a class="btn btn-primary pointer-cursor" name="signup" routerLink="/signup">Première connexion ?</a>
+            </div>
+        </div>
+    </form>
+
+    <div class="modal fade" #loginModal tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Connexion</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    {{ modalBody }}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+</div>
+

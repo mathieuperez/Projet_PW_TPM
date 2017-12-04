@@ -1,0 +1,48 @@
+<div class="container">
+  <h1>Add New Trajets</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <form (ngSubmit)="saveTrajet()" #trajetForm="ngForm">
+        <div class="form-group">
+          <label for="name">Nom du trajet</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="name">depart</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.depart" name="depart" required>
+        </div>
+         <div class="form-group">
+          <label for="name">destination</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.destination" name="destination" required>
+        </div>
+         <div class="form-group">
+          <label for="name">lieu_depart</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.lieu_depart" name="lieu_depart" required>
+        </div>
+         <div class="form-group">
+          <label for="name">lieu_arriver</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.description" name="description" required>
+        </div>
+         <div class="form-group">
+          <label for="name">tarif</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.tarif" name="tarif" required>
+        </div>
+         <div class="form-group">
+          <label for="name">places_restantes</label>
+          <input type="text" class="form-control" [(ngModel)]="trajet.places_restantes" name="places_restantes" required>
+        </div>
+        <div class="form-group">
+          <label for="name">date</label>
+          <input type="date" class="form-control" [(ngModel)]="trajet.date" name="date" required>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success" [disabled]="!trajetForm.form.valid">Save</button>
+        </div>
+        <div class="form-group">
+          <a [routerLink]="['/trajet']" class="btn btn-danger">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

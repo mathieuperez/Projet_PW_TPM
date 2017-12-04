@@ -1,0 +1,40 @@
+
+<div class="container">
+
+
+  <!-- Editable table -->
+<div class="card">
+    <h2 class="card-header text-center font-bold py-4 ">Mes Trajets</h2>
+    <div class="card-body">
+        <div id="table" class="table-editable">
+          <button type="button" class="btn btn-info btn-lg btn3d"   [routerLink]="['/trajet-create']"> Ajouter Trajet</button>
+
+          <table class="table table-bordered table-responsive table-striped text-center">
+            <thead>
+            <tr>
+              <th>Nom du Trajet</th>
+              <th>depart</th>
+              <th>destination</th>
+              <th>lieu_depart</th>
+              <th>lieu_arriver</th>
+              <th>tarif</th>
+              <th>places_restantes</th>
+              <th>date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let trajet of trajets">
+              <td>{{ trajet.name }}</td>
+              <td>{{ trajet.depart }}</td>
+              <td>{{ trajet.destination }}</td>
+              <td>{{ trajet.lieu_depart }}</td>
+              <td>{{ trajet.lieu_arriver }}</td>
+              <td>{{ trajet.tarif }}</td>
+              <td>{{ trajet.places_restantes }}</td>
+              <td>{{ trajet.date }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
