@@ -5,17 +5,9 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
 
-mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
-db.once('open', function (){
-    console.log("Connexion à la base OK");
-});
-
 var OffresSchema = mongoose.Schema({
 
-   location : [{ 
+   location : [{
     pays: { type: String,required: true},
     adresse: {type: String,required: true},
     tarif: {type: Number,required: true},
@@ -23,8 +15,8 @@ var OffresSchema = mongoose.Schema({
     date_debut: {type: Date,required: true},
     option: { type: String}
     }],
-   
-   trajet : [{ 
+
+   trajet : [{
     depart: { type: String,required: true},
     destination: {type: String,required: true},
     lieu_depart: {type: String,required: true},

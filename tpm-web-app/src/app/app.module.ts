@@ -13,6 +13,7 @@ import { HttpModule } from '@angular/http';
 import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OffersComponent } from './components/offers/offers.component';
+import { MyOffersComponent } from './components/my-offers/my-offers.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { OffersComponent } from './components/offers/offers.component';
     AppComponent,
     SignupComponent,
     LoginComponent,
-    OffersComponent
+    OffersComponent,
+    MyOffersComponent
   ],
   imports: [
     BrowserModule,

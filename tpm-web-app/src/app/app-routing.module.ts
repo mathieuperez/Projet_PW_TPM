@@ -1,3 +1,4 @@
+import { MyOffersComponent } from './components/my-offers/my-offers.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -18,6 +19,7 @@ import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
                 { path: 'renting', component: OffersComponent },
                 { path: 'ride', component: OffersComponent }
             ]/*canActivate: [UnAuthGuard]*/ },
+            { path: 'my-offers', component: MyOffersComponent/*canActivate: [UnAuthGuard]*/ },
             { path: '**', redirectTo: '/', pathMatch: 'full' },
             { path: '', redirectTo: '/', pathMatch: 'full' },
         ]),
