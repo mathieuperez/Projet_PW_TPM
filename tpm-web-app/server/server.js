@@ -2,10 +2,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
+const mongoose = require('mongoose');
 const app = express();
 
 // API file for interacting with MongoDB
 const api = require('./routes/api');
+
+mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
+db.once('open', function (){
+    console.log("Connexion à la base OK");
+});
 
 // Parsers
 app.use(bodyParser.json());

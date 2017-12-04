@@ -60,6 +60,10 @@ export class AppComponent implements OnInit {
         return (localStorage.getItem(AppConstants.LOGIN_USER));
     }
 
+    public getUserRole(): string {
+        return (localStorage.getItem(AppConstants.ROLE_USER));
+    }
+
     public logout(): void {
         localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
         localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');

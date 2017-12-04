@@ -1,28 +1,37 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/">Accueil</a></li>
-      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/trip" >Nos voyages</a></li>
-      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/ride" >Nos trajets</a></li>
-      <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/renting" >Nos locations</a></li>
-    </ul>
-    <ul class="navbar-nav">
-        <div *ngIf="!isLoggedIn()">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/signup" >S'inscrire</a></li>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav mr-auto">
+        <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/">Accueil</a></li>
+        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/trip" >Nos voyages</a></li>
         </div>
-        <div *ngIf="!isLoggedIn()">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/login" >Se connecter</a></li>
+        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/ride" >Nos trajets</a></li>
         </div>
-        <div *ngIf="isLoggedIn()">
-            <li class="nav-item"><a class="nav-link disabled">{{ getLogin() }}</a></li>
+        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/renting" >Nos locations</a></li>
         </div>
-        <div *ngIf="isLoggedIn()">
-            <li class="nav-item"><button (click)='logout()' class='btn btn-danger'>Se déconnecter</button></li>
+        <div *ngIf="(getUserRole() === 'Agence') || (getUserRole() === 'Particulier')">
+            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/my-offers" >Mes offres</a></li>
         </div>
-    </ul>
-  </div>
+        </ul>
+        <ul class="navbar-nav">
+            <div *ngIf="!isLoggedIn()">
+                <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/signup" >S'inscrire</a></li>
+            </div>
+            <div *ngIf="!isLoggedIn()">
+                <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/login" >Se connecter</a></li>
+            </div>
+            <div *ngIf="isLoggedIn()">
+                <li class="nav-item"><a class="nav-link disabled">{{ getLogin() }}</a></li>
+            </div>
+            <div *ngIf="isLoggedIn()">
+                <li class="nav-item"><button (click)='logout()' class='btn btn-danger'>Se déconnecter</button></li>
+            </div>
+        </ul>
+    </div>
 </nav>
 <router-outlet></router-outlet>

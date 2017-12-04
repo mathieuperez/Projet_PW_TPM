@@ -8,14 +8,6 @@ var app = express();
 
 app.set('superSecret', "12345"); // secret variable
 
-mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
-db.once('open', function (){
-    console.log("Connexion à la base OK");
-});
-
 var usersSchema = mongoose.Schema({
     email:{
         type: String,
@@ -32,8 +24,11 @@ var usersSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    token: {
+        type: String,
+        required: false
+    },
     offre: [String]
-
 });
 
 var User = mongoose.model('User', usersSchema);
@@ -87,16 +82,22 @@ router.post('/token', (req, res) => {
         user.password = crypto.createHmac('sha256', user.password)
                     .update('I love cupcakes')
                     .digest('hex');
-        User.findOne( {'email': user.email, 'password': user.password } , (error, users ) => {
+        User.findOne( {'email': user.email, 'password': user.password }, (error, users) => {
             if (users) {
                 var token = jwt.sign(users.toJSON(), app.get('superSecret'));
-                //
-                res.json({
-                    success: true,
-                    message: 'Authentication succeded!',
-                    token: token,
-                    user: users
+                User.updateOne({ 'email': users.email }, { 'token': token }, (error,response) => {
+                    if (response['ok'] === 1) {
+                        res.json({
+                            success: true,
+                            message: 'Authentication succeded!',
+                            user: users
+                        });
+                    }
+                    else {
+                        res.status(400).json({success: false, message: 'Authentication failed.'});
+                    }
                 });
+
             }
             else {
                 res.status(400).json({success: false, message: 'Authentication failed. Wrong login/password.'});
