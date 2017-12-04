@@ -42,14 +42,43 @@ var OffresSchema = mongoose.Schema({
 var Offres = mongoose.model('Offres', OffresSchema);
 
 
-router.post('/', (req, res) => {
+router.post('/locations/', (req, res) => {
     var location = new Locations();
-    location.pays = req.body.tarif;
-    location.adresse = req.body.date;
-    location.tarif = req.body.heure;
-    location.duree = req.body.bagage;
+    location.pays = req.body.pays;
+    location.adresse = req.body.adresse;
+    location.tarif = req.body.tarif;
+    location.duree = req.body.duree;
     location.date_debut = req.body.date_debut;
     location.option = req.body.option;
+
+    if (location.pays == null || location.adresse == null || location.tarif == null || location.duree == null || location.date_debut == null || location.option == null) {
+        res.status(422).json({success: false, message:'Missing Arguments.'});
+    }
+    else {
+        var datefin=new Date().setDate(location.date_debut+location.duree);
+        Offres.find({"location": {"date_debut": {"$gte": date_debut, "$lt": datefin}}}).exec(function(err, locations){
+            if (err) {
+                res.status(500).json({success: false, message:'There was a problem with the database while checking if the email already exists.'});
+            }
+            else {
+                if(locations.length==0){
+
+                    location.save(function(err){
+                      if(err){
+                        res.status(401).json({success: false, message: 'Register failed.'});
+                      }
+                      else{
+                        res.status(200).json({success: true, message:'Register successful'});
+                      }
+                    })  
+                }
+                else{
+                    res.status(409).json({success: false, message: 'There is already a location with this adresse and date.'});
+                }
+            }
+        })
+    }
+
 
     location.save(function(err){
       if(err){
@@ -70,5 +99,3 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
-
-
