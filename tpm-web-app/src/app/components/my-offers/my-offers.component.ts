@@ -9,160 +9,48 @@ declare const $: any;
   styleUrls: ['./my-offers.component.css']
 })
 export class MyOffersComponent implements OnInit {
-    private areThereRentings: boolean;
-    private areThereRides: boolean;
+    private tripTable = [
+        'Adresse de location', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
+    ];
 
-    private rentingForm: FormGroup;
-    private rentingSubmitted: boolean;
-    private rentingError: boolean;
-    private rentingLoading: boolean;
+    private areThereTrips: boolean;
 
-    private rideForm: FormGroup;
-    private rideSubmitted: boolean;
-    private rideError: boolean;
-    private rideLoading: boolean;
+    private tripForm: FormGroup;
+    private tripSubmitted: boolean;
+    private tripError: boolean;
+    private tripLoading: boolean;
 
-    private rentingModalTitle: string;
-    private rideModalTitle: string;
+    private tripModalTitle: string;
 
-    @ViewChild('rentingModal')
-    private rentingModal: ElementRef;
-    @ViewChild('rideModal')
-    private rideModal: ElementRef;
+    @ViewChild('tripModal')
+    private tripModal: ElementRef;
 
     constructor() { }
 
     ngOnInit() {
-        this.areThereRentings = false;
-        this.areThereRides = false;
+        this.areThereTrips = false;
 
-        this.rentingSubmitted = false;
-        this.rentingLoading = false;
-        this.rentingError = false;
-        this.rentingForm = new FormGroup({
-            country: new FormControl('', [ Validators.required ]),
-            city: new FormControl('', [ Validators.required ]),
-            price: new FormControl('', [ Validators.required ]),
-            address: new FormControl('', [ Validators.required ]),
-            startDate: new FormControl('', [ Validators.required ]),
-            time: new FormControl('', [ Validators.required ]),
-            surface: new FormControl('', [ Validators.required ]),
-            description: new FormControl('', [ Validators.required ])
+        this.tripSubmitted = false;
+        this.tripLoading = false;
+        this.tripError = false;
+        this.tripForm = new FormGroup({
+
         });
 
-        this.rideSubmitted = false;
-        this.rideLoading = false;
-        this.rideError = false;
-        this.rideForm = new FormGroup({
-            rideStartCity: new FormControl('', [ Validators.required ]),
-            rideArrivalCity: new FormControl('', [ Validators.required ]),
-            rideStart: new FormControl('', [ Validators.required ]),
-            rideArrival: new FormControl('', [ Validators.required ]),
-            ridePrice: new FormControl('', [ Validators.required ]),
-            rideSeat: new FormControl('', [ Validators.required ]),
-            rideDate: new FormControl('', [ Validators.required ])
+        $(this.tripModal.nativeElement).on('hidden.bs.modal', () => {
+            this.tripForm.reset();
         });
+
+        //TODO : get trips from api
     }
 
-    public addRentingOffer(): void {
-        this.rentingModalTitle = 'Nouvelle offre de location';
-        $(this.rentingModal.nativeElement).modal('show');
+    public addTripOffer(): void {
+        this.tripModalTitle = 'Nouvelle offre de voyage';
+        $(this.tripModal.nativeElement).modal('show');
     }
 
-    public addRideOffer(): void {
-        this.rideModalTitle = 'Nouvelle offre de trajet';
-        $(this.rideModal.nativeElement).modal('show');
+    public modifyTripOffer(): void {
+        this.tripModalTitle = 'Modifier l\'offre de voyage';
+        $(this.tripModal.nativeElement).modal('show');
     }
-
-
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get country (): AbstractControl { return this.rentingForm.get('country'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get city (): AbstractControl { return this.rentingForm.get('city'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get price (): AbstractControl { return this.rentingForm.get('price'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get address (): AbstractControl { return this.rentingForm.get('address'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get startDate (): AbstractControl { return this.rentingForm.get('startDate'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get time (): AbstractControl { return this.rentingForm.get('time'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get surface (): AbstractControl { return this.rentingForm.get('surface'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get description (): AbstractControl { return this.rentingForm.get('description'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideStartCity (): AbstractControl { return this.rideForm.get('rideStartCity'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideArrivalCity (): AbstractControl { return this.rideForm.get('rideArrivalCity'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideStart (): AbstractControl { return this.rideForm.get('rideStart'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideArrival (): AbstractControl { return this.rideForm.get('rideArrival'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get ridePrice (): AbstractControl { return this.rideForm.get('ridePrice'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideSeat (): AbstractControl { return this.rideForm.get('rideSeat'); }
-
-    /**
-     * Getter for the login FormControl.
-     * @return {AbstractControl}
-     */
-    public get rideDate (): AbstractControl { return this.rideForm.get('rideDate'); }
 }

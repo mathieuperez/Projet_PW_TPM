@@ -1,0 +1,450 @@
+<div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <h2>Mes offres</h2>
+        <hr>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-light btn-size" id="btn-renting" (click)="addRentingOffer()">Ajouter une nouvelle offre de location</button>
+            <button class="btn btn-light btn-size" id="btn-ride" (click)="addRideOffer()">Ajouter une nouvelle offre de trajet</button>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <hr>
+        <h5>Offres de location</h5>
+    </div>
+    <div class="col-md-12" *ngIf="!areThereRentings">
+        <p class="lead">
+            Vous n'avez enregistré aucune offre de location.
+        </p>
+    </div>
+    <div *ngIf="areThereRentings">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th *ngFor="let obj of tableHeadContent.rentingTable">{{ obj }}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-light btn-size" id="btn-renting-add" (click)="modifyRentingOffer()">Modifier l'offre de location sélectionnée</button>
+                <button class="btn btn-light btn-size" id="btn-renting-delete">Supprimer l'offre de location sélectionnée</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <hr>
+        <h5>Offres de trajet</h5>
+    </div>
+    <div class="col-md-12" *ngIf="!areThereRides">
+        <p class="lead">
+            Vous n'avez enregistré aucune offre de trajet.
+        </p>
+    </div>
+    <div *ngIf="areThereRides">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th *ngFor="let obj of tableHeadContent.rideTable">{{ obj }}</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-light btn-size" id="btn-ride-add" (click)="modifyRideOffer()">Modifier l'offre de trajet sélectionnée</button>
+                <button class="btn btn-light btn-size" id="btn-ride-delete">Supprimer l'offre de trajet sélectionnée</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" #rentingModal tabindex="-1" role="dialog" aria-labelledby="rentingModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ rentingModalTitle }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" [formGroup]="rentingForm"
+                novalidate>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Adresse</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': address.invalid && (address.dirty || address.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="address"
+                                            class="form-control"
+                                            placeholder="Adresse"
+                                            formControlName="address">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="address.invalid && (address.dirty || address.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="address.errors.required">L'adresse est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Ville</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': city.invalid && (city.dirty || city.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="city"
+                                            class="form-control"
+                                            placeholder="Ville"
+                                            formControlName="city">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="city.invalid && (city.dirty || city.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="city.errors.required">La ville est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Pays</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': country.invalid && (country.dirty || country.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="country"
+                                            class="form-control"
+                                            placeholder="Pays"
+                                            formControlName="country">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="country.invalid && (country.dirty || country.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="country.errors.required">Le pays est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Tarif</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': price.invalid && (price.dirty || price.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="price"
+                                            class="form-control"
+                                            placeholder="Tarif"
+                                            formControlName="price">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="price.invalid && (price.dirty || price.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="price.errors.required">Le tarif est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Date de début</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': startDate.invalid && (startDate.dirty || startDate.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="startDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="startDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="startDate.invalid && (startDate.dirty || startDate.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="startDate.errors.required">La date est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Durée (j)</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': time.invalid && (time.dirty || time.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="time"
+                                            class="form-control"
+                                            placeholder="Durée"
+                                            formControlName="time">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="time.invalid && (time.dirty || time.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="time.errors.required">La durée est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Surface (m²)</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': surface.invalid && (surface.dirty || surface.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="surface"
+                                            class="form-control"
+                                            placeholder="Surface"
+                                            formControlName="surface">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="surface.invalid && (surface.dirty || surface.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="surface.errors.required">La surface est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Description</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': description.invalid && (description.dirty || description.touched || rentingSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="description"
+                                            class="form-control"
+                                            placeholder="Description"
+                                            formControlName="description">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="description.invalid && (description.dirty || description.touched || rentingSubmitted)">
+                                    <span class="validation-message" *ngIf="description.errors.required">La description est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
+                        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" #rideModal tabindex="-1" role="dialog" aria-labelledby="rideModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ rideModalTitle }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" [formGroup]="rideForm"
+                novalidate>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <label for="country">Ville de départ</label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-feedback"
+                        [ngClass]="{ 'has-error': rideStartCity.invalid && (rideStartCity.dirty || rideStartCity.touched || rideSubmitted) }">
+                            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                <input  type="text"
+                                        name="rideStartCity"
+                                        class="form-control"
+                                        placeholder="Ville"
+                                        formControlName="rideStartCity">
+                            </div>
+                            <div class="col-12 text-danger"
+                                *ngIf="rideStartCity.invalid && (rideStartCity.dirty || rideStartCity.touched || rideSubmitted)">
+                                <span class="validation-message" *ngIf="rideStartCity.errors.required">La destination est requise.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Ville de destination</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideArrivalCity.invalid && (rideArrivalCity.dirty || rideArrivalCity.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="rideArrivalCity"
+                                            class="form-control"
+                                            placeholder="Ville"
+                                            formControlName="rideArrivalCity">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideArrivalCity.invalid && (rideArrivalCity.dirty || rideArrivalCity.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideArrivalCity.errors.required">La destination est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Lieu de départ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideStart.invalid && (rideStart.dirty || rideStart.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="rideStart"
+                                            class="form-control"
+                                            placeholder="Lieu de départ"
+                                            formControlName="rideStart">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideStart.invalid && (rideStart.dirty || rideStart.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideStart.errors.required">Le lieu de rendez-vous est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Lieu d'arrivée</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideArrival.invalid && (rideArrival.dirty || rideArrival.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="rideArrival"
+                                            class="form-control"
+                                            placeholder="Lieu d'arrivée"
+                                            formControlName="rideArrival">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideArrival.invalid && (rideArrival.dirty || rideArrival.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideArrival.errors.required">Le tarif est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Tarif</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': ridePrice.invalid && (ridePrice.dirty || ridePrice.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="ridePrice"
+                                            class="form-control"
+                                            placeholder="Tarif"
+                                            formControlName="ridePrice">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="ridePrice.invalid && (ridePrice.dirty || ridePrice.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="ridePrice.errors.required">La date est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Places restantes</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideSeat.invalid && (rideSeat.dirty || rideSeat.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="rideSeat"
+                                            class="form-control"
+                                            placeholder="Places restantes"
+                                            formControlName="rideSeat">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideSeat.invalid && (rideSeat.dirty || rideSeat.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideSeat.errors.required">La durée est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Date</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideDate.invalid && (rideDate.dirty || rideDate.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="rideDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="rideDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideDate.invalid && (rideDate.dirty || rideDate.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideDate.errors.required">La date est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
+                        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+

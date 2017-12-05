@@ -6,6 +6,7 @@ import { AppComponent } from './components/app/app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { OffersComponent } from './components/offers/offers.component';
+import { MyOffersIndividualComponent } from './components/my-offers-individual/my-offers-individual.component';
 /*import {AuthGuard} from "./guards/auth/auth.guard";
 import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
 
@@ -19,7 +20,8 @@ import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
                 { path: 'renting', component: OffersComponent },
                 { path: 'ride', component: OffersComponent }
             ]/*canActivate: [UnAuthGuard]*/ },
-            { path: 'my-offers', component: MyOffersComponent/*canActivate: [UnAuthGuard]*/ },
+            { path: 'my-offers-agency', component: MyOffersComponent/*canActivate: [UnAuthGuard]*/ },
+            { path: 'my-offers-individual', component: MyOffersIndividualComponent/*canActivate: [UnAuthGuard]*/ },
             { path: '**', redirectTo: '/', pathMatch: 'full' },
             { path: '', redirectTo: '/', pathMatch: 'full' },
         ]),

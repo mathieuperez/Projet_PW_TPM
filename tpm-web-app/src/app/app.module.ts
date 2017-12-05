@@ -14,6 +14,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OffersComponent } from './components/offers/offers.component';
 import { MyOffersComponent } from './components/my-offers/my-offers.component';
+import { MyOffersIndividualComponent } from './components/my-offers-individual/my-offers-individual.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MyOffersComponent } from './components/my-offers/my-offers.component';
     SignupComponent,
     LoginComponent,
     OffersComponent,
-    MyOffersComponent
+    MyOffersComponent,
+    MyOffersIndividualComponent
   ],
   imports: [
     BrowserModule,

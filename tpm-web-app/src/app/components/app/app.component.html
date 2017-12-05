@@ -4,19 +4,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <ul class="navbar-nav mr-auto">
-        <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/">Accueil</a></li>
-        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/trip" >Nos voyages</a></li>
-        </div>
-        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/ride" >Nos trajets</a></li>
-        </div>
-        <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/renting" >Nos locations</a></li>
-        </div>
-        <div *ngIf="(getUserRole() === 'Agence') || (getUserRole() === 'Particulier')">
-            <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/my-offers" >Mes offres</a></li>
-        </div>
+          <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/">Accueil</a></li>
+          <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/trip" >Nos voyages</a></li>
+          </div>
+          <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/ride" >Nos trajets</a></li>
+          </div>
+          <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/renting" >Nos locations</a></li>
+          </div>
+          <div *ngIf="(getUserRole() === 'Agence')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/my-offers-agency" >Mes offres</a></li>
+          </div>
+          <div *ngIf="(getUserRole() === 'Particulier')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/my-offers-individual" >Mes offres</a></li>
+          </div>
         </ul>
         <ul class="navbar-nav">
             <div *ngIf="!isLoggedIn()">

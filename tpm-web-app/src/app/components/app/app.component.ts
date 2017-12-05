@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
         localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
         localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');
         localStorage.setItem(AppConstants.ROLE_USER, 'role_user');
-        this.router.navigate([this.router.url]);
+        this.router.navigate(['/']);
     }
 
 }
