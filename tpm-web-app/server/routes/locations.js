@@ -5,41 +5,17 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
 
-var OffresSchema = mongoose.Schema({
-
-   location : [{
+   var LocationsSchema = mongoose.Schema({
     pays: { type: String,required: true},
     adresse: {type: String,required: true},
     tarif: {type: Number,required: true},
     durée: {type: Number,required: true},
     date_debut: {type: Date,required: true},
-    option: { type: String}
-    }],
+    description: { type: String}
+    };
 
-   trajet : [{
-    depart: { type: String,required: true},
-    destination: {type: String,required: true},
-    lieu_depart: {type: String,required: true},
-    lieu_arrivé: {type: String,required: true},
-    tarif: {type: Number,required: true},
-    places_restantes: { type: String,required: true},
-    date: {type: Date ,required: true}
-    }],
-   voyage: [{
-    pays: { type: String,required: true},
-    adresse_location: {type: String,required: true},
-    tarif: {type: Number,required: true},
-    date_aller: {type: Date,required: true},
-    date_retour: {type: Date,required: true},
-    lieu_aller: {type: String,required: true},
-    lieu_retour: {type: String,required: true},
-    durée: {type: Number,required: true},
-    description: {type: Date,required: true}
-    }]
 
-});
-
-var Offres = mongoose.model('Offres', OffresSchema);
+var Locations = mongoose.model('Locations', LocationsSchema);
 
 
 router.post('/locations/', (req, res) => {
@@ -51,14 +27,14 @@ router.post('/locations/', (req, res) => {
     location.date_debut = req.body.date_debut;
     location.option = req.body.option;
 
-    if (location.pays == null || location.adresse == null || location.tarif == null || location.duree == null || location.date_debut == null || location.option == null) {
+    if (location.pays == null || location.adresse == null || location.tarif == null || location.duree == null || location.date_debut == null ) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
         var datefin=new Date().setDate(location.date_debut+location.duree);
-        Offres.find({"location": {"date_debut": {"$gte": date_debut, "$lt": datefin}}}).exec(function(err, locations){
+        Locations.find({"date_debut": {"$gte": date_debut, "$lt": datefin}}).exec(function(err, locations){
             if (err) {
-                res.status(500).json({success: false, message:'There was a problem with the database while checking if the email already exists.'});
+                res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent with this adress at this time.'});
             }
             else {
                 if(locations.length==0){
@@ -73,7 +49,7 @@ router.post('/locations/', (req, res) => {
                     })  
                 }
                 else{
-                    res.status(409).json({success: false, message: 'There is already a location with this adresse and date.'});
+                    res.status(409).json({success: false, message: 'There is already a location with this adress and date.'});
                 }
             }
         })
