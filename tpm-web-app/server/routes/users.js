@@ -9,7 +9,14 @@ var app = express();
 app.set('superSecret', "12345"); // secret variable
 
 var usersSchema = mongoose.Schema({
-  email:{
+    login:{
+        type: String,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        required: true
+  },
+    email:{
         type: String,
         unique: true,
         lowercase: true,
@@ -27,11 +34,7 @@ var usersSchema = mongoose.Schema({
     token: {
         type: String,
         required: false
-    },
-
-    trajet:[String],
-    location:[String],
-    voyage:[String]
+    }
 
 
 });
@@ -40,15 +43,16 @@ var User = mongoose.model('User', usersSchema);
 
 router.post('/', (req, res) => {
     var user = new User();
+    user.login = req.body.login;
     user.email = req.body.email;
     user.password = req.body.password;
     user.role = req.body.role;
 
-    if (user.email == null || user.password == null) {
+    if (user.email == null || user.login == null || user.password == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
-        User.find().where('email').equals(user.email).exec(function(err, users){
+        User.find().where('login').equals(user.login).exec(function(err, users){
             if (err) {
                 res.status(500).json({success: false, message:'There was a problem with the database while checking if the email already exists.'});
             }
@@ -77,20 +81,24 @@ router.post('/', (req, res) => {
 router.post('/token', (req, res) => {
     var user = new User();
     res.setHeader('Content-Type', 'application/json');
-    user.email = req.body.email;
+    user.login = req.body.login;
     user.password = req.body.password;
 
-    if (user.email == null || user.password == null) {
+    if (user.login == null || user.password == null) {
         res.status(422).json({success: false, message: 'Missing arguments.'});
     }
     else {
         user.password = crypto.createHmac('sha256', user.password)
                     .update('I love cupcakes')
                     .digest('hex');
-        User.findOne( {'email': user.email, 'password': user.password } , (error, users ) => {
+        User.findOne( {'login': user.login, 'password': user.password } , (error, users ) => {
             if (users) {
                 var token = jwt.sign(users.toJSON(), app.get('superSecret'));
-                User.updateOne({ 'email': users.email }, { 'token': token }, (error,response) => {
+                User.replaceOne({ 'login': users.login }, { 'login': users.login,
+                                                            'email': users.email,
+                                                            'password': users.password,
+                                                            'role': users.role,
+                                                            'token': token }, (error,response) => {
                     if (response['ok'] === 1) {
                         res.json({
                             success: true,

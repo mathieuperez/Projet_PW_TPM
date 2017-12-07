@@ -1,7 +1,8 @@
+import { AppConstants } from './../../app-constants';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 declare const $: any;
 
@@ -19,6 +20,11 @@ export class MyOffersIndividualComponent implements OnInit {
         'rideTable' : [
             'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination', 'Tarif', 'Places restantes', 'Date'
         ]
+    };
+
+    private tableContent = {
+        'rentingTable' : [],
+        'rideTable' : []
     };
 
     private areThereRentings: boolean;
@@ -109,11 +115,31 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public getRentingList(): void {
-        this.httpClient.get('/api/offers/rentings', ).subscribe((response: any) => {});
+        const params = new HttpParams();
+        params.append('login', localStorage.getItem(AppConstants.LOGIN_USER));
+        params.append('token', localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME));
+        /*this.httpClient.get('/api/offers/rentings', {params: params}).subscribe((response: any) => {
+            if (response['success'] === true) {
+
+            }
+        },
+        (error: any) => {
+
+        });*/
     }
 
     public getRideList(): void {
+        const params = new HttpParams();
+        params.append('login', localStorage.getItem(AppConstants.LOGIN_USER));
+        params.append('token', localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME));
+        /*this.httpClient.get('/api/offers/rides', {params: params}).subscribe((response: any) => {
+            if (response['success'] === true) {
 
+            }
+        },
+        (error: any) => {
+
+        });*/
     }
 
 

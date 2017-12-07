@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const users = require('./users');
-const offres = require('./offres');
+//const offres = require('./offres');
 const trajets = require('./trajets');
 
 // Error handling
