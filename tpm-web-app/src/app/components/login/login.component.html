@@ -10,24 +10,22 @@
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
-                <label for="email">Email</label>
+                <label for="login">Nom d'utilisateur</label>
             </div>
             <div class="col-md-6">
                 <div class="form-group has-feedback"
-                [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || loginSubmitted) }">
+                    [ngClass]="{ 'has-error': login.invalid && (login.dirty || login.touched || loginSubmitted) }">
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div  class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
-                        <input  name="email"
-                                type="email"
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input  type="text"
+                                name="login"
                                 class="form-control"
-                                placeholder="Entrez votre adresse email"
-                                formControlName="login"
-                                [email]="true">
+                                placeholder="Entrez votre nom d'utilisateur"
+                                formControlName="login">
                     </div>
                     <div class="col-12 text-danger"
-                        *ngIf="login.invalid && (login.dirty || login.touched || loginSubmitted)">
-                        <span class="validation-message" *ngIf="login.errors.required">Votre adresse email est requise.</span>
-                        <span class="validation-message" *ngIf="login.errors.email">Votre adresse email est invalide.</span>
+                    *ngIf="login.invalid && (login.dirty || login.touched || loginSubmitted)">
+                        <span class="validation-message" *ngIf="login.errors.required">Votre nom d'utilisateur est requis.</span>
                     </div>
                 </div>
             </div>

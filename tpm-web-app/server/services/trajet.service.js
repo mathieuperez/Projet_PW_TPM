@@ -2,16 +2,16 @@ var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var User = require('../models/users.js');
-var trajet = require('../models/trajet.js');
+var User = require('../routes/users');
+var trajet = require('../routes/trajets');
 
 var Q = require('q');
 var service = {};
 
 
 service.create = create;
-service.update = update;
-service.delete = _delete;
+/*service.update = update;
+service.delete = _delete;*/
 
 module.exports = service;
 
@@ -35,7 +35,7 @@ function create(trajet, idUser) {
 //on insert le projet dans la collection Projet
   trajet.create( { "name":  project.name, "depart": trajet.depart, "destination":trajet.destination,
     "lieu_depart":trajet.lieu_depart,"lieu_arriver":trajet.lieu_arriver,"tarif":trajet.tarif,
-    "places_restantes":trajet.places_restantes,"date":trajet:date}, function (err, doc) {
+    "places_restantes":trajet.places_restantes,"date":trajet.date}, function (err, doc) {
   if (err) deferred.reject(err.name + ': ' + err.message);
     // saved!
   });

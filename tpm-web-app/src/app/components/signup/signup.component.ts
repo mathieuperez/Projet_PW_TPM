@@ -49,6 +49,7 @@ export class SignupComponent implements OnInit {
         this.signupError = false;
         this.signupForm = new FormGroup({
             email: new FormControl('', [ Validators.required ]),
+            login: new FormControl('', [ Validators.required ]),
             password: new FormControl('', [ Validators.required ]),
             role: new FormControl(null, [ Validators.required ])
         });
@@ -87,6 +88,12 @@ export class SignupComponent implements OnInit {
      * @return {AbstractControl}
      */
     public get email (): AbstractControl { return this.signupForm.get('email'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get login (): AbstractControl { return this.signupForm.get('login'); }
 
     /**
      * Getter for the password FormControl.

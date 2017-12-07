@@ -2,32 +2,11 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var User = require('./users.js');
+var User = require('./users');
 var trajetService = require('../services/trajet.service');
 var app = express();
 
-mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
-db.once('open', function (){
-    console.log("Connexion à la base OK");
-});
-
-// Response handling
-let response = {
-    status: 200,
-    data: [],
-    message: null
-};
-
-const sendError = (err, res) => {
-    response.status = 501;
-    response.message = typeof err == 'object' ? err.message : err;
-    res.status(501).json(response);
-};
-
-var trajetSchema = mongoose.Schema({
+/*var trajetSchema = mongoose.Schema({
 
     name :{type:String, unique:true},
     depart: { type: String,required: true},
@@ -44,12 +23,11 @@ var trajetSchema = mongoose.Schema({
 var trajet = mongoose.model('trajet', trajetSchema);
 
 
- /* GET  Trajets of a User */
-  router.get('/:login', function(req, res, next) {
-    var login = req.params.login;
-    console.log(login);
+  router.get('/:email', function(req, res, next) {
+    var email = req.params.email;
+    console.log(email);
     var listTrajet = [] ;
-   
+
     User.findOne({ email: email }, function (err, user) {
 if(user){
       listTrajet = user.trajet;
@@ -71,7 +49,7 @@ if(user){
       });
     });
 
-//Ajouter un trajet 
+//Ajouter un trajet
 router.post('/idUser', (req, res) => {
   var iduser = req.params.idUser;
 
@@ -82,7 +60,7 @@ router.post('/idUser', (req, res) => {
     });
   });
    /* var trajet= new trajet();
-    
+
 
     trajet.name = req.body.name;
     trajet.depart = req.body.depart;

@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 declare const $: any;
 
@@ -40,7 +42,8 @@ export class MyOffersIndividualComponent implements OnInit {
     @ViewChild('rideModal')
     private rideModal: ElementRef;
 
-    constructor() { }
+    public constructor(private router: Router,
+                    private httpClient: HttpClient) { }
 
     ngOnInit() {
         this.areThereRentings = false;
@@ -80,6 +83,9 @@ export class MyOffersIndividualComponent implements OnInit {
         $(this.rideModal.nativeElement).on('hidden.bs.modal', () => {
             this.rideForm.reset();
         });
+
+        this.getRentingList();
+        this.getRideList();
     }
 
     public addRentingOffer(): void {
@@ -100,6 +106,14 @@ export class MyOffersIndividualComponent implements OnInit {
     public modifyRideOffer(): void {
         this.rideModalTitle = 'Modifier l\'offre de trajet';
         $(this.rideModal.nativeElement).modal('show');
+    }
+
+    public getRentingList(): void {
+        this.httpClient.get('/api/offers/rentings', ).subscribe((response: any) => {});
+    }
+
+    public getRideList(): void {
+
     }
 
 
