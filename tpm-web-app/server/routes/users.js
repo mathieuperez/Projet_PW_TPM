@@ -24,7 +24,7 @@ var usersSchema = mongoose.Schema({
         trim: true,
         required: true
   },
-  email:{
+    email:{
         type: String,
         unique: true,
         lowercase: true,
@@ -52,6 +52,7 @@ var User = mongoose.model('User', usersSchema);
 router.post('/', (req, res) => {
     var user = new User();
     user.login = req.body.login;
+    user.email = req.body.email;
     user.password = req.body.password;
     user.role = req.body.role;
 
