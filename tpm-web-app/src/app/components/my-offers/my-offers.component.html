@@ -53,7 +53,204 @@
             <div class="modal-body">
                 <form class="form-horizontal" role="form" [formGroup]="tripForm"
                 novalidate>
-
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="address">Adresse de location</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': address.invalid && (address.dirty || address.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="address"
+                                            class="form-control"
+                                            placeholder="Adresse"
+                                            formControlName="address">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="address.invalid && (address.dirty || address.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="address.errors.required">L'adresse est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Pays</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': country.invalid && (country.dirty || country.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="country"
+                                            class="form-control"
+                                            placeholder="Pays"
+                                            formControlName="country">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="country.invalid && (country.dirty || country.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="country.errors.required">Le pays est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="price">Tarif</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': price.invalid && (price.dirty || price.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="price"
+                                            class="form-control"
+                                            placeholder="Tarif"
+                                            formControlName="price">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="price.invalid && (price.dirty || price.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="price.errors.required">Le prix est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="startDate">Date de départ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': startDate.invalid && (startDate.dirty || startDate.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="startDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="startDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="startDate.invalid && (startDate.dirty || startDate.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="startDate.errors.required">La date de départ est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="arrivalDate">Date de retour</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': arrivalDate.invalid && (arrivalDate.dirty || arrivalDate.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="arrivalDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="arrivalDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="arrivalDate.invalid && (arrivalDate.dirty || arrivalDate.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="arrivalDate.errors.required">La date de retour est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="start">Lieu de départ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': start.invalid && (start.dirty || start.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="start"
+                                            class="form-control"
+                                            placeholder="Lieu aller"
+                                            formControlName="start">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="start.invalid && (start.dirty || start.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="start.errors.required">Le lieu de départ est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="arrival">Lieu de retour</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': arrival.invalid && (arrival.dirty || arrival.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="arrival"
+                                            class="form-control"
+                                            placeholder="Lieu retour"
+                                            formControlName="arrival">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="arrival.invalid && (arrival.dirty || arrival.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="arrival.errors.required">Le lieu de retour est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="last">Durée (j)</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': last.invalid && (last.dirty || last.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="number"
+                                            name="last"
+                                            class="form-control"
+                                            placeholder="Durée"
+                                            formControlName="last">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="last.invalid && (last.dirty || last.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="last.errors.required">La durée est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="description">Description</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': description.invalid && (description.dirty || description.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="description"
+                                            class="form-control"
+                                            placeholder="Description"
+                                            formControlName="description">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="description.invalid && (description.dirty || description.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="description.errors.required">La description est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
                         <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

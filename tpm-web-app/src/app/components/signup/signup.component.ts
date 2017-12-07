@@ -54,7 +54,7 @@ export class SignupComponent implements OnInit {
         });
 
         $(this.signupModal.nativeElement).on('hidden.bs.modal', () => {
-            this.router.navigate(['/']);
+            this.router.navigate(['/login']);
         });
     }
 
