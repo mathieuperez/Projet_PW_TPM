@@ -6,66 +6,75 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var app = express();
 
    var LocationsSchema = mongoose.Schema({
-    pays: { type: String,required: true},
-    adresse: {type: String,required: true},
-    tarif: {type: Number,required: true},
-    durée: {type: Number,required: true},
-    date_debut: {type: Date,required: true},
-    description: { type: String}
-    };
+    adress: {type: String,required: true},
+    country: { type: String,required: true},
+    city: { type: String,required: true},
+    price: {type: Number,required: true},
+    startDate: {type: Date,required: true},
+    time: {type: Number,required: true},
+    surface: {type: Number,required: true},
+    description: { type: String},
+    endDate: {type: Date,required: true},
+    login: {type: String,required: true}
+    });
 
 
 var Locations = mongoose.model('Locations', LocationsSchema);
 
 
-router.post('/locations/', (req, res) => {
+router.post('/locations/:login', (req, res) => {
     var location = new Locations();
-    location.pays = req.body.pays;
-    location.adresse = req.body.adresse;
-    location.tarif = req.body.tarif;
-    location.duree = req.body.duree;
-    location.date_debut = req.body.date_debut;
-    location.option = req.body.option;
+    location.country = req.body.country;
+    location.adress = req.body.adress;
+    location.city = req.body.city;
+    location.price = req.body.price;
+    location.startDate = req.body.startDate;
+    location.time = req.body.time;
+    location.surface = req.body.surface;
+    location.description = req.body.description;
+    location.login = req.params.login;
+    location.endDate=new Date().setDate(location.startDate+location.time);
 
-    if (location.pays == null || location.adresse == null || location.tarif == null || location.duree == null || location.date_debut == null ) {
+    if (location.country == null || location.adress == null || location.city  == null || location.price == null || location.startDate == null || location.time == null || location.surface == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
-        var datefin=new Date().setDate(location.date_debut+location.duree);
-        Locations.find({"date_debut": {"$gte": date_debut, "$lt": datefin}}).exec(function(err, locations){
+        Locations.find({"endDate": {"$gte": location.startDate, "$lt": location.endDate}}).exec(function(err, locations){
             if (err) {
-                res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent with this adress at this time.'});
+                res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this adress and time.'});
             }
             else {
                 if(locations.length==0){
-
-                    location.save(function(err){
-                      if(err){
-                        res.status(401).json({success: false, message: 'Register failed.'});
-                      }
-                      else{
-                        res.status(200).json({success: true, message:'Register successful'});
-                      }
-                    })  
+                    Locations.find({"start": {"$gte": location.start, "$lt": location.endDate}}).exec(function(err, locations){
+                        if (err) {
+                            res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent starting at this adress and time.'});
+                        }
+                        else {
+                            if(locations.length==0){
+                                location.save(function(err){
+                                  if(err){
+                                    res.status(401).json({success: false, message: 'Creating Rent failed.'});
+                                  }
+                                  else{
+                                    res.status(200).json({success: true, message:'Creating Rent successful'});
+                                  }
+                                });
+                            }
+                            else{
+                                res.status(409).json({success: false, message: 'There is already a location with this adress and date.'});
+                            }
+                        }
+                    });
                 }
                 else{
                     res.status(409).json({success: false, message: 'There is already a location with this adress and date.'});
                 }
             }
-        })
+        });
     }
-
-
-    location.save(function(err){
-      if(err){
-        res.status(400).json({success: false, message: 'Register failed.'});
-      }
-    res.json({
-        success: true,
-        message : 'location bien ajouté!'});
-    })
-
 });
+
+
 router.get('/', function(req, res, next) {
     var location = new Locations();
   location.find(function (err, locations) {

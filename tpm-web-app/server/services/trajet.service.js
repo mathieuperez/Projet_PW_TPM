@@ -31,15 +31,15 @@ function create(trajet, idUser) {
       deferred.resolve();
   });
 
-
+/*
 //on insert le projet dans la collection Projet
-  trajet.create( { "name":  project.name, "depart": trajet.depart, "destination":trajet.destination,
-    "lieu_depart":trajet.lieu_depart,"lieu_arriver":trajet.lieu_arriver,"tarif":trajet.tarif,
-    "places_restantes":trajet.places_restantes,"date":trajet.date}, function (err, doc) {
-  if (err) deferred.reject(err.name + ': ' + err.message);
+  trajet.create( { "name":  project.name, "depart": trajet.depart, "destination": Ztrajet.destination,
+    "lieu_depart": trajet.lieu_depart,"lieu_arriver": trajet.lieu_arriver,"tarif": trajet.tarif,
+    "places_restantes": trajet.places_restantes, "date": trajet:date}, function (err, doc) {
+  //if (err) deferred.reject(err.name + ': ' + err.message);
     // saved!
   });
-
+*/
     return deferred.promise;
 }
 
