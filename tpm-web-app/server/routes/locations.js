@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
 
-   var LocationsSchema = mongoose.Schema({
-    adress: {type: String,required: true},
+var RentingsSchema = mongoose.Schema({
+    address: {type: String,required: true},
     country: { type: String,required: true},
     city: { type: String,required: true},
     price: {type: Number,required: true},
@@ -16,43 +16,42 @@ var app = express();
     description: { type: String},
     endDate: {type: Date,required: true},
     login: {type: String,required: true}
-    });
+});
 
+var Renting = mongoose.model('Renting', RentingsSchema);
 
-var Locations = mongoose.model('Locations', LocationsSchema);
+router.post('/:login', (req, res) => {
+    var renting = new Renting();
+    renting.country = req.body.country;
+    renting.address = req.body.address;
+    renting.city = req.body.city;
+    renting.price = req.body.price;
+    renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
+    renting.time = req.body.time;
+    renting.surface = req.body.surface;
+    renting.description = req.body.description;
+    renting.login = req.params.login;
+    renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
 
-
-router.post('/locations/:login', (req, res) => {
-    var location = new Locations();
-    location.country = req.body.country;
-    location.adress = req.body.adress;
-    location.city = req.body.city;
-    location.price = req.body.price;
-    location.startDate = req.body.startDate;
-    location.time = req.body.time;
-    location.surface = req.body.surface;
-    location.description = req.body.description;
-    location.login = req.params.login;
-    location.endDate=new Date().setDate(location.startDate+location.time);
-
-    if (location.country == null || location.adress == null || location.city  == null || location.price == null || location.startDate == null || location.time == null || location.surface == null) {
+    if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || renting.startDate == null || renting.time == null || renting.surface == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
-        Locations.find({"endDate": {"$gte": location.startDate, "$lt": location.endDate}}).exec(function(err, locations){
+        Renting.find({"endDate": {"$gte": renting.startDate, "$lt": renting.endDate}}).exec(function(err, rentings){
             if (err) {
                 res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this adress and time.'});
             }
             else {
-                if(locations.length==0){
-                    Locations.find({"start": {"$gte": location.start, "$lt": location.endDate}}).exec(function(err, locations){
+                if(rentings.length==0){
+                    Renting.find({"start": {"$gte": renting.start, "$lt": renting.endDate}}).exec(function(err, rentings){
                         if (err) {
                             res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent starting at this adress and time.'});
                         }
                         else {
-                            if(locations.length==0){
-                                location.save(function(err){
+                            if(rentings.length==0){
+                                renting.save(function(err){
                                   if(err){
+                                      console.log(err);
                                     res.status(401).json({success: false, message: 'Creating Rent failed.'});
                                   }
                                   else{
@@ -75,12 +74,12 @@ router.post('/locations/:login', (req, res) => {
 });
 
 
-router.get('/', function(req, res, next) {
-    var location = new Locations();
-  location.find(function (err, locations) {
-    if (err) return next(err);
-    res.json(location);
-  });
+router.get('/:login', function(req, res, next) {
+    var login = req.params.login;
+    Renting.find({"login": login}, function (err, rentings) {
+        if (err) return next(err);
+        res.json(rentings);
+    });
 });
 
 module.exports = router;
