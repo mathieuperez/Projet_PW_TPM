@@ -2,16 +2,16 @@ var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var User = require('../models/users.js');
-var trajet = require('../models/trajet.js');
+var User = require('../routes/users');
+var trajet = require('../routes/trajets');
 
 var Q = require('q');
 var service = {};
 
 
 service.create = create;
-service.update = update;
-service.delete = _delete;
+/*service.update = update;
+service.delete = _delete;*/
 
 module.exports = service;
 
