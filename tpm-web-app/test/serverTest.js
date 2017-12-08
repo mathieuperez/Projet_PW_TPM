@@ -1,6 +1,7 @@
 var expect  = require("chai").expect;
 var request = require("request");
 var jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 describe("Travel Agency API", function() {
 
@@ -24,7 +25,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", role: "Developpeur"}
+                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", login: "bisounours", role: "Developpeur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
@@ -35,7 +36,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mp@bord.fr", password: "mp", role: "Utilisateur"}
+                form:    { email: "mp@bord.fr", password: "mp", login:"teddybear", role: "Utilisateur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
@@ -46,7 +47,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", role: "Developpeur"}
+                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", login: "bisounours", role: "Developpeur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(409);
                 done();
@@ -55,11 +56,11 @@ describe("Travel Agency API", function() {
 
     });
 
-/*
+
     describe("POST Authentification", function() {
         var localurl = url + "users/token";
 
-        it("Bad Request (missing arguments) : returns status 409", function(done) {
+        it("Bad Request (missing arguments) : returns status 422", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
@@ -70,11 +71,11 @@ describe("Travel Agency API", function() {
             });
         });
 
-        it("Bad Request (not matching arguments) : returns status 409", function(done) {
+        it("Bad Request (not matching arguments) : returns status 400", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
+                form:    { login: "bisounours Premier", password: "mperez3"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(400);
                 done();
@@ -85,33 +86,17 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
+                form:    { login: "bisounours", password: "mperez3"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
-            });
-        });
-        it("fetched the associated user", function(done) {
-            request.post({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
-            }, function(error, response, body) {
-                var bodyJson = JSON.parse(body);
-                var token = bodyJson.token;
-                jwt.verify(token, "12345", function (err, decoded) {
-                    expect(decoded.email).to.equal("dprestat");
-                    expect(decoded.password).to.equal("dp33");
-                });
-                done();
-
             });
         });
     });
 
 
 
-
+/*
 
 
 
@@ -147,11 +132,11 @@ describe("Travel Agency API", function() {
             });
         });
     });
+*/
 
 
 
-
-
+/*
 
 describe("PUT Créer une user story", function() {
         var localurl = url + "userStories/projects/Bepp";
