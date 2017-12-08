@@ -6,8 +6,8 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-light btn-size" id="btn-renting" (click)="addRentingOffer()">Ajouter une nouvelle offre de location</button>
-            <button class="btn btn-light btn-size" id="btn-ride" (click)="addRideOffer()">Ajouter une nouvelle offre de trajet</button>
+            <button class="btn btn-light btn-size" (click)="newRentingClick()">Ajouter une nouvelle offre de location</button>
+            <button class="btn btn-light btn-size" (click)="newRideClick()">Ajouter une nouvelle offre de trajet</button>
         </div>
     </div>
     <div class="col-md-3"></div>
@@ -23,20 +23,29 @@
     <div *ngIf="areThereRentings">
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th *ngFor="let obj of tableHeadContent.rentingTable">{{ obj }}</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
+                <thead>
+                    <tr>
+                        <th *ngFor="let obj of tableHeadContent.rentingTable">{{ obj }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rowContent of tableContent.rentingTable">
+                        <th>{{rowContent.country}}</th>
+                        <th>{{rowContent.city}}</th>
+                        <th>{{rowContent.address}}</th>
+                        <th>{{rowContent.price}}</th>
+                        <th>{{rowContent.startDate}}</th>
+                        <th>{{rowContent.time}}</th>
+                        <th>{{rowContent.surface}}</th>
+                        <th>{{rowContent.description}}</th>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-light btn-size" id="btn-renting-add" (click)="modifyRentingOffer()">Modifier l'offre de location sélectionnée</button>
+                <button class="btn btn-light btn-size" (click)="modifyRentingClick()">Modifier l'offre de location sélectionnée</button>
                 <button class="btn btn-light btn-size" id="btn-renting-delete">Supprimer l'offre de location sélectionnée</button>
             </div>
         </div>
@@ -61,13 +70,21 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                    <tr *ngFor="let rowContent of tableContent.rideTable">
+                        <th>{{rowContent.rideStartCity}}</th>
+                        <th>{{rowContent.rideArrivalCity}}</th>
+                        <th>{{rowContent.rideStart}}</th>
+                        <th>{{rowContent.rideArrival}}</th>
+                        <th>{{rowContent.ridePrice}}</th>
+                        <th>{{rowContent.rideSeat}}</th>
+                        <th>{{rowContent.rideDate}}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-light btn-size" id="btn-ride-add" (click)="modifyRideOffer()">Modifier l'offre de trajet sélectionnée</button>
+                <button class="btn btn-light btn-size" (click)="modifyRideClick()">Modifier l'offre de trajet sélectionnée</button>
                 <button class="btn btn-light btn-size" id="btn-ride-delete">Supprimer l'offre de trajet sélectionnée</button>
             </div>
         </div>
@@ -262,7 +279,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
+                        <button type="submit" class="btn btn-primary" (click)="addRentingOffer()">Valider</button>
                         <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     </div>
                 </form>
@@ -438,7 +455,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
+                        <button type="submit" class="btn btn-primary" (click)="addRideOffer()">Valider</button>
                         <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     </div>
                 </form>
