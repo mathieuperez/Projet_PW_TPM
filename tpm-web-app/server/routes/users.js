@@ -1,46 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const User = require('./UserSchema');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
 
 app.set('superSecret', "12345"); // secret variable
-
+/*
 var usersSchema = mongoose.Schema({
-    login:{
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        required: true
-  },
-    email:{
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        required: true
-  },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true
-    },
-    token: {
-        type: String,
-        required: false
-    }
-
-
+    login:{type: String, unique: true, lowercase: true, trim: true, required: true},
+    email:{type: String, unique: true, lowercase: true, trim: true, required: true},
+    password: {type: String, required: true},
+    role: {type: String, required: true},
+    token: {type: String, required: false}
 });
 
 var User = mongoose.model('User', usersSchema);
-
+*/
 router.post('/', (req, res) => {
     var user = new User();
     user.login = req.body.login;
@@ -105,14 +83,10 @@ router.post('/token', (req, res) => {
                     .digest('hex');
         User.findOne( {login: user.login, password: user.password } , (error, users ) => {
             if (users) {
-                var token = jwt.sign(users.toJSON(), app.get('superSecret'));
+                var token = jwt.sign(users.toJSON(), app.get('superSecret')); //24hours
                 User.update({ 'login': users.login }, {token: token }, (error,response) => {
                     if (response['ok'] === 1) {
-                        res.json({
-                            success: true,
-                            message: 'Authentication succeded!',
-                            user: users
-                        });
+                        res.json({success: true, message: 'Authentication succeded!', user: users});
                     } 
                     else {
                         res.status(400).json({success: false, message: 'Authentication failed.'});

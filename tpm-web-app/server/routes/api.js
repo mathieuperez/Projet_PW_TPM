@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const users = require('./users');
-const locations = require('./locations');
+const rentings = require('./rentings');
 const trajets = require('./trajets');
 
 // Error handling
@@ -20,7 +20,7 @@ let response = {
 };
 
 router.use('/users', users);
-router.use('/locations', locations);
+router.use('/rentings', rentings);
 router.use('/trajets', trajets);
 
 // Define the home page route
