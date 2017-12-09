@@ -49,6 +49,9 @@ export class MyOffersIndividualComponent implements OnInit {
     @ViewChild('rideModal')
     private rideModal: ElementRef;
 
+    private selectedRowRentings;
+    private selectedRowRides;
+
     public constructor(private router: Router,
                     private httpClient: HttpClient) { }
 
@@ -106,13 +109,36 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public modifyRentingClick(): void {
-        this.rentingModalTitle = 'Modifier l\'offre de location';
-        $(this.rentingModal.nativeElement).modal('show');
+        if (this.selectedRowRentings) {
+            this.rentingModalTitle = 'Modifier l\'offre de location';
+            this.rentingForm.setValue({
+                country: this.selectedRowRentings.country,
+                city: this.selectedRowRentings.city,
+                price: this.selectedRowRentings.price,
+                address: this.selectedRowRentings.address,
+                startDate: this.selectedRowRentings.startDate,
+                time: this.selectedRowRentings.time,
+                surface: this.selectedRowRentings.surface,
+                description: this.selectedRowRentings.description
+            });
+            $(this.rentingModal.nativeElement).modal('show');
+        }
     }
 
     public modifyRideClick(): void {
-        this.rideModalTitle = 'Modifier l\'offre de trajet';
-        $(this.rideModal.nativeElement).modal('show');
+        if (this.selectedRowRides) {
+            this.rideModalTitle = 'Modifier l\'offre de trajet';
+            this.rideForm.setValue({
+                rideStartCity: this.selectedRowRides.rideStartCity,
+                rideArrivalCity: this.selectedRowRides.rideArrivalCity,
+                rideStart: this.selectedRowRides.rideStart,
+                rideArrival: this.selectedRowRides.rideArrival,
+                ridePrice: this.selectedRowRides.ridePrice,
+                rideSeat: this.selectedRowRides.rideSeat,
+                rideDate: this.selectedRowRides.rideDate
+            });
+            $(this.rideModal.nativeElement).modal('show');
+        }
     }
 
     public addRentingOffer(): void {
@@ -164,8 +190,6 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public modifyRentingOffer(): void {
-        //TODO
-        //PRE REMPLIR LE FORM
         this.rentingSubmitted = true;
 
         if (this.rentingForm.valid && !this.rentingLoading) {
@@ -190,8 +214,6 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public modifyRideOffer(): void {
-        //TODO
-        //PRE REMPLIR LE FORM
         this.rideSubmitted = true;
 
         if (this.rideForm.valid && !this.rideLoading) {
@@ -239,6 +261,13 @@ export class MyOffersIndividualComponent implements OnInit {
         });
     }
 
+    public onSelectRenting(selectedItem: any) {
+        this.selectedRowRentings = selectedItem;
+    }
+
+    public onSelectRide(selectedItem: any) {
+        this.selectedRowRides = selectedItem;
+    }
 
     /**
      * Getter for the login FormControl.
