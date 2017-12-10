@@ -285,6 +285,10 @@ export class MyOffersIndividualComponent implements OnInit {
     public getRentingList(): void {
         this.httpClient.get(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.startDate.split('-');
+                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
                 this.tableContent.rentingTable = response;
                 this.areThereRentings = true;
             }
@@ -297,6 +301,10 @@ export class MyOffersIndividualComponent implements OnInit {
     public getRideList(): void {
         this.httpClient.get(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.rideDate.split('-');
+                    element.rideDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
                 this.tableContent.rideTable = response;
                 this.areThereRides = true;
             }
