@@ -6,7 +6,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-light btn-size" id="btn-trip" (click)="addTripOffer()">Ajouter une nouvelle offre de voyage</button>
+            <button class="btn btn-light btn-size" (click)="newTripClick()">Ajouter une nouvelle offre de voyage</button>
         </div>
     </div>
     <div class="col-md-3"></div>
@@ -28,15 +28,27 @@
                 </tr>
             </thead>
             <tbody>
-
+                <tr *ngFor="let rowContent of tripTableContent"
+                    (click)="onSelectTrip(rowContent)" [class.active]="rowContent == selectedRowTrips">
+                    <th>{{rowContent.address}}</th>
+                    <th>{{rowContent.country}}</th>
+                    <th>{{rowContent.price}}</th>
+                    <th>{{rowContent.startDate}}</th>
+                    <th>{{rowContent.arrivalDate}}</th>
+                    <th>{{rowContent.start}}</th>
+                    <th>{{rowContent.arrival}}</th>
+                    <th>{{rowContent.last}}</th>
+                    <th>{{rowContent.description}}</th>
+                </tr>
             </tbody>
             </table>
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-light btn-size" id="btn-renting-add" (click)="modifyTripOffer()">Modifier l'offre de voyage sélectionnée</button>
-                <button class="btn btn-light btn-size" id="btn-renting-delete">Supprimer l'offre de voyage sélectionnée</button>
+                <button class="btn btn-light btn-size" (click)="modifyTripClick()">Modifier l'offre de voyage sélectionnée</button>
+                <button class="btn btn-light btn-size" id="btn-renting-delete" data-toggle="modal"
+                    data-target="#deleteTripModal">Supprimer l'offre de voyage sélectionnée</button>
             </div>
         </div>
     </div>
@@ -252,7 +264,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Valider</button>
+                        <button type="submit" class="btn btn-primary" (click)="addTripOffer()">Valider</button>
                         <button type="reset" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     </div>
                 </form>
@@ -260,5 +272,25 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="deleteTripModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Suppression d'une offre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Etes-vous sûr de vouloir supprimer cette offre de voyage ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="deleteTripOffer()">Valider</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+                </div>
+            </div>
+        </div>
 </div>
 

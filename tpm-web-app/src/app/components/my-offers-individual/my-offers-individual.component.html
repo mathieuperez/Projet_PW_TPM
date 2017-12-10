@@ -47,7 +47,8 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-light btn-size" (click)="modifyRentingClick()">Modifier l'offre de location sélectionnée</button>
-                <button class="btn btn-light btn-size" id="btn-renting-delete">Supprimer l'offre de location sélectionnée</button>
+                <button class="btn btn-light btn-size" id="btn-renting-delete" data-toggle="modal"
+                        data-target="#deleteRentingModal">Supprimer l'offre de location sélectionnée</button>
             </div>
         </div>
     </div>
@@ -87,7 +88,8 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-light btn-size" (click)="modifyRideClick()">Modifier l'offre de trajet sélectionnée</button>
-                <button class="btn btn-light btn-size" id="btn-ride-delete">Supprimer l'offre de trajet sélectionnée</button>
+                <button class="btn btn-light btn-size" id="btn-ride-delete" data-toggle="modal"
+                        data-target="#deleteRideModal">Supprimer l'offre de trajet sélectionnée</button>
             </div>
         </div>
     </div>
@@ -465,5 +467,45 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="deleteRentingModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'une offre</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Etes-vous sûr de vouloir supprimer cette offre de location ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="deleteRenting()">Valider</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="modal fade" id="deleteRideModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'une offre</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Etes-vous sûr de vouloir supprimer cette offre de trajet ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="deleteRide()">Valider</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
 
