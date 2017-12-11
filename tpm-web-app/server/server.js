@@ -8,7 +8,8 @@ const app = express();
 // API file for interacting with MongoDB
 const api = require('./routes/api');
 
-mongoose.connect('mongodb://localhost:27017/tpm-webdb', { useMongoClient: true });
+uri='mongodb://zakia:zakiaweb@ds135156.mlab.com:35156/tpm-webdb';
+mongoose.connect(uri, { useMongoClient: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
