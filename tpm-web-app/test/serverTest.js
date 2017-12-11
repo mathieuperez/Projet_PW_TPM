@@ -114,7 +114,7 @@ describe("POST Create a renting", function() {
         });*/
 
         it("Bad request (missing Token) : returns status 401", function(done) {
-                request.put({
+                request.post({
                     url:     localurl,
                     form:    { login: "bisounours"}
                 }, function(error, response, body) {
@@ -130,12 +130,12 @@ describe("POST Create a renting", function() {
                 form:    { login: "bisounours", password: "mp"}
             }, function(error, response, body) {
                 var bodyJson = JSON.parse(body);
-                request.put({
+                request.post({
                     headers: {'x-access-token' : bodyJson.token},
                     url:     localurl,
                     form:    { description: "ma_user_story_preferee", difficulte: "3"}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(401);
+                    expect(response.statusCode).to.equal(422);
                     done();
                 });
 
@@ -146,12 +146,7 @@ describe("POST Create a renting", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     authurl,
-
-
                 form:    { login: "bisounours", password: "mperez3"}
-
-
-                
             }, function(error, response, body) {
                 var bodyJson = JSON.parse(body);
                 request.post({

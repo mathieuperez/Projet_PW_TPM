@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var RentingsSchema = mongoose.Schema({
+var RentingSchema = mongoose.Schema({
     address: {type: String,required: true},
     country: { type: String,required: true},
     city: { type: String,required: true},
@@ -14,4 +14,4 @@ var RentingsSchema = mongoose.Schema({
     login: {type: String,required: true}
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Renting', RentingSchema);
