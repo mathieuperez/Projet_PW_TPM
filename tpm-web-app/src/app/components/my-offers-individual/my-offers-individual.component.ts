@@ -3,6 +3,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Button } from 'selenium-webdriver';
 
 declare const $: any;
 
@@ -30,6 +31,9 @@ export class MyOffersIndividualComponent implements OnInit {
     private areThereRentings: boolean;
     private areThereRides: boolean;
 
+    private isModifyingRenting: boolean;
+    private isModifyingRide: boolean;
+
     private rentingForm: FormGroup;
     private rentingSubmitted: boolean;
     private rentingError: boolean;
@@ -48,12 +52,17 @@ export class MyOffersIndividualComponent implements OnInit {
     @ViewChild('rideModal')
     private rideModal: ElementRef;
 
+    private selectedRowRentings;
+    private selectedRowRides;
+
     public constructor(private router: Router,
                     private httpClient: HttpClient) { }
 
     ngOnInit() {
         this.areThereRentings = false;
         this.areThereRides = false;
+        this.isModifyingRenting = false;
+        this.isModifyingRide = false;
 
         this.rentingSubmitted = false;
         this.rentingLoading = false;
@@ -83,10 +92,12 @@ export class MyOffersIndividualComponent implements OnInit {
         });
 
         $(this.rentingModal.nativeElement).on('hidden.bs.modal', () => {
+            this.isModifyingRenting = false;
             this.rentingForm.reset();
         });
 
         $(this.rideModal.nativeElement).on('hidden.bs.modal', () => {
+            this.isModifyingRide = false;
             this.rideForm.reset();
         });
 
@@ -94,54 +105,222 @@ export class MyOffersIndividualComponent implements OnInit {
         this.getRideList();
     }
 
-    public addRentingOffer(): void {
+    public newRentingClick(): void {
         this.rentingModalTitle = 'Nouvelle offre de location';
         $(this.rentingModal.nativeElement).modal('show');
     }
 
-    public addRideOffer(): void {
+    public newRideClick(): void {
         this.rideModalTitle = 'Nouvelle offre de trajet';
         $(this.rideModal.nativeElement).modal('show');
     }
 
+    public modifyRentingClick(): void {
+        if (this.selectedRowRentings) {
+            this.rentingModalTitle = 'Modifier l\'offre de location';
+            this.rentingForm.setValue({
+                country: this.selectedRowRentings.country,
+                city: this.selectedRowRentings.city,
+                price: this.selectedRowRentings.price,
+                address: this.selectedRowRentings.address,
+                startDate: this.selectedRowRentings.startDate,
+                time: this.selectedRowRentings.time,
+                surface: this.selectedRowRentings.surface,
+                description: this.selectedRowRentings.description
+            });
+            $(this.rentingModal.nativeElement).modal('show');
+            this.isModifyingRenting = true;
+        }
+    }
+
+    public modifyRideClick(): void {
+        if (this.selectedRowRides) {
+            this.rideModalTitle = 'Modifier l\'offre de trajet';
+            this.rideForm.setValue({
+                rideStartCity: this.selectedRowRides.rideStartCity,
+                rideArrivalCity: this.selectedRowRides.rideArrivalCity,
+                rideStart: this.selectedRowRides.rideStart,
+                rideArrival: this.selectedRowRides.rideArrival,
+                ridePrice: this.selectedRowRides.ridePrice,
+                rideSeat: this.selectedRowRides.rideSeat,
+                rideDate: this.selectedRowRides.rideDate
+            });
+            $(this.rideModal.nativeElement).modal('show');
+            this.isModifyingRide = true;
+        }
+    }
+
+    public addRentingOffer(): void {
+        if (this.isModifyingRenting) {
+            this.modifyRentingOffer();
+        } else {
+            this.rentingSubmitted = true;
+
+            if (this.rentingForm.valid && !this.rentingLoading) {
+                this.rentingLoading = true;
+                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.rentingForm.value, {
+                        responseType: 'json'
+                    }
+                ).subscribe( (response: any) => {
+                    this.rentingLoading = false;
+                    if (response['success'] === true) {
+                        this.rentingLoading = false;
+                        alert('Votre offre de location a bien été ajoutée.');
+                        this.rentingForm.reset();
+                        this.getRentingList();
+                        $(this.rentingModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de location.');
+                    }
+                });
+            }
+        }
+    }
+
+    public addRideOffer(): void {
+        if (this.isModifyingRide) {
+            this.modifyRideOffer();
+        } else {
+            this.rideSubmitted = true;
+
+            if (this.rideForm.valid && !this.rideLoading) {
+                this.rideLoading = true;
+                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.rideForm.value, {
+                        responseType: 'json'
+                    }
+                ).subscribe( (response: any) => {
+                    this.rideLoading = false;
+                    if (response['success'] === true) {
+                        this.rideLoading = false;
+                        alert('Votre offre de trajet a bien été ajoutée.');
+                        this.rideForm.reset();
+                        this.getRideList();
+                        $(this.rideModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de trajet.');
+                    }
+                });
+            }
+        }
+    }
+
     public modifyRentingOffer(): void {
-        this.rentingModalTitle = 'Modifier l\'offre de location';
-        $(this.rentingModal.nativeElement).modal('show');
+        this.rentingSubmitted = true;
+
+        if (this.rentingForm.valid && !this.rentingLoading) {
+            this.rentingLoading = true;
+            this.httpClient.patch(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                this.rentingForm.value, {
+                    responseType: 'json'
+                }
+            ).subscribe( (response: any) => {
+                this.rentingLoading = false;
+                if (response['success'] === true) {
+                    this.rentingLoading = false;
+                    alert('Votre offre de location a bien été modifiée.');
+                    this.rentingForm.reset();
+                    this.getRentingList();
+                    $(this.rentingModal.nativeElement).modal('hide');
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de location.');
+                }
+            });
+        }
     }
 
     public modifyRideOffer(): void {
-        this.rideModalTitle = 'Modifier l\'offre de trajet';
-        $(this.rideModal.nativeElement).modal('show');
+        this.rideSubmitted = true;
+
+        if (this.rideForm.valid && !this.rideLoading) {
+            this.rideLoading = true;
+            this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                this.rideForm.value, {
+                    responseType: 'json'
+                }
+            ).subscribe( (response: any) => {
+                this.rideLoading = false;
+                if (response['success'] === true) {
+                    this.rideLoading = false;
+                    alert('Votre offre de trajet a bien été modifiée.');
+                    this.rideForm.reset();
+                    this.getRideList();
+                    $(this.rideModal.nativeElement).modal('hide');
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de trajet.');
+                }
+            });
+        }
+    }
+
+    public deleteRenting(): void {
+        if (this.selectedRowRentings) {
+            this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de location a bien été supprimée.');
+                    this.getRideList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de location.');
+                }
+            });
+        }
+    }
+
+    public deleteRide(): void {
+        if (this.selectedRowRides) {
+            this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de trajet a bien été supprimée.');
+                    this.getRideList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de trajet.');
+                }
+            });
+        }
     }
 
     public getRentingList(): void {
-        const params = new HttpParams();
-        params.append('login', localStorage.getItem(AppConstants.LOGIN_USER));
-        params.append('token', localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME));
-        /*this.httpClient.get('/api/offers/rentings', {params: params}).subscribe((response: any) => {
-            if (response['success'] === true) {
-
+        this.httpClient.get(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+            if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.startDate.split('-');
+                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
+                this.tableContent.rentingTable = response;
+                this.areThereRentings = true;
             }
         },
         (error: any) => {
-
-        });*/
+            alert('Une erreur est survenue lors de la récupération de la liste de vos locations.');
+        });
     }
 
     public getRideList(): void {
-        const params = new HttpParams();
-        params.append('login', localStorage.getItem(AppConstants.LOGIN_USER));
-        params.append('token', localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME));
-        /*this.httpClient.get('/api/offers/rides', {params: params}).subscribe((response: any) => {
-            if (response['success'] === true) {
-
+        this.httpClient.get(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+            if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.rideDate.split('-');
+                    element.rideDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
+                this.tableContent.rideTable = response;
+                this.areThereRides = true;
             }
         },
         (error: any) => {
-
-        });*/
+            alert('Une erreur est survenue lors de la récupération de la liste de vos trajets.');
+        });
     }
 
+    public onSelectRenting(selectedItem: any) {
+        this.selectedRowRentings = selectedItem;
+    }
+
+    public onSelectRide(selectedItem: any) {
+        this.selectedRowRides = selectedItem;
+    }
 
     /**
      * Getter for the login FormControl.

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { AppConstants } from '../../app-constants';
 
 declare const $: any;
 
@@ -13,7 +15,11 @@ export class MyOffersComponent implements OnInit {
         'Adresse de location', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
     ];
 
+    private tripTableContent;
+
     private areThereTrips: boolean;
+
+    private isModifyingTrip: boolean;
 
     private tripForm: FormGroup;
     private tripSubmitted: boolean;
@@ -25,10 +31,13 @@ export class MyOffersComponent implements OnInit {
     @ViewChild('tripModal')
     private tripModal: ElementRef;
 
-    constructor() { }
+    private selectedRowTrips;
+
+    constructor(private httpClient: HttpClient) { }
 
     ngOnInit() {
         this.areThereTrips = false;
+        this.isModifyingTrip = false;
 
         this.tripSubmitted = false;
         this.tripLoading = false;
@@ -46,20 +55,67 @@ export class MyOffersComponent implements OnInit {
         });
 
         $(this.tripModal.nativeElement).on('hidden.bs.modal', () => {
+            this.isModifyingTrip = false;
             this.tripForm.reset();
         });
 
-        //TODO : get trips from api
+        this.getTripList();
     }
 
-    public addTripOffer(): void {
+    public newTripClick(): void {
         this.tripModalTitle = 'Nouvelle offre de voyage';
         $(this.tripModal.nativeElement).modal('show');
     }
 
+    public modifyTripClick(): void {
+        if (this.selectedRowTrips) {
+            this.tripModalTitle = 'Modifier l\'offre de voyage';
+            this.tripForm.setValue({
+                address: this.selectedRowTrips.address,
+                country: this.selectedRowTrips.country,
+                price: this.selectedRowTrips.price,
+                startDate: this.selectedRowTrips.startDate,
+                arrivalDate: this.selectedRowTrips.arrivalDate,
+                start: this.selectedRowTrips.start,
+                arrival: this.selectedRowTrips.arrival,
+                last: this.selectedRowTrips.last,
+                description: this.selectedRowTrips.description
+            });
+            $(this.tripModal.nativeElement).modal('show');
+            this.isModifyingTrip = true;
+        }
+    }
+
+    public addTripOffer(): void {
+        if (this.isModifyingTrip) {
+            this.modifyTripOffer();
+        } else {
+
+        }
+    }
+
     public modifyTripOffer(): void {
-        this.tripModalTitle = 'Modifier l\'offre de voyage';
-        $(this.tripModal.nativeElement).modal('show');
+
+    }
+
+    public deleteTripOffer(): void {
+
+    }
+
+    public getTripList(): void {
+        this.httpClient.get(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+            if (response.length > 0) {
+                this.tripTableContent = response;
+                this.areThereTrips = true;
+            }
+        },
+        (error: any) => {
+            alert('Une erreur est survenue lors de la récupération de la liste de vos agences.');
+        });
+    }
+
+    public onSelectTrip(selectedItem: any): void {
+        this.selectedRowTrips = selectedItem;
     }
 
     /**
