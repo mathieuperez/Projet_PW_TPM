@@ -31,6 +31,9 @@ export class MyOffersIndividualComponent implements OnInit {
     private areThereRentings: boolean;
     private areThereRides: boolean;
 
+    private isModifyingRenting: boolean;
+    private isModifyingRide: boolean;
+
     private rentingForm: FormGroup;
     private rentingSubmitted: boolean;
     private rentingError: boolean;
@@ -58,6 +61,8 @@ export class MyOffersIndividualComponent implements OnInit {
     ngOnInit() {
         this.areThereRentings = false;
         this.areThereRides = false;
+        this.isModifyingRenting = false;
+        this.isModifyingRide = false;
 
         this.rentingSubmitted = false;
         this.rentingLoading = false;
@@ -87,10 +92,12 @@ export class MyOffersIndividualComponent implements OnInit {
         });
 
         $(this.rentingModal.nativeElement).on('hidden.bs.modal', () => {
+            this.isModifyingRenting = false;
             this.rentingForm.reset();
         });
 
         $(this.rideModal.nativeElement).on('hidden.bs.modal', () => {
+            this.isModifyingRide = false;
             this.rideForm.reset();
         });
 
@@ -122,6 +129,7 @@ export class MyOffersIndividualComponent implements OnInit {
                 description: this.selectedRowRentings.description
             });
             $(this.rentingModal.nativeElement).modal('show');
+            this.isModifyingRenting = true;
         }
     }
 
@@ -138,54 +146,63 @@ export class MyOffersIndividualComponent implements OnInit {
                 rideDate: this.selectedRowRides.rideDate
             });
             $(this.rideModal.nativeElement).modal('show');
+            this.isModifyingRide = true;
         }
     }
 
     public addRentingOffer(): void {
-        this.rentingSubmitted = true;
+        if (this.isModifyingRenting) {
+            this.modifyRentingOffer();
+        } else {
+            this.rentingSubmitted = true;
 
-        if (this.rentingForm.valid && !this.rentingLoading) {
-            this.rentingLoading = true;
-            this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
-                this.rentingForm.value, {
-                    responseType: 'json'
-                }
-            ).subscribe( (response: any) => {
-                this.rentingLoading = false;
-                if (response['success'] === true) {
+            if (this.rentingForm.valid && !this.rentingLoading) {
+                this.rentingLoading = true;
+                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.rentingForm.value, {
+                        responseType: 'json'
+                    }
+                ).subscribe( (response: any) => {
                     this.rentingLoading = false;
-                    alert('Votre offre de location a bien été ajoutée.');
-                    this.rentingForm.reset();
-                    this.getRentingList();
-                    $(this.rentingModal.nativeElement).modal('hide');
-                } else {
-                    alert('Une erreur est survenue lors de la création de votre offre de location.');
-                }
-            });
+                    if (response['success'] === true) {
+                        this.rentingLoading = false;
+                        alert('Votre offre de location a bien été ajoutée.');
+                        this.rentingForm.reset();
+                        this.getRentingList();
+                        $(this.rentingModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de location.');
+                    }
+                });
+            }
         }
     }
 
     public addRideOffer(): void {
-        this.rideSubmitted = true;
+        if (this.isModifyingRide) {
+            this.modifyRideOffer();
+        } else {
+            this.rideSubmitted = true;
 
-        if (this.rideForm.valid && !this.rideLoading) {
-            this.rideLoading = true;
-            this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
-                this.rideForm.value, {
-                    responseType: 'json'
-                }
-            ).subscribe( (response: any) => {
-                this.rideLoading = false;
-                if (response['success'] === true) {
+            if (this.rideForm.valid && !this.rideLoading) {
+                this.rideLoading = true;
+                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.rideForm.value, {
+                        responseType: 'json'
+                    }
+                ).subscribe( (response: any) => {
                     this.rideLoading = false;
-                    alert('Votre offre de trajet a bien été ajoutée.');
-                    this.rideForm.reset();
-                    this.getRideList();
-                    $(this.rideModal.nativeElement).modal('hide');
-                } else {
-                    alert('Une erreur est survenue lors de la création de votre offre de trajet.');
-                }
-            });
+                    if (response['success'] === true) {
+                        this.rideLoading = false;
+                        alert('Votre offre de trajet a bien été ajoutée.');
+                        this.rideForm.reset();
+                        this.getRideList();
+                        $(this.rideModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de trajet.');
+                    }
+                });
+            }
         }
     }
 
@@ -237,27 +254,63 @@ export class MyOffersIndividualComponent implements OnInit {
         }
     }
 
+    public deleteRenting(): void {
+        if (this.selectedRowRentings) {
+            this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de location a bien été supprimée.');
+                    this.getRideList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de location.');
+                }
+            });
+        }
+    }
+
+    public deleteRide(): void {
+        if (this.selectedRowRides) {
+            this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de trajet a bien été supprimée.');
+                    this.getRideList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de trajet.');
+                }
+            });
+        }
+    }
+
     public getRentingList(): void {
         this.httpClient.get(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.startDate.split('-');
+                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
                 this.tableContent.rentingTable = response;
                 this.areThereRentings = true;
             }
         },
         (error: any) => {
-            alert('Une erreur est survenue lors de la récupération de la liste de vos locations.' + error);
+            alert('Une erreur est survenue lors de la récupération de la liste de vos locations.');
         });
     }
 
     public getRideList(): void {
         this.httpClient.get(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    const date = element.rideDate.split('-');
+                    element.rideDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                });
                 this.tableContent.rideTable = response;
                 this.areThereRides = true;
             }
         },
         (error: any) => {
-            alert('Une erreur est survenue lors de la récupération de la liste de vos trajets.' + error);
+            alert('Une erreur est survenue lors de la récupération de la liste de vos trajets.');
         });
     }
 

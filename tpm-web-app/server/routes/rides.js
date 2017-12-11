@@ -24,7 +24,7 @@ var Ride = mongoose.model('ride', rideSchema);
 //Ajouter un trajet
 router.post('/:login', (req, res) => {
   var ride= new Ride();
-    ride.rideStartCity= req.body.rideArrivalCity;
+    ride.rideStartCity= req.body.rideStartCity;
     ride.rideArrivalCity= req.body.rideArrivalCity;
     ride.rideStart = req.body.rideStart;
     ride.rideArrival = req.body.rideArrival;
