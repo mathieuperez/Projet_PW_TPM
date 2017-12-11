@@ -1,45 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const crypto = require('crypto');
+const User = require('./UserSchema');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
 
 app.set('superSecret', "12345"); // secret variable
-
+/*
 var usersSchema = mongoose.Schema({
-    login:{
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        required: true
-  },
-    email:{
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        required: true
-  },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true
-    },
-    token: {
-        type: String,
-        required: false
-    }
-
-
+    login:{type: String, unique: true, lowercase: true, trim: true, required: true},
+    email:{type: String, unique: true, lowercase: true, trim: true, required: true},
+    password: {type: String, required: true},
+    role: {type: String, required: true},
+    token: {type: String, required: false}
 });
 
 var User = mongoose.model('User', usersSchema);
+*/
 
 router.post('/', (req, res) => {
     var user = new User();

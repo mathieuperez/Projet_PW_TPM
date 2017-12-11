@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+const Renting = require('./RentingSchema');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
-
+/*
 var RentingsSchema = mongoose.Schema({
     address: {type: String,required: true},
     country: { type: String,required: true},
@@ -19,7 +19,7 @@ var RentingsSchema = mongoose.Schema({
 });
 
 var Renting = mongoose.model('Renting', RentingsSchema);
-
+*/
 router.post('/:login', (req, res) => {
     var renting = new Renting();
     renting.country = req.body.country;
@@ -77,7 +77,9 @@ router.post('/:login', (req, res) => {
 router.get('/:login', function(req, res, next) {
     var login = req.params.login;
     Renting.find({"login": login}, function (err, rentings) {
+
         if (err) return next(err);
+
         res.json(rentings);
     });
 });

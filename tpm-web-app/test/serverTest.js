@@ -1,12 +1,11 @@
 var expect  = require("chai").expect;
 var request = require("request");
-var jwt = require('jsonwebtoken');
 
 describe("Travel Agency API", function() {
 
     var url = "http://localhost:3000/api/";
 
-    describe("POST Créer un utilisateur", function() {
+    describe("POST Create a user", function() {
         var localurl = url + "users/";
 
         it("Bad request (missing Argument) : returns status 422", function(done) {
@@ -24,7 +23,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", role: "Developpeur"}
+                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", login: "bisounours", role: "Developpeur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
@@ -35,7 +34,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mp@bord.fr", password: "mp", role: "Utilisateur"}
+                form:    { email: "mp@bord.fr", password: "mp", login:"teddybear", role: "Utilisateur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
@@ -46,7 +45,7 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", role: "Developpeur"}
+                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3", login: "bisounours", role: "Developpeur"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(409);
                 done();
@@ -55,11 +54,11 @@ describe("Travel Agency API", function() {
 
     });
 
-/*
+
     describe("POST Authentification", function() {
         var localurl = url + "users/token";
 
-        it("Bad Request (missing arguments) : returns status 409", function(done) {
+        it("Bad Request (missing arguments) : returns status 422", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
@@ -70,11 +69,11 @@ describe("Travel Agency API", function() {
             });
         });
 
-        it("Bad Request (not matching arguments) : returns status 409", function(done) {
+        it("Bad Request (not matching arguments) : returns status 400", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
+                form:    { login: "bisounours Premier", password: "mperez3"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(400);
                 done();
@@ -85,112 +84,48 @@ describe("Travel Agency API", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
-            }, function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
-                done();
-            });
-        });
-        it("fetched the associated user", function(done) {
-            request.post({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     localurl,
-                form:    { email: "mathieu.perez@etu.u-bordeaux.fr", password: "mperez3"}
-            }, function(error, response, body) {
-                var bodyJson = JSON.parse(body);
-                var token = bodyJson.token;
-                jwt.verify(token, "12345", function (err, decoded) {
-                    expect(decoded.email).to.equal("dprestat");
-                    expect(decoded.password).to.equal("dp33");
-                });
-                done();
-
-            });
-        });
-    });
-
-
-
-
-
-
-
-
-    describe("GET Obtenir un utilisateur", function() {
-        var localurl = url + "users/dprestat";
-        it("Good request : returns status 200", function(done) {
-            request.get({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     localurl,
+                form:    { login: "bisounours", password: "mperez3"}
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
                 done();
             });
         });
 
-        it("fetched the associated user", function(done) {
-            request.get({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     localurl,
-            }, function(error, response, body) {
-                var bodyJson = JSON.parse(body);
-                var email = bodyJson.email;
-                var password = bodyJson.password;
-                var name = bodyJson.name;
-                var surname = bodyJson.surname;
-
-                expect(email).to.equal("dprestat");
-                expect(password).to.equal("dp33");
-                expect(name).to.equal("Prestat");
-                expect(surname).to.equal("Dimitri");
-                done();
-            });
-        });
     });
 
 
 
 
-
-
-describe("PUT Créer une user story", function() {
-        var localurl = url + "userStories/projects/Bepp";
+    describe("POST Create a renting", function() {
+        var localurl = url + "rentings/mperez3";
         var authurl = url + "users/token";
-
-        it("Bad request (missing Argument) : returns status 422", function(done) {
-            request.post({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     authurl,
-                form:    { email: "dprestat", password: "dp33"}
-            }, function(error, response, body) {
-                var bodyJson = JSON.parse(body);
-                request.put({
-                    headers: {'x-access-token' : bodyJson.token},
-                    url:     localurl,
-                    form:    { description: "ma user story préférée"}
-                }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
-                    done();
-                });
-
-            });
-        });
+        /*
+                it("Another good request without token verification: returns status 200", function(done) {
+                    request.post({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                        url:     localurl,
+                        form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                    }, function(error, response, body) {
+                        expect(response.statusCode).to.equal(200);
+                        done();
+                    });
+                });*/
 
         it("Bad request (missing Token) : returns status 401", function(done) {
-                request.put({
-                    url:     localurl,
-                    form:    { name: "Bepp"}
-                }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
-                    done();
-                });
+            request.put({
+                url:     localurl,
+                form:    { login: "bisounours"}
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(422);
+                done();
+            });
         });
 
         it("Bad request (bad Token) : returns status 401", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     authurl,
-                form:    { email: "abounad", password: "ab33"}
+                form:    { login: "bisounours", password: "mp"}
             }, function(error, response, body) {
                 var bodyJson = JSON.parse(body);
                 request.put({
@@ -209,13 +144,13 @@ describe("PUT Créer une user story", function() {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     authurl,
-                form:    { email: "dprestat", password: "dp33"}
+                form:    { login: "bisounours", password: "mperez3"}
             }, function(error, response, body) {
                 var bodyJson = JSON.parse(body);
-                request.put({
+                request.post({
                     headers: {'x-access-token' : bodyJson.token},
                     url:     localurl,
-                    form:    { description: "ma_user_story_preferee", difficulte: "3" }
+                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
                 }, function(error, response, body) {
                     expect(response.statusCode).to.equal(200);
                     done();
@@ -224,7 +159,33 @@ describe("PUT Créer une user story", function() {
             });
         });
 
-    });*/
+
+
+        it("Good request 2222 : returns status 200", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                //done();
+                request.post({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+
+            });
+        });
+
+
+
+
+
+    });
 
 
 
