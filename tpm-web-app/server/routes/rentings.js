@@ -1,24 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+const User = require('./UserSchema');
+const Renting = require('./RentingSchema');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
-
-var RentingsSchema = mongoose.Schema({
-    address: {type: String,required: true},
-    country: { type: String,required: true},
-    city: { type: String,required: true},
-    price: {type: Number,required: true},
-    startDate: {type: Date,required: true},
-    time: {type: Number,required: true},
-    surface: {type: Number,required: true},
-    description: { type: String},
-    endDate: {type: Date,required: true},
-    login: {type: String,required: true}
-});
-
-var Renting = mongoose.model('Renting', RentingsSchema);
 
 router.post('/:login', (req, res) => {
     var renting = new Renting();
@@ -81,5 +67,34 @@ router.get('/:login', function(req, res, next) {
         res.json(rentings);
     });
 });
+
+
+function verifyAuthentification(req, res, login, next) {
+
+    login="bisounours";
+    User.findOne().where('login').equals(login).exec(function(err, users){
+        if (err) {
+            res.status(500).json({success: false, message:'There was a problem with the database while checking if the login already exists.'});
+        }
+        else {
+            var token = users.token;
+            if (token) {
+                jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+                    if (err) {
+                        res.success(401).json({success: false, message: 'Failed to authenticate token.'});
+                    }
+                    else {
+                        req.decoded = decoded;
+                        next();
+                    }
+                });
+            }
+            else {
+                res.status(401).send({success: false,message: 'No token provided.'});
+            }
+        }
+    });
+
+}
 
 module.exports = router;
