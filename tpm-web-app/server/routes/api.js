@@ -23,6 +23,7 @@ router.use('/users', users);
 router.use('/rentings', rentings);
 router.use('/rides', rides);
 
+
 // Define the home page route
 router.get('/', function(req, res) {
     res.json('home page');

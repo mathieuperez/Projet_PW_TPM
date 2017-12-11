@@ -96,29 +96,29 @@ describe("Travel Agency API", function() {
 
 
 
-    describe("POST Create a renting", function() {
+describe("POST Create a renting", function() {
         var localurl = url + "rentings/mperez3";
         var authurl = url + "users/token";
-        /*
-                it("Another good request without token verification: returns status 200", function(done) {
-                    request.post({
-                        headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                        url:     localurl,
-                        form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
-                    }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(200);
-                        done();
-                    });
-                });*/
-
-        it("Bad request (missing Token) : returns status 401", function(done) {
-            request.put({
+/*
+        it("Another good request without token verification: returns status 200", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     localurl,
-                form:    { login: "bisounours"}
+                form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
             }, function(error, response, body) {
-                expect(response.statusCode).to.equal(422);
+                expect(response.statusCode).to.equal(200);
                 done();
             });
+        });*/
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+                request.post({
+                    url:     localurl,
+                    form:    { login: "bisounours"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(422);
+                    done();
+                });
         });
 
         it("Bad request (bad Token) : returns status 401", function(done) {
@@ -128,12 +128,12 @@ describe("Travel Agency API", function() {
                 form:    { login: "bisounours", password: "mp"}
             }, function(error, response, body) {
                 var bodyJson = JSON.parse(body);
-                request.put({
+                request.post({
                     headers: {'x-access-token' : bodyJson.token},
                     url:     localurl,
                     form:    { description: "ma_user_story_preferee", difficulte: "3"}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(401);
+                    expect(response.statusCode).to.equal(422);
                     done();
                 });
 
