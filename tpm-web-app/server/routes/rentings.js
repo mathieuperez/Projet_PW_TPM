@@ -22,33 +22,24 @@ router.post('/:login', (req, res) => {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
+        renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
+        renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
+
         Renting.find({"endDate": {"$gte": renting.startDate, "$lt": renting.endDate}}).exec(function(err, rentings){
             if (err) {
                 res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this adress and time.'});
             }
             else {
                 verifyAuthentification(req, res, renting.login, function () {
-                    renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
-                    renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
 
                     if (rentings.length == 0) {
-                        Renting.find({
-                            "start": {
-                                "$gte": renting.start,
-                                "$lt": renting.endDate
-                            }
-                        }).exec(function (err, rentings) {
+                        Renting.find({"start": {"$gte": renting.start, "$lt": renting.endDate}}).exec(function (err, rentings) {
                             if (err) {
-                                res.status(500).json({
-                                    success: false,
-                                    message: 'There was a problem with the database while checking if there is already a rent starting at this adress and time.'
-                                });
-                            }
+                                res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent starting at this adress and time.'});}
                             else {
                                 if (rentings.length == 0) {
                                     renting.save(function (err) {
                                         if (err) {
-                                            console.log("---------------"+err);
                                             res.status(401).json({success: false, message: 'Creating Rent failed.'});
                                         }
                                         else {
@@ -57,19 +48,13 @@ router.post('/:login', (req, res) => {
                                     });
                                 }
                                 else {
-                                    res.status(409).json({
-                                        success: false,
-                                        message: 'There is already a location with this adress and date.'
-                                    });
+                                    res.status(409).json({success: false, message: 'There is already a location with this adress and date.'});
                                 }
                             }
                         });
                     }
                     else {
-                        res.status(409).json({
-                            success: false,
-                            message: 'There is already a location with this adress and date.'
-                        });
+                        res.status(409).json({success: false,message: 'There is already a location with this adress and date.'});
                     }
                 });
             }
@@ -99,7 +84,6 @@ function verifyAuthentification(req, res, login, next) {
             if (token) {
                 jwt.verify(token, app.get('superSecret'), function (err, decoded) {
                     if (err) {
-                        console.log("<<<<<<<<<<<"+err);
                         res.status(401).json({success: false, message: 'Failed to authenticate token.'});
                     }
                     else {
@@ -109,7 +93,6 @@ function verifyAuthentification(req, res, login, next) {
                 });
             }
             else {
-                console.log(">>>>>>>>>>>"+err);
                 res.status(401).send({success: false,message: 'No token provided.'});
             }
         }
