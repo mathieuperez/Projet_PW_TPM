@@ -161,7 +161,7 @@ describe("POST Create a renting", function() {
 
 
 
-        it("Good request 2222 : returns status 200", function(done) {
+        it("Duplicate request  : returns status 409", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     authurl,
@@ -172,9 +172,9 @@ describe("POST Create a renting", function() {
                 request.post({
                     headers: {'x-access-token' : bodyJson.token},
                     url:     localurl,
-                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "11/12/2017", time: 15, surface: 37}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(200);
+                    expect(response.statusCode).to.equal(409);
                     done();
                 });
 
