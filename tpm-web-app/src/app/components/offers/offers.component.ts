@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConstants } from '../../app-constants';
 import { HttpClient } from '@angular/common/http';
@@ -39,13 +39,15 @@ export class OffersComponent implements OnInit {
         ]
     };
 
-    constructor(private router: Router, private httpClient: HttpClient) {
+    constructor(private router: Router, private httpClient: HttpClient, private ngzone: NgZone) {
     }
 
     ngOnInit() {
         const url = this.router.url.split('/');
         this.url = url[url.length - 1];
         this.changeContent(this.url);
+
+        console.log('ngoninit');
 
         this.tableContentCopy = new Array<{[x: string]: string}>();
         this.tableContent = new Array<{[x: string]: string}>();
@@ -141,8 +143,7 @@ export class OffersComponent implements OnInit {
         this.httpClient.get('/api/rentings/').subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    const date = element.startDate.split('-');
-                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                    element.startDate = new Date(element.startDate);
                 });
                 this.tableContent = response;
                 this.tableContentCopy = this.tableContent;
@@ -158,11 +159,11 @@ export class OffersComponent implements OnInit {
         this.httpClient.get('/api/rides/').subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    const date = element.rideDate.split('-');
-                    element.rideDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                    element.rideDate = new Date(element.rideDate);
                 });
                 this.tableContent = response;
                 this.tableContentCopy = this.tableContent;
+                console.log(this.tableContent);
             }
         },
         (error: any) => {

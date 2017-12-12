@@ -24,8 +24,8 @@
                     <td>{{rowContent.city}}</td>
                     <td>{{rowContent.country}}</td>
                     <td>{{rowContent.price}}</td>
-                    <td>{{rowContent.startDate}}</td>
-                    <td>{{rowContent.arrivalDate}}</td>
+                    <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                    <td>{{rowContent.arrivalDate.toLocaleDateString()}}</td>
                     <td>{{rowContent.start}}</td>
                     <td>{{rowContent.arrival}}</td>
                     <td>{{rowContent.last}}</td>
@@ -38,7 +38,7 @@
                     <td>{{rowContent.city}}</td>
                     <td>{{rowContent.address}}</td>
                     <td>{{rowContent.price}}</td>
-                    <td>{{rowContent.startDate}}</td>
+                    <td>{{rowContent.startDate.toLocaleDateString()}}</td>
                     <td>{{rowContent.time}}</td>
                     <td>{{rowContent.surface}}</td>
                     <td>{{rowContent.description}}</td>
@@ -52,7 +52,7 @@
                     <td>{{rowContent.rideArrival}}</td>
                     <td>{{rowContent.ridePrice}}</td>
                     <td>{{rowContent.rideSeat}}</td>
-                    <td>{{rowContent.rideDate}}</td>
+                    <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
                 </tr>
             </ng-container>
       </tbody>

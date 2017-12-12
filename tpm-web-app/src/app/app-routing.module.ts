@@ -22,7 +22,8 @@ import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
             { path: 'my-offers-individual', component: MyOffersIndividualComponent/*canActivate: [UnAuthGuard]*/ },
             { path: '**', redirectTo: '/', pathMatch: 'full' },
             { path: '', redirectTo: '/', pathMatch: 'full' },
-        ]),
+        ],
+        {useHash: true}),
     ],
     exports: [RouterModule]
 })
