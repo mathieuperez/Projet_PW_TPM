@@ -98,8 +98,8 @@ describe("Travel Agency API", function() {
 
 
 
-describe("POST Create a renting", function() {
-        var localurl = url + "rentings/mperez3";
+    describe("POST Create a renting", function() {
+        var localurl = url + "rentings/bisounours";
         var authurl = url + "users/token";
 /*
         it("Another good request without token verification: returns status 200", function(done) {
@@ -152,7 +152,89 @@ describe("POST Create a renting", function() {
                 request.post({
                     headers: {'x-access-token' : bodyJson.token},
                     url:     localurl,
-                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                    form:    { country: "france", address: "3rue_jean_plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+
+            });
+        });
+
+
+        it("Bad request (Duplicate) : returns status 409", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    {  password: "mperez3", login: "bisounours"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                //done();
+                request.post({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { country: "france", address: "3rue_jean_plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(409);
+                    done();
+                });
+
+            });
+        });
+    });
+
+
+
+
+    describe("PATCH Modify a renting", function() {
+
+        var date= "10/12/2017";
+        var startDate = new Date(""+ date.split('/')[2] + "-" + date.split('/')[1] + "-" + date.split('/')[0]);
+
+        var localurl = url + "rentings/bisounours/2017-12-10/3rue_jean_plaa";
+        var authurl = url + "users/token";
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.patch({
+                url:     localurl,
+                form:    { login: "bisounours"}
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(422);
+                done();
+            });
+        });
+
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mp"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.patch({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { country: "france", startDate: "28/10/2017", time: 15, surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(422);
+                    done();
+                });
+
+            });
+        });
+
+        it("Good request : returns status 200", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.patch({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "28/10/2017", time: 15, surface: 37}
                 }, function(error, response, body) {
                     expect(response.statusCode).to.equal(200);
                     done();
@@ -163,31 +245,9 @@ describe("POST Create a renting", function() {
 
 
 
-        it("Bad request (Duplicate) : returns status 409", function(done) {
-            request.post({
-                headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                url:     authurl,
-                form:    { login: "bisounours", password: "mperez3"}
-            }, function(error, response, body) {
-                var bodyJson = JSON.parse(body);
-                //done();
-                request.post({
-                    headers: {'x-access-token' : bodyJson.token},
-                    url:     localurl,
-                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/12/2017", time: 15, surface: 37}
-                }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(409);
-                    done();
-                });
-
-            });
-        });
-
-
-
-
 
     });
+
 
 
 

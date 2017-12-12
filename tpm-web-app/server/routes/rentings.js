@@ -41,9 +41,10 @@ router.post('/:login', (req, res) => {
     }
 });
 
-/*
 
-router.patch('/:login/:oldStartDate/:oldTime/:oldAddress', (req, res) => {
+
+router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
+
     var renting = new Renting();
     renting.country = req.body.country;
     renting.address = req.body.address;
@@ -55,11 +56,10 @@ router.patch('/:login/:oldStartDate/:oldTime/:oldAddress', (req, res) => {
     renting.login = req.params.login;
     var oldRenting=new Renting();
     oldRenting.address = req.params.oldAddress;
-    oldRenting.startDate = req.params.oldStartDate;
-    oldRenting.time = req.params.oldTime;
-    oldRenting.endDate = new Date().setTime(oldRenting.startDate.getTime()+oldRenting.time * 86400000);
+    oldRenting.startDate = req.params.oldStartDate; //!!!!!!!! FORMAT: yyyy-mm-dd
 
     if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
+        console.log("missing arguments patch");
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
@@ -67,24 +67,52 @@ router.patch('/:login/:oldStartDate/:oldTime/:oldAddress', (req, res) => {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
 
+/*
+            console.log("--------------------------------------------------"+renting.startDate);
+            console.log("--------------------------------------------------"+oldRenting.startDate.toISOString()+"   :   "+oldRenting.startDate);
+            console.log("--------------------------------------------------"+oldRenting.startDate.toDateString());
 
+*/
+            Renting.find({"startDate": oldRenting.startDate.toISOString(),"address": oldRenting.address}).exec(function (err, rentings) {
+                if (err) {
+                    res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent with this address and starting date.'});
+                }
+                else {
+                    if (rentings.length == 1) {
+                        oldRenting.country=rentings[0].country;
+                        oldRenting.city=rentings[0].city;
+                        oldRenting.price=rentings[0].price;
+                        oldRenting.time=rentings[0].time;
+                        oldRenting.surface=rentings[0].surface;
+                        oldRenting.description=rentings[0].description;
+                        oldRenting.login=rentings[0].login;
+                        oldRenting.endDate=rentings[0].endDate;
 
-                    verifyDate(req, res, renting, function(){
+                        findAndDeleteRent(req, res, oldRenting, function(){
 
-                        renting.save(function (err) {
-                            if (err) {
-                                res.status(401).json({success: false, message: 'Creating Rent failed.'});
-                            }
-                            else {
-                                res.status(200).json({success: true, message: 'Creating Rent successful'});
-                            }
+                            verifyDate(req, res, renting, function(){
+
+                                renting.save(function (err) {
+                                    if (err) {
+                                        res.status(401).json({success: false, message: 'Creating Rent failed.'});
+                                    }
+                                    else {
+                                        res.status(200).json({success: true, message: 'Creating Rent successful'});
+                                    }
+                                });
+
+                            });
+
                         });
-
-                    });
-
+                    }
+                    else {
+                        res.status(409).json({success: false,message: 'There is no rent with this address and starting date.'});
+                    }
+                }
+            });
         });
     }
-});*/
+});
 
 
 
@@ -99,7 +127,6 @@ router.get('/:login', function(req, res, next) {
 
 function verifyAuthentification(req, res, login, next) {
 
-    login="bisounours";
     User.findOne().where('login').equals(login).exec(function(err, users){
         if (err) {
             res.status(500).json({success: false, message:'There was a problem with the database while checking if the login already exists.'});
@@ -118,6 +145,7 @@ function verifyAuthentification(req, res, login, next) {
                 });
             }
             else {
+                console.log("No token provided");
                 res.status(401).send({success: false,message: 'No token provided.'});
             }
         }
@@ -127,6 +155,7 @@ function verifyAuthentification(req, res, login, next) {
 
 
 function verifyDate(req, res, renting, next) {
+    console.log("                      pppppppp");
     Renting.find({"endDate": {"$gte": renting.startDate.getTime()-1, "$lt": renting.endDate.getTime()+1}}).exec(function(err, rentings){
         if (err) {
             res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this address and time.'});
@@ -168,5 +197,26 @@ function verifyDate(req, res, renting, next) {
         }
     });
 }
+
+
+
+function findAndDeleteRent(req, res, renting, next) {
+
+    Renting.findOneAndRemove({"startDate": renting.startDate,"address": renting.address}).exec(function (err, rentings) {
+        if (err) {
+            res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent with this address and starting date.'});
+        }
+        else {
+            if (rentings) {
+                next();
+            }
+            else {
+                res.status(409).json({success: false,message: 'There is no rent with this address and starting date.'});
+            }
+        }
+    });
+
+}
+
 
 module.exports = router;
