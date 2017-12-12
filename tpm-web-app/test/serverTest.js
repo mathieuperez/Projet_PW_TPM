@@ -161,7 +161,7 @@ describe("POST Create a renting", function() {
 
 
 
-        it("Duplicate request  : returns status 409", function(done) {
+        it("Bad request (Duplicate) : returns status 409", function(done) {
             request.post({
                 headers: {'content-type' : 'application/x-www-form-urlencoded'},
                 url:     authurl,
@@ -180,10 +180,6 @@ describe("POST Create a renting", function() {
 
             });
         });
-
-
-
-
 
     });
 
