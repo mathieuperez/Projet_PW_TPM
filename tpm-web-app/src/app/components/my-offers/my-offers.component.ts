@@ -32,6 +32,7 @@ export class MyOffersComponent implements OnInit {
     private tripModal: ElementRef;
 
     private selectedRowTrips;
+    private selectedRowTripsIndex;
 
     constructor(private httpClient: HttpClient) { }
 
@@ -118,10 +119,12 @@ export class MyOffersComponent implements OnInit {
 
     public modifyTripOffer(): void {
         this.tripSubmitted = true;
+        console.log(this.tripTableContent['_id']);
 
         if (this.tripForm.valid && !this.tripLoading) {
             this.tripLoading = true;
-            this.httpClient.patch(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+            this.httpClient.patch(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
                 this.tripForm.value, {
                     responseType: 'json'
                 }
@@ -142,7 +145,8 @@ export class MyOffersComponent implements OnInit {
 
     public deleteTripOffer(): void {
         if (this.selectedRowTrips) {
-            this.httpClient.delete(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            this.httpClient.delete(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`, {}
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de voyage a bien été supprimée.');
@@ -166,8 +170,9 @@ export class MyOffersComponent implements OnInit {
         });
     }
 
-    public onSelectTrip(selectedItem: any): void {
+    public onSelectTrip(selectedItem: any, index: number): void {
         this.selectedRowTrips = selectedItem;
+        this.selectedRowTripsIndex = index;
     }
 
     /**

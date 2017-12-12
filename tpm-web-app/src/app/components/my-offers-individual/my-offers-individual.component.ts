@@ -54,6 +54,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
     private selectedRowRentings;
     private selectedRowRides;
+    private selectedRowRentingsIndex;
+    private selectedRowRidesIndex;
 
     public constructor(private router: Router,
                     private httpClient: HttpClient) { }
@@ -211,7 +213,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rentingForm.valid && !this.rentingLoading) {
             this.rentingLoading = true;
-            this.httpClient.patch(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+            this.httpClient.patch(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
                 this.rentingForm.value, {
                     responseType: 'json'
                 }
@@ -235,7 +238,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rideForm.valid && !this.rideLoading) {
             this.rideLoading = true;
-            this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+            this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                 this.rideForm.value, {
                     responseType: 'json'
                 }
@@ -256,7 +260,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
     public deleteRenting(): void {
         if (this.selectedRowRentings) {
-            this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                    ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`, {}
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de location a bien été supprimée.');
@@ -270,7 +275,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
     public deleteRide(): void {
         if (this.selectedRowRides) {
-            this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`, {}
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de trajet a bien été supprimée.');
@@ -314,12 +320,14 @@ export class MyOffersIndividualComponent implements OnInit {
         });
     }
 
-    public onSelectRenting(selectedItem: any) {
+    public onSelectRenting(selectedItem: any, index: number) {
         this.selectedRowRentings = selectedItem;
+        this.selectedRowRentingsIndex = index;
     }
 
-    public onSelectRide(selectedItem: any) {
+    public onSelectRide(selectedItem: any, index: number) {
         this.selectedRowRides = selectedItem;
+        this.selectedRowRidesIndex = index;
     }
 
     /**

@@ -28,8 +28,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let rowContent of tripTableContent"
-                    (click)="onSelectTrip(rowContent)" [class.active]="rowContent == selectedRowTrips">
+                <tr *ngFor="let rowContent of tripTableContent; let i = index;"
+                    (click)="onSelectTrip(rowContent, i)" [class.active]="rowContent == selectedRowTrips">
                     <td>{{rowContent.address}}</td>
                     <td>{{rowContent.city}}</td>
                     <td>{{rowContent.country}}</td>

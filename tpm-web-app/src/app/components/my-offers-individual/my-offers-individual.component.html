@@ -29,8 +29,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rowContent of tableContent.rentingTable"
-                        (click)="onSelectRenting(rowContent)" [class.active]="rowContent == selectedRowRentings">
+                    <tr *ngFor="let rowContent of tableContent.rentingTable; let i = index;"
+                        (click)="onSelectRenting(rowContent, i)" [class.active]="rowContent == selectedRowRentings">
                         <td>{{rowContent.country}}</td>
                         <td>{{rowContent.city}}</td>
                         <td>{{rowContent.address}}</td>
@@ -72,8 +72,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rowContent of tableContent.rideTable"
-                        (click)="onSelectRide(rowContent)" [class.active]="rowContent == selectedRowRides">
+                    <tr *ngFor="let rowContent of tableContent.rideTable; let i = index;"
+                        (click)="onSelectRide(rowContent, i)" [class.active]="rowContent == selectedRowRides">
                         <td>{{rowContent.rideStartCity}}</td>
                         <td>{{rowContent.rideArrivalCity}}</td>
                         <td>{{rowContent.rideStart}}</td>
