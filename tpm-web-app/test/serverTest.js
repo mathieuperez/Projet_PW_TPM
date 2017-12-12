@@ -243,11 +243,66 @@ describe("Travel Agency API", function() {
             });
         });
 
-
-
-
     });
 
+
+
+
+    describe("DELETE Delete a renting", function() {
+
+        var localurl = url + "rentings/bisounours/";
+        var authurl = url + "users/token";
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.delete({
+                url:     localurl,
+                form:    { login: "bisounours"}
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(422);
+                done();
+            });
+        });
+
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mp"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.delete({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { country: "france", startDate: "28/10/2017", time: 15, surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(422);
+                    done();
+                });
+
+            });
+        });
+
+        it("Good request : returns status 200", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.delete({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { address: "3rue jean plaa", startDate: "28/10/2017", surface: 37}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+
+            });
+        });
+
+    });
 
 
 
