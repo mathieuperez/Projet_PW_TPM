@@ -6,6 +6,11 @@
     background-color: #7fc2e0 !important;
 }
 
+.table-responsive thead{
+    background-color: #bebebe;
+    border-color:#bebebe;
+}
+
 .table-responsive {
-    max-height:240px;
+    max-height: 480px;
 }

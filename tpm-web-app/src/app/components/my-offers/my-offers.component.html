@@ -6,7 +6,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-light btn-size" (click)="newTripClick()">Ajouter une nouvelle offre de voyage</button>
+            <button class="btn btn-info btn-size" (click)="newTripClick()">Ajouter une nouvelle offre de voyage</button>
         </div>
     </div>
     <div class="col-md-3"></div>
@@ -21,7 +21,7 @@
     </div>
     <div *ngIf="areThereTrips">
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-hover">
             <thead>
                 <tr>
                     <th *ngFor="let obj of tripTable">{{ obj }}</th>
@@ -30,15 +30,16 @@
             <tbody>
                 <tr *ngFor="let rowContent of tripTableContent"
                     (click)="onSelectTrip(rowContent)" [class.active]="rowContent == selectedRowTrips">
-                    <th>{{rowContent.address}}</th>
-                    <th>{{rowContent.country}}</th>
-                    <th>{{rowContent.price}}</th>
-                    <th>{{rowContent.startDate}}</th>
-                    <th>{{rowContent.arrivalDate}}</th>
-                    <th>{{rowContent.start}}</th>
-                    <th>{{rowContent.arrival}}</th>
-                    <th>{{rowContent.last}}</th>
-                    <th>{{rowContent.description}}</th>
+                    <td>{{rowContent.address}}</td>
+                    <td>{{rowContent.city}}</td>
+                    <td>{{rowContent.country}}</td>
+                    <td>{{rowContent.price}}</td>
+                    <td>{{rowContent.startDate}}</td>
+                    <td>{{rowContent.arrivalDate}}</td>
+                    <td>{{rowContent.start}}</td>
+                    <td>{{rowContent.arrival}}</td>
+                    <td>{{rowContent.last}}</td>
+                    <td>{{rowContent.description}}</td>
                 </tr>
             </tbody>
             </table>
@@ -46,8 +47,8 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-light btn-size" (click)="modifyTripClick()">Modifier l'offre de voyage sélectionnée</button>
-                <button class="btn btn-light btn-size" id="btn-renting-delete" data-toggle="modal"
+                <button class="btn btn-info btn-size" (click)="modifyTripClick()">Modifier l'offre de voyage sélectionnée</button>
+                <button class="btn btn-info btn-size" id="btn-renting-delete" data-toggle="modal"
                     data-target="#deleteTripModal">Supprimer l'offre de voyage sélectionnée</button>
             </div>
         </div>
@@ -83,6 +84,28 @@
                                 <div class="col-12 text-danger"
                                     *ngIf="address.invalid && (address.dirty || address.touched || tripSubmitted)">
                                     <span class="validation-message" *ngIf="address.errors.required">L'adresse est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="city">Ville</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': city.invalid && (city.dirty || city.touched || tripSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="city"
+                                            class="form-control"
+                                            placeholder="Ville"
+                                            formControlName="city">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="address.invalid && (city.dirty || city.touched || tripSubmitted)">
+                                    <span class="validation-message" *ngIf="city.errors.required">La ville est requise.</span>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +269,7 @@
                             <label for="description">Description</label>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group has-feedback"
-                            [ngClass]="{ 'has-error': description.invalid && (description.dirty || description.touched || tripSubmitted) }">
+                            <div class="form-group has-feedback">
                                 <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                                     <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
                                     <input  type="text"
@@ -255,10 +277,6 @@
                                             class="form-control"
                                             placeholder="Description"
                                             formControlName="description">
-                                </div>
-                                <div class="col-12 text-danger"
-                                    *ngIf="description.invalid && (description.dirty || description.touched || tripSubmitted)">
-                                    <span class="validation-message" *ngIf="description.errors.required">La description est requise.</span>
                                 </div>
                             </div>
                         </div>

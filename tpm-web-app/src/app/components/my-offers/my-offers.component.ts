@@ -44,6 +44,7 @@ export class MyOffersComponent implements OnInit {
         this.tripError = false;
         this.tripForm = new FormGroup({
             address: new FormControl('', [ Validators.required ]),
+            city: new FormControl('', [ Validators.required ]),
             country: new FormControl('', [ Validators.required ]),
             price: new FormControl('', [ Validators.required ]),
             startDate: new FormControl('', [ Validators.required ]),
@@ -72,6 +73,7 @@ export class MyOffersComponent implements OnInit {
             this.tripModalTitle = 'Modifier l\'offre de voyage';
             this.tripForm.setValue({
                 address: this.selectedRowTrips.address,
+                city: this.selectedRowTrips.city,
                 country: this.selectedRowTrips.country,
                 price: this.selectedRowTrips.price,
                 startDate: this.selectedRowTrips.startDate,
@@ -90,16 +92,66 @@ export class MyOffersComponent implements OnInit {
         if (this.isModifyingTrip) {
             this.modifyTripOffer();
         } else {
+            this.tripSubmitted = true;
 
+            if (this.tripForm.valid && !this.tripLoading) {
+                this.tripLoading = true;
+                this.httpClient.post(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.tripForm.value, {
+                        responseType: 'json'
+                    }
+                ).subscribe( (response: any) => {
+                    this.tripLoading = false;
+                    if (response['success'] === true) {
+                        this.tripLoading = false;
+                        alert('Votre offre de voyage a bien été ajoutée.');
+                        this.tripForm.reset();
+                        this.getTripList();
+                        $(this.tripModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de voyage.');
+                    }
+                });
+            }
         }
     }
 
     public modifyTripOffer(): void {
+        this.tripSubmitted = true;
 
+        if (this.tripForm.valid && !this.tripLoading) {
+            this.tripLoading = true;
+            this.httpClient.patch(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                this.tripForm.value, {
+                    responseType: 'json'
+                }
+            ).subscribe( (response: any) => {
+                this.tripLoading = false;
+                if (response['success'] === true) {
+                    this.tripLoading = false;
+                    alert('Votre offre de voyage a bien été modifiée.');
+                    this.tripForm.reset();
+                    this.getTripList();
+                    $(this.tripModal.nativeElement).modal('hide');
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de voyage.');
+                }
+            });
+        }
     }
 
     public deleteTripOffer(): void {
-
+        if (this.selectedRowTrips) {
+            this.httpClient.delete(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {}
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de voyage a bien été supprimée.');
+                    this.getTripList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de voyage.');
+                }
+            });
+        }
     }
 
     public getTripList(): void {
@@ -123,6 +175,12 @@ export class MyOffersComponent implements OnInit {
      * @return {AbstractControl}
      */
     public get address (): AbstractControl { return this.tripForm.get('address'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get city (): AbstractControl { return this.tripForm.get('city'); }
 
     /**
      * Getter for the login FormControl.

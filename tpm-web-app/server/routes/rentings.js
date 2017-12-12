@@ -82,4 +82,11 @@ router.get('/:login', function(req, res, next) {
     });
 });
 
+router.get('/', function(req, res, next) {
+    Renting.find(function (err, rentings) {
+        if (err) return next(err);
+        res.json(rentings);
+    });
+});
+
 module.exports = router;

@@ -53,6 +53,13 @@ router.post('/:login', (req, res) => {
     });
 });
 
+router.get('/', function(req, res, next) {
+    Ride.find(function (err, rides) {
+        if (err) return next(err);
+        res.json(rides);
+    });
+});
+
 
 module.exports = router;
 
