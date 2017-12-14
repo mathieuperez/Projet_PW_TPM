@@ -6,20 +6,6 @@ const rentings = require('./rentings');
 const rides = require('./rides');
 const trips = require('./trips');
 
-// Error handling
-const sendError = (err, res) => {
-    response.status = 501;
-    response.message = typeof err == 'object' ? err.message : err;
-    res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-    status: 200,
-    data: [],
-    message: null
-};
-
 router.use('/users', users);
 router.use('/rentings', rentings);
 router.use('/rides', rides);
