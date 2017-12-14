@@ -2,7 +2,7 @@ import { AppConstants } from './../../app-constants';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Button } from 'selenium-webdriver';
 
 declare const $: any;
@@ -19,7 +19,8 @@ export class MyOffersIndividualComponent implements OnInit {
             'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description'
         ],
         'rideTable' : [
-            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination', 'Tarif', 'Places restantes', 'Date'
+            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination',
+            'Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes', 'Date'
         ]
     };
 
@@ -88,6 +89,9 @@ export class MyOffersIndividualComponent implements OnInit {
             rideArrivalCity: new FormControl('', [ Validators.required ]),
             rideStart: new FormControl('', [ Validators.required ]),
             rideArrival: new FormControl('', [ Validators.required ]),
+            rideStartTime: new FormControl('', [ Validators.required ]),
+            rideArrivalTime: new FormControl('', [ Validators.required ]),
+            rideConveyance: new FormControl('', [ Validators.required ]),
             ridePrice: new FormControl('', [ Validators.required ]),
             rideSeat: new FormControl('', [ Validators.required ]),
             rideDate: new FormControl('', [ Validators.required ])
@@ -143,6 +147,9 @@ export class MyOffersIndividualComponent implements OnInit {
                 rideArrivalCity: this.selectedRowRides.rideArrivalCity,
                 rideStart: this.selectedRowRides.rideStart,
                 rideArrival: this.selectedRowRides.rideArrival,
+                rideStartTime: this.selectedRowRides.rideStartTime,
+                rideArrivalTime: this.selectedRowRides.rideArrivalTime,
+                rideConveyance: this.selectedRowRides.rideConveyance,
                 ridePrice: this.selectedRowRides.ridePrice,
                 rideSeat: this.selectedRowRides.rideSeat,
                 rideDate: this.selectedRowRides.rideDate
@@ -162,7 +169,11 @@ export class MyOffersIndividualComponent implements OnInit {
                 this.rentingLoading = true;
                 this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rentingForm.value, {
-                        responseType: 'json'
+                        responseType: 'json',
+                        headers: new HttpHeaders(
+                            { 'Content-Type': 'application/json',
+                              'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                        )
                     }
                 ).subscribe( (response: any) => {
                     this.rentingLoading = false;
@@ -190,7 +201,11 @@ export class MyOffersIndividualComponent implements OnInit {
                 this.rideLoading = true;
                 this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rideForm.value, {
-                        responseType: 'json'
+                        responseType: 'json',
+                        headers: new HttpHeaders(
+                            { 'Content-Type': 'application/json',
+                              'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                        )
                     }
                 ).subscribe( (response: any) => {
                     this.rideLoading = false;
@@ -241,7 +256,11 @@ export class MyOffersIndividualComponent implements OnInit {
             this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
                                 ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                 this.rideForm.value, {
-                    responseType: 'json'
+                    responseType: 'json',
+                    headers: new HttpHeaders(
+                        { 'Content-Type': 'application/json',
+                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                    )
                 }
             ).subscribe( (response: any) => {
                 this.rideLoading = false;
@@ -261,7 +280,12 @@ export class MyOffersIndividualComponent implements OnInit {
     public deleteRenting(): void {
         if (this.selectedRowRentings) {
             this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`, {}
+                                    ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`, {
+                                        headers: new HttpHeaders(
+                                            { 'Content-Type': 'application/json',
+                                              'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                                        )
+                                    }
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de location a bien été supprimée.');
@@ -276,7 +300,12 @@ export class MyOffersIndividualComponent implements OnInit {
     public deleteRide(): void {
         if (this.selectedRowRides) {
             this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`, {}
+                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`, {
+                                    headers: new HttpHeaders(
+                                        { 'Content-Type': 'application/json',
+                                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                                    )
+                                }
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de trajet a bien été supprimée.');
@@ -289,7 +318,12 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public getRentingList(): void {
-        this.httpClient.get(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+        this.httpClient.get(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {
+            headers: new HttpHeaders(
+                { 'Content-Type': 'application/json',
+                  'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+            )}
+        ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
                     const date = element.startDate.split('-');
@@ -305,7 +339,12 @@ export class MyOffersIndividualComponent implements OnInit {
     }
 
     public getRideList(): void {
-        this.httpClient.get(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+        this.httpClient.get(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {
+            headers: new HttpHeaders(
+                { 'Content-Type': 'application/json',
+                  'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+            )}
+        ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
                     const date = element.rideDate.split('-');
@@ -401,6 +440,24 @@ export class MyOffersIndividualComponent implements OnInit {
      * @return {AbstractControl}
      */
     public get rideArrival (): AbstractControl { return this.rideForm.get('rideArrival'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get rideStartTime (): AbstractControl { return this.rideForm.get('rideStartTime'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get rideArrivalTime (): AbstractControl { return this.rideForm.get('rideArrivalTime'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get rideConveyance (): AbstractControl { return this.rideForm.get('rideConveyance'); }
 
     /**
      * Getter for the login FormControl.

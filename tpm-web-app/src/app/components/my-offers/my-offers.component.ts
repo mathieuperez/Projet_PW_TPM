@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConstants } from '../../app-constants';
 
 declare const $: any;
@@ -99,7 +99,11 @@ export class MyOffersComponent implements OnInit {
                 this.tripLoading = true;
                 this.httpClient.post(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.tripForm.value, {
-                        responseType: 'json'
+                        responseType: 'json',
+                        headers: new HttpHeaders(
+                            { 'Content-Type': 'application/json',
+                              'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                        )
                     }
                 ).subscribe( (response: any) => {
                     this.tripLoading = false;
@@ -126,7 +130,11 @@ export class MyOffersComponent implements OnInit {
             this.httpClient.patch(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
                                 ${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
                 this.tripForm.value, {
-                    responseType: 'json'
+                    responseType: 'json',
+                    headers: new HttpHeaders(
+                        { 'Content-Type': 'application/json',
+                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                    )
                 }
             ).subscribe( (response: any) => {
                 this.tripLoading = false;
@@ -146,7 +154,12 @@ export class MyOffersComponent implements OnInit {
     public deleteTripOffer(): void {
         if (this.selectedRowTrips) {
             this.httpClient.delete(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`, {}
+                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`, {
+                                    headers: new HttpHeaders(
+                                        { 'Content-Type': 'application/json',
+                                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                                    )
+                                }
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de voyage a bien été supprimée.');
@@ -159,7 +172,12 @@ export class MyOffersComponent implements OnInit {
     }
 
     public getTripList(): void {
-        this.httpClient.get(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+        this.httpClient.get(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {
+            headers: new HttpHeaders(
+                { 'Content-Type': 'application/json',
+                  'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+            )}
+        ).subscribe((response: any) => {
             if (response.length > 0) {
                 this.tripTableContent = response;
                 this.areThereTrips = true;

@@ -2,7 +2,6 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConstants } from '../../app-constants';
 import { HttpClient } from '@angular/common/http';
-import { forEach } from '@angular/router/src/utils/collection';
 
 declare const google: any;
 
@@ -46,8 +45,6 @@ export class OffersComponent implements OnInit {
         const url = this.router.url.split('/');
         this.url = url[url.length - 1];
         this.changeContent(this.url);
-
-        console.log('ngoninit');
 
         this.tableContentCopy = new Array<{[x: string]: string}>();
         this.tableContent = new Array<{[x: string]: string}>();
@@ -147,7 +144,6 @@ export class OffersComponent implements OnInit {
                 });
                 this.tableContent = response;
                 this.tableContentCopy = this.tableContent;
-                console.log(this.tableContent);
             }
         },
         (error: any) => {

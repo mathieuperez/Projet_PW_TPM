@@ -78,6 +78,9 @@
                         <td>{{rowContent.rideArrivalCity}}</td>
                         <td>{{rowContent.rideStart}}</td>
                         <td>{{rowContent.rideArrival}}</td>
+                        <td>{{rowContent.rideStartTime}}</td>
+                        <td>{{rowContent.rideArrivalTime}}</td>
+                        <td>{{rowContent.rideConveyance}}</td>
                         <td>{{rowContent.ridePrice}}</td>
                         <td>{{rowContent.rideSeat}}</td>
                         <td>{{rowContent.rideDate}}</td>
@@ -388,6 +391,73 @@
                                 <div class="col-12 text-danger"
                                     *ngIf="rideArrival.invalid && (rideArrival.dirty || rideArrival.touched || rideSubmitted)">
                                     <span class="validation-message" *ngIf="rideArrival.errors.required">Le tarif est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Heure de départ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideStartTime.invalid && (rideStartTime.dirty || rideStartTime.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="time"
+                                            name="rideStartTime"
+                                            class="form-control"
+                                            placeholder="HH:MM"
+                                            formControlName="rideStartTime">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideStartTime.invalid && (rideStartTime.dirty || rideStartTime.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideStartTime.errors.required">L'heure de départ est requise.</span>
+                                    {{rideStartTime.errors | json}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Heure d'arrivée'</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideArrivalTime.invalid && (rideArrivalTime.dirty || rideArrivalTime.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="time"
+                                            name="rideArrivalTime"
+                                            class="form-control"
+                                            placeholder="HH:MM"
+                                            formControlName="rideArrivalTime">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideArrivalTime.invalid && (rideArrivalTime.dirty || rideArrivalTime.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideArrivalTime.errors.required">L'heure d'arrivée est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="country">Transport</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideConveyance.invalid && (rideConveyance.dirty || rideConveyance.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="text"
+                                            name="rideConveyance"
+                                            class="form-control"
+                                            placeholder="Transport"
+                                            formControlName="rideConveyance">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideConveyance.invalid && (rideConveyance.dirty || rideConveyance.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideConveyance.errors.required">Le moyen de transport est requis.</span>
                                 </div>
                             </div>
                         </div>
