@@ -35,7 +35,7 @@
                         <td>{{rowContent.city}}</td>
                         <td>{{rowContent.address}}</td>
                         <td>{{rowContent.price}}</td>
-                        <td>{{rowContent.startDate}}</td>
+                        <td>{{rowContent.startDate.toLocaleDateString()}}</td>
                         <td>{{rowContent.time}}</td>
                         <td>{{rowContent.surface}}</td>
                         <td>{{rowContent.description}}</td>
@@ -47,8 +47,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-info btn-size" (click)="modifyRentingClick()">Modifier l'offre de location sélectionnée</button>
-                <button class="btn btn-info btn-size" id="btn-renting-delete" data-toggle="modal"
-                        data-target="#deleteRentingModal">Supprimer l'offre de location sélectionnée</button>
+                <button class="btn btn-info btn-size" (click)="deleteRentingClick()">Supprimer l'offre de location sélectionnée</button>
             </div>
         </div>
     </div>
@@ -83,7 +82,7 @@
                         <td>{{rowContent.rideConveyance}}</td>
                         <td>{{rowContent.ridePrice}}</td>
                         <td>{{rowContent.rideSeat}}</td>
-                        <td>{{rowContent.rideDate}}</td>
+                        <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,8 +90,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-info btn-size" (click)="modifyRideClick()">Modifier l'offre de trajet sélectionnée</button>
-                <button class="btn btn-info btn-size" id="btn-ride-delete" data-toggle="modal"
-                        data-target="#deleteRideModal">Supprimer l'offre de trajet sélectionnée</button>
+                <button class="btn btn-info btn-size" (click)="deleteRideClick()">Supprimer l'offre de trajet sélectionnée</button>
             </div>
         </div>
     </div>
@@ -538,7 +536,7 @@
         </div>
       </div>
 
-      <div class="modal fade" id="deleteRentingModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal fade" #deleteRentingModal id="deleteRentingModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -558,7 +556,7 @@
         </div>
       </div>
 
-    <div class="modal fade" id="deleteRideModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" #deleteRideModal id="deleteRideModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">

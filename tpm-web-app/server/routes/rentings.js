@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./UserSchema');
-const Renting = require('./RentingSchema');
+const User = require('../schemas/user');
+const Renting = require('../schemas/renting');
+const verifyauth = require('../utils/verify-auth');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-
-var app = express();
-app.set('superSecret', "12345"); // secret variable
 
 router.post('/:login', (req, res) => {
     var renting = new Renting();
@@ -17,6 +15,7 @@ router.post('/:login', (req, res) => {
     renting.surface = req.body.surface;
     renting.description = req.body.description;
     renting.login = req.params.login;
+    let token = req.headers['access-token'];
 
     if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
@@ -30,8 +29,7 @@ router.post('/:login', (req, res) => {
                 res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this adress and time.'});
             }
             else {
-                verifyAuthentification(req, res, renting.login, function () {
-
+                verifyauth(req, res, renting.login, token, function () {
                     if (rentings.length == 0) {
                         Renting.find({"start": {"$gte": renting.start,"$lt": renting.endDate}}).exec(function (err, rentings) {
                             if (err) {
@@ -63,14 +61,32 @@ router.post('/:login', (req, res) => {
     }
 });
 
+router.delete('/:login/:id', function(req, res, next) {
+    let id = req.params.id.toString();
+    let login = req.params.login;
+    let token = req.headers['access-token'];
+    verifyauth(req, res, login, token, function () {
+        Renting.remove({"_id": id, "login": login}, function(err, renting){
+            if (err){
+                return next(err);
+            }
+            else {
+                res.json({success: true, message:"Renting deleted successful."});
+            }
+        });
+    });
+});
+
 
 router.get('/:login', function(req, res, next) {
-    var login = req.params.login;
-    Renting.find({"login": login}, function (err, rentings) {
+    let login = req.params.login;
+    let token = req.headers['access-token'];
+    verifyauth(req, res, login, token, function () {
+        Renting.find({"login": login}, function (err, rentings) {
+            if (err) return next(err);
 
-        if (err) return next(err);
-
-        res.json(rentings);
+            res.json(rentings);
+        });
     });
 });
 
@@ -80,33 +96,5 @@ router.get('/', function(req, res, next) {
         res.json(rentings);
     });
 });
-
-function verifyAuthentification(req, res, login, next) {
-
-    login="bisounours";
-    User.findOne().where('login').equals(login).exec(function(err, users){
-        if (err) {
-            res.status(500).json({success: false, message:'There was a problem with the database while checking if the login already exists.'});
-        }
-        else {
-            var token = users.token;
-            if (token) {
-                jwt.verify(token, app.get('superSecret'), function (err, decoded) {
-                    if (err) {
-                        res.status(401).json({success: false, message: 'Failed to authenticate token.'});
-                    }
-                    else {
-                        req.decoded = decoded;
-                        next();
-                    }
-                });
-            }
-            else {
-                res.status(401).send({success: false,message: 'No token provided.'});
-            }
-        }
-    });
-
-}
 
 module.exports = router;

@@ -121,11 +121,11 @@ export class OffersComponent implements OnInit {
     }
 
     public getTrips(): void {
-        /*this.httpClient.get('/api/trips/').subscribe((response: any) => {
+        this.httpClient.get('/api/trips/').subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    const date = element.startDate.split('-');
-                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                    element.startDate = new Date(element.startDate);
+                    element.endDate = new Date(element.endDate);
                 });
                 this.tableContent = response;
                 this.tableContentCopy = this.tableContent;
@@ -133,7 +133,7 @@ export class OffersComponent implements OnInit {
         },
         (error: any) => {
             alert('Une erreur est survenue lors de la récupération de la liste de vos locations.');
-        });*/
+        });
     }
 
     public getRentings(): void {

@@ -52,6 +52,10 @@ export class MyOffersIndividualComponent implements OnInit {
     private rentingModal: ElementRef;
     @ViewChild('rideModal')
     private rideModal: ElementRef;
+    @ViewChild('deleteRentingModal')
+    private deleteRentingModal: ElementRef;
+    @ViewChild('deleteRideModal')
+    private deleteRideModal: ElementRef;
 
     private selectedRowRentings;
     private selectedRowRides;
@@ -159,6 +163,18 @@ export class MyOffersIndividualComponent implements OnInit {
         }
     }
 
+    public deleteRentingClick(): void {
+        if (this.selectedRowRentings) {
+            $(this.deleteRentingModal.nativeElement).modal('show');
+        }
+    }
+
+    public deleteRideClick(): void {
+        if (this.selectedRowRides) {
+            $(this.deleteRideModal.nativeElement).modal('show');
+        }
+    }
+
     public addRentingOffer(): void {
         if (this.isModifyingRenting) {
             this.modifyRentingOffer();
@@ -167,7 +183,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rentingForm.valid && !this.rentingLoading) {
                 this.rentingLoading = true;
-                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                     this.rentingForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -199,7 +216,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rideForm.valid && !this.rideLoading) {
                 this.rideLoading = true;
-                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
+                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                     this.rideForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -293,6 +311,7 @@ export class MyOffersIndividualComponent implements OnInit {
                 } else {
                     alert('Une erreur est survenue lors de la modification de votre offre de location.');
                 }
+                $(this.deleteRentingModal.nativeElement).modal('hide');
             });
         }
     }
@@ -313,6 +332,7 @@ export class MyOffersIndividualComponent implements OnInit {
                 } else {
                     alert('Une erreur est survenue lors de la modification de votre offre de trajet.');
                 }
+                $(this.deleteRideModal.nativeElement).modal('hide');
             });
         }
     }
@@ -326,8 +346,7 @@ export class MyOffersIndividualComponent implements OnInit {
         ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    const date = element.startDate.split('-');
-                    element.startDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                    element.startDate = new Date(element.startDate);
                 });
                 this.tableContent.rentingTable = response;
                 this.areThereRentings = true;
@@ -347,8 +366,7 @@ export class MyOffersIndividualComponent implements OnInit {
         ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    const date = element.rideDate.split('-');
-                    element.rideDate = date[2].split('T')[0] + '/' + date[1] + '/' + date[0];
+                    element.rideDate = new Date(element.rideDate);
                 });
                 this.tableContent.rideTable = response;
                 this.areThereRides = true;

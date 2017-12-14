@@ -18,42 +18,37 @@
         </tr>
       </thead>
       <tbody>
+            <tr *ngFor="let rowContent of tableContent">
             <ng-container *ngIf="url === 'trip'">
-                <tr *ngFor="let rowContent of tableContent">
-                    <td>{{rowContent.address}}</td>
-                    <td>{{rowContent.city}}</td>
-                    <td>{{rowContent.country}}</td>
-                    <td>{{rowContent.price}}</td>
-                    <td>{{rowContent.startDate.toLocaleDateString()}}</td>
-                    <td>{{rowContent.arrivalDate.toLocaleDateString()}}</td>
-                    <td>{{rowContent.start}}</td>
-                    <td>{{rowContent.arrival}}</td>
-                    <td>{{rowContent.last}}</td>
-                    <td>{{rowContent.description}}</td>
-                </tr>
+                <td>{{rowContent.address}}</td>
+                <td>{{rowContent.city}}</td>
+                <td>{{rowContent.country}}</td>
+                <td>{{rowContent.price}}</td>
+                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.endDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.startArea}}</td>
+                <td>{{rowContent.arrivalArea}}</td>
+                <td>{{rowContent.time}}</td>
+                <td>{{rowContent.description}}</td>
             </ng-container>
             <ng-container *ngIf="url === 'renting'">
-                <tr *ngFor="let rowContent of tableContent">
-                    <td>{{rowContent.country}}</td>
-                    <td>{{rowContent.city}}</td>
-                    <td>{{rowContent.address}}</td>
-                    <td>{{rowContent.price}}</td>
-                    <td>{{rowContent.startDate.toLocaleDateString()}}</td>
-                    <td>{{rowContent.time}}</td>
-                    <td>{{rowContent.surface}}</td>
-                    <td>{{rowContent.description}}</td>
-                </tr>
+                <td>{{rowContent.country}}</td>
+                <td>{{rowContent.city}}</td>
+                <td>{{rowContent.address}}</td>
+                <td>{{rowContent.price}}</td>
+                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.time}}</td>
+                <td>{{rowContent.surface}}</td>
+                <td>{{rowContent.description}}</td>
             </ng-container>
             <ng-container *ngIf="url === 'ride'">
-                <tr *ngFor="let rowContent of tableContent">
-                    <td>{{rowContent.rideStartCity}}</td>
-                    <td>{{rowContent.rideArrivalCity}}</td>
-                    <td>{{rowContent.rideStart}}</td>
-                    <td>{{rowContent.rideArrival}}</td>
-                    <td>{{rowContent.ridePrice}}</td>
-                    <td>{{rowContent.rideSeat}}</td>
-                    <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
-                </tr>
+                <td>{{rowContent.rideStartCity}}</td>
+                <td>{{rowContent.rideArrivalCity}}</td>
+                <td>{{rowContent.rideStart}}</td>
+                <td>{{rowContent.rideArrival}}</td>
+                <td>{{rowContent.ridePrice}}</td>
+                <td>{{rowContent.rideSeat}}</td>
+                <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
             </ng-container>
       </tbody>
     </table>

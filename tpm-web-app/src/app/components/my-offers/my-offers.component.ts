@@ -12,7 +12,7 @@ declare const $: any;
 })
 export class MyOffersComponent implements OnInit {
     private tripTable = [
-        'Adresse de location', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
+        'Adresse de location', 'Ville', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
     ];
 
     private tripTableContent;
@@ -30,6 +30,8 @@ export class MyOffersComponent implements OnInit {
 
     @ViewChild('tripModal')
     private tripModal: ElementRef;
+    @ViewChild('deleteTripModal')
+    private deleteTripModal: ElementRef;
 
     private selectedRowTrips;
     private selectedRowTripsIndex;
@@ -49,10 +51,10 @@ export class MyOffersComponent implements OnInit {
             country: new FormControl('', [ Validators.required ]),
             price: new FormControl('', [ Validators.required ]),
             startDate: new FormControl('', [ Validators.required ]),
-            arrivalDate: new FormControl('', [ Validators.required ]),
-            start: new FormControl('', [ Validators.required ]),
-            arrival: new FormControl('', [ Validators.required ]),
-            last: new FormControl('', [ Validators.required ]),
+            endDate: new FormControl('', [ Validators.required ]),
+            startArea: new FormControl('', [ Validators.required ]),
+            arrivalArea: new FormControl('', [ Validators.required ]),
+            time: new FormControl('', [ Validators.required ]),
             description: new FormControl('')
         });
 
@@ -78,14 +80,20 @@ export class MyOffersComponent implements OnInit {
                 country: this.selectedRowTrips.country,
                 price: this.selectedRowTrips.price,
                 startDate: this.selectedRowTrips.startDate,
-                arrivalDate: this.selectedRowTrips.arrivalDate,
-                start: this.selectedRowTrips.start,
-                arrival: this.selectedRowTrips.arrival,
-                last: this.selectedRowTrips.last,
+                endDate: this.selectedRowTrips.endDate,
+                startArea: this.selectedRowTrips.startArea,
+                arrivalArea: this.selectedRowTrips.arrivalArea,
+                time: this.selectedRowTrips.time,
                 description: this.selectedRowTrips.description
             });
             $(this.tripModal.nativeElement).modal('show');
             this.isModifyingTrip = true;
+        }
+    }
+
+    public deleteTripClick(): void {
+        if (this.selectedRowTrips) {
+            $(this.deleteTripModal.nativeElement).modal('show');
         }
     }
 
@@ -127,8 +135,8 @@ export class MyOffersComponent implements OnInit {
 
         if (this.tripForm.valid && !this.tripLoading) {
             this.tripLoading = true;
-            this.httpClient.patch(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
+            this.httpClient.patch(
+                `/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
                 this.tripForm.value, {
                     responseType: 'json',
                     headers: new HttpHeaders(
@@ -153,13 +161,16 @@ export class MyOffersComponent implements OnInit {
 
     public deleteTripOffer(): void {
         if (this.selectedRowTrips) {
-            this.httpClient.delete(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tripTableContent[this.selectedRowTripsIndex]._id}`, {
-                                    headers: new HttpHeaders(
-                                        { 'Content-Type': 'application/json',
-                                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
-                                    )
-                                }
+            this.httpClient.delete(
+                `/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
+                {
+                    headers: new HttpHeaders(
+                        {
+                            'Content-Type': 'application/json',
+                            'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)
+                        }
+                    )
+                }
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de voyage a bien été supprimée.');
@@ -167,6 +178,7 @@ export class MyOffersComponent implements OnInit {
                 } else {
                     alert('Une erreur est survenue lors de la modification de votre offre de voyage.');
                 }
+                $(this.deleteTripModal.nativeElement).modal('hide');
             });
         }
     }
@@ -179,6 +191,10 @@ export class MyOffersComponent implements OnInit {
             )}
         ).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    element.startDate = new Date(element.startDate);
+                    element.endDate = new Date(element.startDate);
+                });
                 this.tripTableContent = response;
                 this.areThereTrips = true;
             }
@@ -227,25 +243,25 @@ export class MyOffersComponent implements OnInit {
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get arrivalDate (): AbstractControl { return this.tripForm.get('arrivalDate'); }
+    public get endDate (): AbstractControl { return this.tripForm.get('endDate'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get start (): AbstractControl { return this.tripForm.get('start'); }
+    public get startArea (): AbstractControl { return this.tripForm.get('startArea'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get arrival (): AbstractControl { return this.tripForm.get('arrival'); }
+    public get arrivalArea (): AbstractControl { return this.tripForm.get('arrivalArea'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get last (): AbstractControl { return this.tripForm.get('last'); }
+    public get time (): AbstractControl { return this.tripForm.get('time'); }
 
     /**
      * Getter for the login FormControl.

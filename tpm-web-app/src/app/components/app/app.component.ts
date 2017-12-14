@@ -47,10 +47,15 @@ export class AppComponent implements OnInit {
         this.searchForm = new FormGroup({
 
         });
+        localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
+        localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');
+        localStorage.setItem(AppConstants.EMAIL_USER, 'email_user');
+        localStorage.setItem(AppConstants.ROLE_USER, 'role_user');
     }
 
     public isLoggedIn(): boolean {
-        if (localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME) !== 'access_cookie') {
+        if (localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)
+            && localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME) !== 'access_cookie') {
             return true;
         }
         return false;
@@ -65,9 +70,10 @@ export class AppComponent implements OnInit {
     }
 
     public logout(): void {
+        localStorage.clear();
         localStorage.setItem(AppConstants.ACCESS_COOKIE_NAME, 'access_cookie');
         localStorage.setItem(AppConstants.LOGIN_USER, 'login_user');
-        localStorage.setItem(AppConstants.LOGIN_USER, 'email_user');
+        localStorage.setItem(AppConstants.EMAIL_USER, 'email_user');
         localStorage.setItem(AppConstants.ROLE_USER, 'role_user');
         this.router.navigate(['/']);
     }
