@@ -96,6 +96,26 @@ describe("Travel Agency API", function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 describe("POST Create a renting", function() {
         var localurl = url + "rentings/mperez3";
         var authurl = url + "users/token";
@@ -111,7 +131,7 @@ describe("POST Create a renting", function() {
             });
         });*/
 
-        it("Bad request (missing Token) : returns status 401", function(done) {
+       /* it("Bad request (missing Token) : returns status 401", function(done) {
                 request.post({
                     url:     localurl,
                     form:    { login: "bisounours"}
@@ -183,6 +203,81 @@ describe("POST Create a renting", function() {
 
     });
 
+*/
 
 
-});
+describe("POST Create a ride", function() {
+        var localurl = url + "rides/mperez3";
+        var authurl = url + "users/token";
+/*
+        it("Bad request (missing Token) : returns status 401", function(done) {
+                request.post({
+                    url:     localurl,
+                    form:    { login: "bisounours"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(422);
+                    done();
+                });
+        });
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mp"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.post({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { description: "ma_user_story_preferee", difficulte: "3"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(422);
+                    done();
+                });
+
+            });
+        });
+*/
+        it("Good request : returns status 200", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                request.post({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+
+            });
+        });
+
+
+
+        it("Bad request (Duplicate) : returns status 409", function(done) {
+            request.post({
+                headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                var bodyJson = JSON.parse(body);
+                //done();
+                request.post({
+                    headers: {'x-access-token' : bodyJson.token},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(409);
+                    done();
+                });
+
+            });
+        });
+
+    });
