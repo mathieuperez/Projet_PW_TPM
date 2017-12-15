@@ -22,46 +22,25 @@ router.post('/:login', (req, res) => {
     trip.login = req.params.login;
     let token = req.headers['access-token'];
 
-    if (trip.address == null || trip.city == null || trip.country  == null || trip.price == null || trip.startDate== null
-        || trip.endDate == null || trip.startArea == null || trip.arrivalArea == null || trip.time == null || trip.login == null) {
-        res.status(422).json({success: false, message: 'Missing Arguments.'});
-    }
-    else {
-        Trip.find({"endDate": {"$gte": trip.startDate, "$lt": trip.endDate}}).exec(function(err, trips){
+    let status;
+    let success;
+    let message;
+
+    checkdates(req, res, trip, token, trip._id, trip.login, function () {
+        trip.save(function (err) {
             if (err) {
-                res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a trip ending at this adress and time.'});
+                status = 401;
+                success = false;
+                message = 'Creating Trip failed.';
             }
             else {
-                verifyauth(req, res, trip.login, token, function () {
-                    if (trips.length == 0) {
-                        Trip.find({"startDate": {"$gte": trip.startDate,"$lt": trip.endDate}}).exec(function (err, trips) {
-                            if (err) {
-                                res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent starting at this adress and time.'});
-                            }
-                            else {
-                                if (trips.length == 0) {
-                                    trip.save(function (err) {
-                                        if (err) {
-                                            res.status(401).json({success: false, message: 'Creating Trip failed.'});
-                                        }
-                                        else {
-                                            res.status(200).json({success: true, message: 'Creating Trip successful'});
-                                        }
-                                    });
-                                }
-                                else {
-                                    res.status(409).json({success: false, message: 'There is already a trip with this address and date.'});
-                                }
-                            }
-                        });
-                    }
-                    else {
-                        res.status(409).json({success: false,message: 'There is already a trip with this address and date.'});
-                    }
-                });
+                status = 200;
+                success = true;
+                message = 'Creating Trip success.';
             }
+            res.status(status).json({success: success, message: message});
         });
-    }
+    });
 });
 
 router.patch('/:login/:id', function (req, res) {
@@ -70,14 +49,24 @@ router.patch('/:login/:id', function (req, res) {
 
     let login = req.params.login;
     let id = req.params.id;
-    checkdates(req, res, trip, token, id, function () {
+
+    let status;
+    let success;
+    let message;
+
+    checkdates(req, res, trip, token, id, login, function () {
         Trip.findOneAndUpdate({"_id": id, "login": login}, trip, { new: true }, function (err, trips) {
             if (err) {
-                res.status(401).json({success: false, message: 'Updating Trip failed.'});
+                status = 401;
+                success = false;
+                message = 'Updating Trip failed.';
             }
             else {
-                res.status(200).json({success: true, message: 'Updating Trip successful'});
+                status = 200;
+                success = true;
+                message = 'Updating Trip success.';
             }
+            res.status(status).json({success: success, message: message});
         });
     });
 });
