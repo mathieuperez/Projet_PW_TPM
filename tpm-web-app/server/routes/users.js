@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./UserSchema');
 const crypto = require('crypto');
+const User = require('../schemas/user');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var app = express();
@@ -72,15 +72,8 @@ router.post('/token', (req, res) => {
                     .digest('hex');
         User.findOne( {login: user.login, password: user.password } , (error, users ) => {
             if (users) {
-                var token = jwt.sign(users.toJSON(), app.get('superSecret')); //24hours
-                User.update({ 'login': users.login }, {token: token }, (error,response) => {
-                    if (response['ok'] === 1) {
-                        res.json({success: true, message: 'Authentication succeded!', user: users});
-                    }
-                    else {
-                        res.status(400).json({success: false, message: 'Authentication failed.'});
-                    }
-                });
+                var token = jwt.sign(users.toObject(), app.get('superSecret')); //24hours
+                res.json({success: true, message: 'Authentication succeded!', user: users, token: token});
             }
             else {
                 res.status(400).json({success: false, message: 'Authentication failed. Wrong login/password.'});

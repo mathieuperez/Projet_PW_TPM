@@ -15,16 +15,15 @@ import {UnAuthGuard} from "./guards/un-auth/un-auth.guard";*/
         RouterModule.forRoot([
             { path: 'login', component: LoginComponent/*, canActivate: [UnAuthGuard]*/},
             { path: 'signup', component: SignupComponent/*canActivate: [UnAuthGuard]*/ },
-            { path: 'offers', component: OffersComponent, children: [
-                { path: 'trip', component: OffersComponent },
-                { path: 'renting', component: OffersComponent },
-                { path: 'ride', component: OffersComponent }
-            ]/*canActivate: [UnAuthGuard]*/ },
+            { path: 'offers/trip', component: OffersComponent },
+            { path: 'offers/ride', component: OffersComponent },
+            { path: 'offers/renting', component: OffersComponent },
             { path: 'my-offers-agency', component: MyOffersComponent/*canActivate: [UnAuthGuard]*/ },
             { path: 'my-offers-individual', component: MyOffersIndividualComponent/*canActivate: [UnAuthGuard]*/ },
             { path: '**', redirectTo: '/', pathMatch: 'full' },
             { path: '', redirectTo: '/', pathMatch: 'full' },
-        ]),
+        ],
+        {useHash: true}),
     ],
     exports: [RouterModule]
 })

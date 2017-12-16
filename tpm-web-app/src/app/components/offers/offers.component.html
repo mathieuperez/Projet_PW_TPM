@@ -11,14 +11,45 @@
         <h5>Offres disponibles</h5>
     </div>
   <div class="table-responsive">
-    <table class="table table-striped table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
-            <th *ngFor="let obj of res">{{ obj }}</th>
+            <th *ngFor="let obj of tableHead">{{ obj }}</th>
         </tr>
       </thead>
       <tbody>
-
+            <tr *ngFor="let rowContent of tableContent">
+            <ng-container *ngIf="url === 'trip'">
+                <td>{{rowContent.address}}</td>
+                <td>{{rowContent.city}}</td>
+                <td>{{rowContent.country}}</td>
+                <td>{{rowContent.price}}</td>
+                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.endDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.startArea}}</td>
+                <td>{{rowContent.arrivalArea}}</td>
+                <td>{{rowContent.time}}</td>
+                <td>{{rowContent.description}}</td>
+            </ng-container>
+            <ng-container *ngIf="url === 'renting'">
+                <td>{{rowContent.country}}</td>
+                <td>{{rowContent.city}}</td>
+                <td>{{rowContent.address}}</td>
+                <td>{{rowContent.price}}</td>
+                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                <td>{{rowContent.time}}</td>
+                <td>{{rowContent.surface}}</td>
+                <td>{{rowContent.description}}</td>
+            </ng-container>
+            <ng-container *ngIf="url === 'ride'">
+                <td>{{rowContent.rideStartCity}}</td>
+                <td>{{rowContent.rideArrivalCity}}</td>
+                <td>{{rowContent.rideStart}}</td>
+                <td>{{rowContent.rideArrival}}</td>
+                <td>{{rowContent.ridePrice}}</td>
+                <td>{{rowContent.rideSeat}}</td>
+                <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
+            </ng-container>
       </tbody>
     </table>
   </div>

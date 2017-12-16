@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConstants } from '../../app-constants';
 
 declare const $: any;
@@ -12,7 +12,7 @@ declare const $: any;
 })
 export class MyOffersComponent implements OnInit {
     private tripTable = [
-        'Adresse de location', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
+        'Adresse de location', 'Ville', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller', 'Lieu retour', 'Durée', 'Description'
     ];
 
     private tripTableContent;
@@ -30,8 +30,11 @@ export class MyOffersComponent implements OnInit {
 
     @ViewChild('tripModal')
     private tripModal: ElementRef;
+    @ViewChild('deleteTripModal')
+    private deleteTripModal: ElementRef;
 
     private selectedRowTrips;
+    private selectedRowTripsIndex;
 
     constructor(private httpClient: HttpClient) { }
 
@@ -44,13 +47,14 @@ export class MyOffersComponent implements OnInit {
         this.tripError = false;
         this.tripForm = new FormGroup({
             address: new FormControl('', [ Validators.required ]),
+            city: new FormControl('', [ Validators.required ]),
             country: new FormControl('', [ Validators.required ]),
             price: new FormControl('', [ Validators.required ]),
             startDate: new FormControl('', [ Validators.required ]),
-            arrivalDate: new FormControl('', [ Validators.required ]),
-            start: new FormControl('', [ Validators.required ]),
-            arrival: new FormControl('', [ Validators.required ]),
-            last: new FormControl('', [ Validators.required ]),
+            endDate: new FormControl('', [ Validators.required ]),
+            startArea: new FormControl('', [ Validators.required ]),
+            arrivalArea: new FormControl('', [ Validators.required ]),
+            time: new FormControl('', [ Validators.required ]),
             description: new FormControl('')
         });
 
@@ -72,13 +76,14 @@ export class MyOffersComponent implements OnInit {
             this.tripModalTitle = 'Modifier l\'offre de voyage';
             this.tripForm.setValue({
                 address: this.selectedRowTrips.address,
+                city: this.selectedRowTrips.city,
                 country: this.selectedRowTrips.country,
                 price: this.selectedRowTrips.price,
                 startDate: this.selectedRowTrips.startDate,
-                arrivalDate: this.selectedRowTrips.arrivalDate,
-                start: this.selectedRowTrips.start,
-                arrival: this.selectedRowTrips.arrival,
-                last: this.selectedRowTrips.last,
+                endDate: this.selectedRowTrips.endDate,
+                startArea: this.selectedRowTrips.startArea,
+                arrivalArea: this.selectedRowTrips.arrivalArea,
+                time: this.selectedRowTrips.time,
                 description: this.selectedRowTrips.description
             });
             $(this.tripModal.nativeElement).modal('show');
@@ -86,25 +91,110 @@ export class MyOffersComponent implements OnInit {
         }
     }
 
+    public deleteTripClick(): void {
+        if (this.selectedRowTrips) {
+            $(this.deleteTripModal.nativeElement).modal('show');
+        }
+    }
+
     public addTripOffer(): void {
         if (this.isModifyingTrip) {
             this.modifyTripOffer();
         } else {
+            this.tripSubmitted = true;
 
+            if (this.tripForm.valid && !this.tripLoading) {
+                this.tripLoading = true;
+                this.httpClient.post(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
+                    this.tripForm.value, {
+                        responseType: 'json',
+                        headers: new HttpHeaders(
+                            { 'Content-Type': 'application/json',
+                              'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                        )
+                    }
+                ).subscribe( (response: any) => {
+                    this.tripLoading = false;
+                    if (response['success'] === true) {
+                        this.tripLoading = false;
+                        alert('Votre offre de voyage a bien été ajoutée.');
+                        this.tripForm.reset();
+                        this.getTripList();
+                        $(this.tripModal.nativeElement).modal('hide');
+                    } else {
+                        alert('Une erreur est survenue lors de la création de votre offre de voyage.');
+                    }
+                });
+            }
         }
     }
 
     public modifyTripOffer(): void {
+        this.tripSubmitted = true;
+        console.log(this.tripTableContent['_id']);
 
+        if (this.tripForm.valid && !this.tripLoading) {
+            this.tripLoading = true;
+            this.httpClient.patch(
+                `/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
+                this.tripForm.value, {
+                    responseType: 'json',
+                    headers: new HttpHeaders(
+                        { 'Content-Type': 'application/json',
+                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                    )
+                }
+            ).subscribe( (response: any) => {
+                this.tripLoading = false;
+                if (response['success'] === true) {
+                    this.tripLoading = false;
+                    alert('Votre offre de voyage a bien été modifiée.');
+                    this.tripForm.reset();
+                    this.getTripList();
+                    $(this.tripModal.nativeElement).modal('hide');
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de voyage.');
+                }
+            });
+        }
     }
 
     public deleteTripOffer(): void {
-
+        if (this.selectedRowTrips) {
+            this.httpClient.delete(
+                `/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tripTableContent[this.selectedRowTripsIndex]._id}`,
+                {
+                    headers: new HttpHeaders(
+                        {
+                            'Content-Type': 'application/json',
+                            'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)
+                        }
+                    )
+                }
+            ).subscribe( (response: any) => {
+                if (response['success'] === true) {
+                    alert('Votre offre de voyage a bien été supprimée.');
+                    this.getTripList();
+                } else {
+                    alert('Une erreur est survenue lors de la modification de votre offre de voyage.');
+                }
+                $(this.deleteTripModal.nativeElement).modal('hide');
+            });
+        }
     }
 
     public getTripList(): void {
-        this.httpClient.get(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`).subscribe((response: any) => {
+        this.httpClient.get(`/api/trips/${localStorage.getItem(AppConstants.LOGIN_USER)}`, {
+            headers: new HttpHeaders(
+                { 'Content-Type': 'application/json',
+                  'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+            )}
+        ).subscribe((response: any) => {
             if (response.length > 0) {
+                response.forEach(element => {
+                    element.startDate = new Date(element.startDate);
+                    element.endDate = new Date(element.startDate);
+                });
                 this.tripTableContent = response;
                 this.areThereTrips = true;
             }
@@ -114,8 +204,9 @@ export class MyOffersComponent implements OnInit {
         });
     }
 
-    public onSelectTrip(selectedItem: any): void {
+    public onSelectTrip(selectedItem: any, index: number): void {
         this.selectedRowTrips = selectedItem;
+        this.selectedRowTripsIndex = index;
     }
 
     /**
@@ -123,6 +214,12 @@ export class MyOffersComponent implements OnInit {
      * @return {AbstractControl}
      */
     public get address (): AbstractControl { return this.tripForm.get('address'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get city (): AbstractControl { return this.tripForm.get('city'); }
 
     /**
      * Getter for the login FormControl.
@@ -146,25 +243,25 @@ export class MyOffersComponent implements OnInit {
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get arrivalDate (): AbstractControl { return this.tripForm.get('arrivalDate'); }
+    public get endDate (): AbstractControl { return this.tripForm.get('endDate'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get start (): AbstractControl { return this.tripForm.get('start'); }
+    public get startArea (): AbstractControl { return this.tripForm.get('startArea'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get arrival (): AbstractControl { return this.tripForm.get('arrival'); }
+    public get arrivalArea (): AbstractControl { return this.tripForm.get('arrivalArea'); }
 
     /**
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get last (): AbstractControl { return this.tripForm.get('last'); }
+    public get time (): AbstractControl { return this.tripForm.get('time'); }
 
     /**
      * Getter for the login FormControl.

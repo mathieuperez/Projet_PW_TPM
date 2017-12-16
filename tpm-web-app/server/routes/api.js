@@ -4,6 +4,7 @@ const router = express.Router();
 const users = require('./users');
 const rentings = require('./rentings');
 const rides = require('./rides');
+const trips = require('./trips');
 
 // Error handling
 const sendError = (err, res) => {
@@ -22,6 +23,7 @@ let response = {
 router.use('/users', users);
 router.use('/rentings', rentings);
 router.use('/rides', rides);
+router.use('/trips', trips);
 
 
 // Define the home page route

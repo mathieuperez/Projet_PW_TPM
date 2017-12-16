@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./UserSchema');
-const Renting = require('./RentingSchema');
+const User = require('../schemas/user');
+const Renting = require('../schemas/renting');
+const verifyAuthentification = require('../utils/verify-auth');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-
-var app = express();
-app.set('superSecret', "12345"); // secret variable
 
 router.post('/:login', (req, res) => {
     var renting = new Renting();
@@ -17,12 +15,13 @@ router.post('/:login', (req, res) => {
     renting.surface = req.body.surface;
     renting.description = req.body.description;
     renting.login = req.params.login;
+    let token = req.headers['access-token'];
 
     if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
-        verifyAuthentification(req, res, renting.login, function () {
+        verifyAuthentification(req, res, token, function () {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
             var dateProblem=false;
@@ -48,6 +47,7 @@ router.post('/:login', (req, res) => {
 
 router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
 
+    let token = req.headers['access-token'];
     var renting = new Renting();
     renting.country = req.body.country;
     renting.address = req.body.address;
@@ -65,7 +65,7 @@ router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
-        verifyAuthentification(req, res, renting.login, function () {
+        verifyAuthentification(req, res, token function () {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
 
@@ -125,6 +125,8 @@ router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
 
 
 router.delete('/:login', (req, res) => {
+
+    let token = req.headers['access-token'];
     var renting = new Renting();
     renting.address = req.body.address;
     renting.startDate = req.body.startDate;
@@ -136,7 +138,7 @@ router.delete('/:login', (req, res) => {
     }
     else {
         renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
-        verifyAuthentification(req, res, login, function () {
+        verifyAuthentification(req, res, token, function () {
 
             findAndDeleteRent(req, res, oldRenting, function(){
 
@@ -153,16 +155,43 @@ router.delete('/:login', (req, res) => {
     }
 });
 
+router.delete('/:login/:id', function(req, res, next) {
+    let id = req.params.id.toString();
+    let login = req.params.login;
+    let token = req.headers['access-token'];
+    verifyauth(req, res, login, token, function () {
+        Renting.remove({"_id": id, "login": login}, function(err, renting){
+            if (err){
+                return next(err);
+            }
+            else {
+                res.json({success: true, message:"Renting deleted successful."});
+            }
+        });
+    });
+});
+
 
 router.get('/:login', function(req, res, next) {
-    var login = req.params.login;
-    Renting.find({"login": login}, function (err, rentings) {
+    let login = req.params.login;
+    let token = req.headers['access-token'];
+    verifyauth(req, res, login, token, function () {
+        Renting.find({"login": login}, function (err, rentings) {
+            if (err) return next(err);
+
+            res.json(rentings);
+        });
+    });
+});
+
+router.get('/', function(req, res, next) {
+    Renting.find(function (err, rentings) {
         if (err) return next(err);
         res.json(rentings);
     });
 });
 
-
+/*
 function verifyAuthentification(req, res, login, next) {
 
     User.findOne().where('login').equals(login).exec(function(err, users){
@@ -188,7 +217,7 @@ function verifyAuthentification(req, res, login, next) {
         }
     });
 
-}
+}*/
 
 
 function verifyDate(req, res, renting, dateProblem, next) {
