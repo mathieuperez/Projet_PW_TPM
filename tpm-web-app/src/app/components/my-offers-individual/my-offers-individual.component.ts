@@ -134,7 +134,7 @@ export class MyOffersIndividualComponent implements OnInit {
                 city: this.selectedRowRentings.city,
                 price: this.selectedRowRentings.price,
                 address: this.selectedRowRentings.address,
-                startDate: this.selectedRowRentings.startDate,
+                startDate: this.selectedRowRentings.startDate.toISOString().split('T')[0],
                 time: this.selectedRowRentings.time,
                 surface: this.selectedRowRentings.surface,
                 description: this.selectedRowRentings.description
@@ -157,8 +157,8 @@ export class MyOffersIndividualComponent implements OnInit {
                 rideConveyance: this.selectedRowRides.rideConveyance,
                 ridePrice: this.selectedRowRides.ridePrice,
                 rideSeat: this.selectedRowRides.rideSeat,
-                rideStartDate: this.selectedRowRides.rideStartDate,
-                rideArrivalDate: this.selectedRowRides.rideArrivalDate
+                rideStartDate: this.selectedRowRides.rideStartDate.toISOString().split('T')[0],
+                rideArrivalDate: this.selectedRowRides.rideArrivalDate.toISOString().split('T')[0]
             });
             $(this.rideModal.nativeElement).modal('show');
             this.isModifyingRide = true;
@@ -185,8 +185,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rentingForm.valid && !this.rentingLoading) {
                 this.rentingLoading = true;
-                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                this.httpClient.post(
+        `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                     this.rentingForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -218,8 +218,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rideForm.valid && !this.rideLoading) {
                 this.rideLoading = true;
-                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                this.httpClient.post(
+            `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                     this.rideForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -248,8 +248,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rentingForm.valid && !this.rentingLoading) {
             this.rentingLoading = true;
-            this.httpClient.patch(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
+            this.httpClient.patch(
+    `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
                 this.rentingForm.value, {
                     responseType: 'json'
                 }
@@ -273,8 +273,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rideForm.valid && !this.rideLoading) {
             this.rideLoading = true;
-            this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+            this.httpClient.patch(
+            `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                 this.rideForm.value, {
                     responseType: 'json',
                     headers: new HttpHeaders(
