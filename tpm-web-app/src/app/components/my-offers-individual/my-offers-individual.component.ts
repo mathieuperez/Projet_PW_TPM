@@ -19,8 +19,8 @@ export class MyOffersIndividualComponent implements OnInit {
             'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description'
         ],
         'rideTable' : [
-            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination',
-            'Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes', 'Date'
+            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination', 'Date de départ',
+            'Date d\'arrivée, Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes'
         ]
     };
 
@@ -93,12 +93,13 @@ export class MyOffersIndividualComponent implements OnInit {
             rideArrivalCity: new FormControl('', [ Validators.required ]),
             rideStart: new FormControl('', [ Validators.required ]),
             rideArrival: new FormControl('', [ Validators.required ]),
+            rideStartDate: new FormControl('', [ Validators.required ]),
+            rideArrivalDate: new FormControl('', [ Validators.required ]),
             rideStartTime: new FormControl('', [ Validators.required ]),
             rideArrivalTime: new FormControl('', [ Validators.required ]),
             rideConveyance: new FormControl('', [ Validators.required ]),
             ridePrice: new FormControl('', [ Validators.required ]),
-            rideSeat: new FormControl('', [ Validators.required ]),
-            rideDate: new FormControl('', [ Validators.required ])
+            rideSeat: new FormControl('', [ Validators.required ])
         });
 
         $(this.rentingModal.nativeElement).on('hidden.bs.modal', () => {
@@ -156,7 +157,8 @@ export class MyOffersIndividualComponent implements OnInit {
                 rideConveyance: this.selectedRowRides.rideConveyance,
                 ridePrice: this.selectedRowRides.ridePrice,
                 rideSeat: this.selectedRowRides.rideSeat,
-                rideDate: this.selectedRowRides.rideDate
+                rideStartDate: this.selectedRowRides.rideStartDate,
+                rideArrivalDate: this.selectedRowRides.rideArrivalDate
             });
             $(this.rideModal.nativeElement).modal('show');
             this.isModifyingRide = true;
@@ -366,7 +368,8 @@ export class MyOffersIndividualComponent implements OnInit {
         ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    element.rideDate = new Date(element.rideDate);
+                    element.rideStartDate = new Date(element.rideStartDate);
+                    element.rideArrivalDate = new Date(element.rideArrivalDate);
                 });
                 this.tableContent.rideTable = response;
                 this.areThereRides = true;
@@ -493,5 +496,11 @@ export class MyOffersIndividualComponent implements OnInit {
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get rideDate (): AbstractControl { return this.rideForm.get('rideDate'); }
+    public get rideStartDate (): AbstractControl { return this.rideForm.get('rideStartDate'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get rideArrivalDate (): AbstractControl { return this.rideForm.get('rideArrivalDate'); }
 }
