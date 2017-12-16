@@ -9,6 +9,7 @@ module.exports = (req, res, token, next) => {
     if (token) {
         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
             if (err) {
+                console.log("PAR LA!!!!");
                 res.status(401).json({success: false, message: 'Failed to authenticate token.'});
             }
             else {

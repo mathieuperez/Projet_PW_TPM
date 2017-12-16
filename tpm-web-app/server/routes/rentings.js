@@ -17,11 +17,11 @@ router.post('/:login', (req, res) => {
     renting.login = req.params.login;
     let token = req.headers['access-token'];
 
-    if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
-        res.status(422).json({success: false, message:'Missing Arguments.'});
-    }
-    else {
-        verifyAuthentification(req, res, token, function () {
+    verifyAuthentification(req, res, token, function () {
+        if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
+            res.status(422).json({success: false, message:'Missing Arguments.'});
+        }
+        else {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
             var dateProblem=false;
@@ -30,6 +30,7 @@ router.post('/:login', (req, res) => {
                 if(dateProblem==false){
                     renting.save(function (err) {
                         if (err) {
+                            console.log("ICI");
                             res.status(401).json({success: false, message: 'Creating Rent failed.'});
                         }
                         else {
@@ -38,9 +39,8 @@ router.post('/:login', (req, res) => {
                     });
                 }
             });
-
-        });
-    }
+        }
+    });
 });
 
 
@@ -61,11 +61,11 @@ router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
     oldRenting.address = req.params.oldAddress;
     oldRenting.startDate = req.params.oldStartDate; //!!!!!!!! FORMAT: yyyy-mm-dd
 
-    if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
-        res.status(422).json({success: false, message:'Missing Arguments.'});
-    }
-    else {
-        verifyAuthentification(req, res, token function () {
+    verifyAuthentification(req, res, token, function () {
+        if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
+            res.status(422).json({success: false, message:'Missing Arguments.'});
+        }
+        else {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
 
@@ -118,8 +118,9 @@ router.patch('/:login/:oldStartDate/:oldAddress', (req, res) => {
                     }
                 }
             });
-        });
-    }
+        }
+
+    });
 });
 
 
@@ -131,7 +132,7 @@ router.delete('/:login', (req, res) => {
     renting.address = req.body.address;
     renting.startDate = req.body.startDate;
     var login = req.params.login;
-    console.log(renting.address+":"+renting.startDate+":"+req.body.surface);
+    //console.log(renting.address+":"+renting.startDate+":"+req.body.surface);
 
     if (renting.address == null || renting.startDate == null) {
         res.status(422).json({success: false, message:'Missing Arguments.'});

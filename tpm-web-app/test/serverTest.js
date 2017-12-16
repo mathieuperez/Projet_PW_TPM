@@ -114,7 +114,7 @@ describe("Travel Agency API", function() {
 
 
 describe("POST Create a renting", function() {
-        var localurl = url + "rentings/mperez3";
+        var localurl = url + "rentings/bisounours";
         var authurl = url + "users/token";
 /*
         it("Another good request without token verification: returns status 200", function(done) {
@@ -133,7 +133,7 @@ describe("POST Create a renting", function() {
                     url:     localurl,
                     form:    { login: "bisounours"}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
+                    expect(response.statusCode).to.equal(401);
                     done();
                 });
         });
@@ -150,7 +150,7 @@ describe("POST Create a renting", function() {
                     url:     localurl,
                     form:    { description: "ma_user_story_preferee", difficulte: "3"}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
+                    expect(response.statusCode).to.equal(401);
                     done();
                 });
 
@@ -200,7 +200,7 @@ describe("POST Create a renting", function() {
     });
 
 
-
+/*
 
     describe("PATCH Modify a renting", function() {
 
@@ -215,7 +215,7 @@ describe("POST Create a renting", function() {
                 url:     localurl,
                 form:    { login: "bisounours"}
             }, function(error, response, body) {
-                expect(response.statusCode).to.equal(422);
+                expect(response.statusCode).to.equal(401);
                 done();
             });
         });
@@ -233,7 +233,7 @@ describe("POST Create a renting", function() {
                     url:     localurl,
                     form:    { country: "france", startDate: "28/10/2017", time: 15, surface: 37}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
+                    expect(response.statusCode).to.equal(401);
                     done();
                 });
 
@@ -274,7 +274,7 @@ describe("POST Create a renting", function() {
                 url:     localurl,
                 form:    { login: "bisounours"}
             }, function(error, response, body) {
-                expect(response.statusCode).to.equal(422);
+                expect(response.statusCode).to.equal(401);
                 done();
             });
         });
@@ -292,7 +292,7 @@ describe("POST Create a renting", function() {
                     url:     localurl,
                     form:    { country: "france", startDate: "28/10/2017", time: 15, surface: 37}
                 }, function(error, response, body) {
-                    expect(response.statusCode).to.equal(422);
+                    expect(response.statusCode).to.equal(401);
                     done();
                 });
 
@@ -318,7 +318,7 @@ describe("POST Create a renting", function() {
             });
         });
 
-    });
+    });*/
 
 
 /*

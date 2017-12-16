@@ -7,7 +7,6 @@ const checkdates = require('../utils/check-dates-trips');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 router.post('/:login', (req, res) => {
-    console.log('trip');
     var trip = new Trip();
     trip.address = req.body.address;
     trip.city = req.body.city;
