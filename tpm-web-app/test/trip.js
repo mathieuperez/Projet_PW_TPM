@@ -7,7 +7,7 @@ let mocha = require('mocha');
 describe("Trip tests", function() {
     let url = "http://localhost:3000/api/";
     let token;
-
+/*
     describe("POST Create a agency", function() {
         var localurl = url + "users/";
 
@@ -229,5 +229,5 @@ describe("Trip tests", function() {
                 done();
             });
         });
-    });
+    });*/
 });
