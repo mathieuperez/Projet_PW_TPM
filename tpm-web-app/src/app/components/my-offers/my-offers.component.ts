@@ -193,7 +193,7 @@ export class MyOffersComponent implements OnInit {
             if (response.length > 0) {
                 response.forEach(element => {
                     element.startDate = new Date(element.startDate);
-                    element.endDate = new Date(element.startDate);
+                    element.endDate = new Date(element.endDate);
                 });
                 this.tripTableContent = response;
                 this.areThereTrips = true;
