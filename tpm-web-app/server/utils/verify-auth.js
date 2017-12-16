@@ -4,7 +4,9 @@ var app = express();
 
 app.set('superSecret', "12345"); // secret variable
 
-module.exports = (req, res, login, token, next) => { if (token) {
+module.exports = (req, res, login, token, next) => {
+
+    if (token) {
         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
             if (err) {
                 res.status(401).json({success: false, message: 'Failed to authenticate token.'});

@@ -13,7 +13,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
             res.status(422).json({success: false, message: 'Missing Arguments.'});
     }
     else {
-        Trip.find({"endDate": {"$gt": trip.startDate, "$lt": trip.endDate}, "address": trip.address}).exec(function(err, trips){
+        Trip.find({"endDate": {"$gte": trip.startDate.getTime()-1, "$lt": trip.endDate.getTime()+1}, "address": trip.address}).exec(function(err, trips){
             if (err) {
                 res.status(500).json(
                     {
@@ -39,7 +39,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                             }
                             else {
                                 console.log("0 voyages avec meme date (end)");
-                                Trip.find({"startDate": {"$gt": trip.startDate,"$lt": trip.endDate},"address": trip.address}).exec(function (err, trips) {
+                                Trip.find({"startDate": {"$gte": trip.startDate.getTime()-1,"$lt": trip.endDate.getTime()+1},"address": trip.address}).exec(function (err, trips) {
                                     if (err) {
                                         res.status(500).json(
                                             {
@@ -82,7 +82,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                             }
                         } else {
                             console.log("aucun voyage avec meme date (end)");
-                            Trip.find({"startDate": {"$gt": trip.startDate,"$lt": trip.endDate}, "address": trip.address}).exec(function (err, trips) {
+                            Trip.find({"startDate": {"$gte": trip.startDate.getTime()-1,"$lt": trip.endDate.getTime()+1}, "address": trip.address}).exec(function (err, trips) {
                                 if (err) {
                                     res.status(500).json(
                                         {
