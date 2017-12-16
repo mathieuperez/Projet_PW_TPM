@@ -7,7 +7,6 @@ const checkdates = require('../utils/check-dates-trips');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 router.post('/:login', (req, res) => {
-    console.log('trip');
     var trip = new Trip();
     trip.address = req.body.address;
     trip.city = req.body.city;
@@ -27,7 +26,7 @@ router.post('/:login', (req, res) => {
     let message;
 
     checkdates(req, res, trip, token, trip._id, trip.login, function () {
-        trip.save(function (err) {
+        trip.save(function (err, result) {
             if (err) {
                 status = 401;
                 success = false;
@@ -38,7 +37,7 @@ router.post('/:login', (req, res) => {
                 success = true;
                 message = 'Creating Trip success.';
             }
-            res.status(status).json({success: success, message: message});
+            res.status(status).json({success: success, message: message, object: result});
         });
     });
 });

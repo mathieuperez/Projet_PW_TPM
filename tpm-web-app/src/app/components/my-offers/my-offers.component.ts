@@ -131,7 +131,6 @@ export class MyOffersComponent implements OnInit {
 
     public modifyTripOffer(): void {
         this.tripSubmitted = true;
-        console.log(this.tripTableContent['_id']);
 
         if (this.tripForm.valid && !this.tripLoading) {
             this.tripLoading = true;
