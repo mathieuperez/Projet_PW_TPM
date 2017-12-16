@@ -186,7 +186,7 @@ export class MyOffersIndividualComponent implements OnInit {
             if (this.rentingForm.valid && !this.rentingLoading) {
                 this.rentingLoading = true;
                 this.httpClient.post(
-        `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                    `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rentingForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -219,7 +219,7 @@ export class MyOffersIndividualComponent implements OnInit {
             if (this.rideForm.valid && !this.rideLoading) {
                 this.rideLoading = true;
                 this.httpClient.post(
-            `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                    `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rideForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -383,11 +383,14 @@ export class MyOffersIndividualComponent implements OnInit {
     public onSelectRenting(selectedItem: any, index: number) {
         this.selectedRowRentings = selectedItem;
         this.selectedRowRentingsIndex = index;
+
+        console.log(index);
     }
 
     public onSelectRide(selectedItem: any, index: number) {
         this.selectedRowRides = selectedItem;
         this.selectedRowRidesIndex = index;
+        console.log(index);
     }
 
     /**
