@@ -73,7 +73,7 @@ router.post('/token', (req, res) => {
         User.findOne( {login: user.login, password: user.password } , (error, users ) => {
             if (users) {
                 var token = jwt.sign(users.toObject(), app.get('superSecret')); //24hours
-                res.json({success: true, message: 'Authentication succeded!', user: users, token: token});
+                res.status(200).json({success: true, message: 'Authentication succeeded', user: users, token: token});
             }
             else {
                 res.status(400).json({success: false, message: 'Authentication failed. Wrong login/password.'});
