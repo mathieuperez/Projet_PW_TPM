@@ -95,9 +95,11 @@ router.get('/:login', function(req, res, next) {
     verifyauth(req, res, login, token, function () {
         Trip.find({"login": login}, function (err, trips) {
             if (err) {
-                return next(err);
+                res.status(401).json({success: true, message: 'Get trips failed'});
             }
-            res.json(trips);
+            else {
+                res.status(200).json({success: true, message: 'Get trips successful', trips: trips});
+            }
         });
     });
 });
@@ -105,9 +107,11 @@ router.get('/:login', function(req, res, next) {
 router.get('/', function(req, res, next) {
     Trip.find(function (err, trips) {
         if (err) {
-            return next(err);
+            res.status(401).json({success: true, message: 'Get trips failed'});
         }
-        res.json(trips);
+        else {
+            res.status(200).json({success: true, message: 'Get trips successful', trips: trips});
+        }
     });
 });
 

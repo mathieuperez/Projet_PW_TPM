@@ -4,53 +4,99 @@
         <h2>{{ pageTitle }}</h2>
         <hr>
     </div>
-    <div id="googleMap" style="width:100%;height:400px; border: 1px solid black"></div>
-    <div class="col-md-3"></div>
+      <div class="alert alert-warning" *ngIf="noResults">
+            <strong>Aucune information disponible à propos de cet emplacement</strong>
+        </div>
+    <div class="row">
+        <div id="googleMap" style="width:75%;height:400px;margin-left:1.5%; border: 1px solid black"></div>
+        <form #formvalue>
+            <div class="col-md-3 field-label-responsive">
+                <label for="date">Date</label>
+            </div>
+            <div class="col-md-12 input-group">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at">
+                        <span class="glyphicon glyphicon-calendar"></span></i>
+                </div>
+                <input #datevalue type="date" class="form-control">
+            </div>
+            <div class="col-md-12">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-light btn-date" (click)="searchByDate(datevalue.value)">OK</button>
+                    <button type="reset" class="btn btn-light btn-date">Reset</button>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-light btn-block"
+                        (click)="resetAll(formvalue)">
+                        Réinitialiser la recherche
+                </button>
+            </div>
+        </form>
+    </div>
     <div class="col-md-12">
         <hr>
         <h5>Offres disponibles</h5>
     </div>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-            <th *ngFor="let obj of tableHead">{{ obj }}</th>
-        </tr>
-      </thead>
-      <tbody>
-            <tr *ngFor="let rowContent of tableContent">
-            <ng-container *ngIf="url === 'trip'">
-                <td>{{rowContent.address}}</td>
-                <td>{{rowContent.city}}</td>
-                <td>{{rowContent.country}}</td>
-                <td>{{rowContent.price}}</td>
-                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
-                <td>{{rowContent.endDate.toLocaleDateString()}}</td>
-                <td>{{rowContent.startArea}}</td>
-                <td>{{rowContent.arrivalArea}}</td>
-                <td>{{rowContent.time}}</td>
-                <td>{{rowContent.description}}</td>
-            </ng-container>
-            <ng-container *ngIf="url === 'renting'">
-                <td>{{rowContent.country}}</td>
-                <td>{{rowContent.city}}</td>
-                <td>{{rowContent.address}}</td>
-                <td>{{rowContent.price}}</td>
-                <td>{{rowContent.startDate.toLocaleDateString()}}</td>
-                <td>{{rowContent.time}}</td>
-                <td>{{rowContent.surface}}</td>
-                <td>{{rowContent.description}}</td>
-            </ng-container>
-            <ng-container *ngIf="url === 'ride'">
-                <td>{{rowContent.rideStartCity}}</td>
-                <td>{{rowContent.rideArrivalCity}}</td>
-                <td>{{rowContent.rideStart}}</td>
-                <td>{{rowContent.rideArrival}}</td>
-                <td>{{rowContent.ridePrice}}</td>
-                <td>{{rowContent.rideSeat}}</td>
-                <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
-            </ng-container>
-      </tbody>
-    </table>
-  </div>
+    <div class="col-md-12" *ngIf="tableContent.length == 0">
+        <p class="lead">
+            Aucune offre n'est disponible.
+        </p>
+    </div>
+    <ng-container *ngIf="tableContent.length > 0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th *ngFor="let obj of tableHead">
+                        <ng-container *ngIf="obj === ''">
+                            <ng-container *ngIf="canBook()">{{ obj }}</ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="obj !== ''">{{ obj }}</ng-container>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr *ngFor="let rowContent of tableContent">
+                    <ng-container *ngIf="url === 'trip'">
+                        <td>{{rowContent.address}}</td>
+                        <td>{{rowContent.city}}</td>
+                        <td>{{rowContent.country}}</td>
+                        <td>{{rowContent.price}}</td>
+                        <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.endDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.startArea}}</td>
+                        <td>{{rowContent.arrivalArea}}</td>
+                        <td>{{rowContent.time}}</td>
+                        <td>{{rowContent.description}}</td>
+                        <td *ngIf="canBook()"><button type="button" class="btn btn-success">@</button></td>
+                    </ng-container>
+                    <ng-container *ngIf="url === 'renting'">
+                        <td>{{rowContent.country}}</td>
+                        <td>{{rowContent.city}}</td>
+                        <td>{{rowContent.address}}</td>
+                        <td>{{rowContent.price}}</td>
+                        <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.time}}</td>
+                        <td>{{rowContent.surface}}</td>
+                        <td>{{rowContent.description}}</td>
+                        <td *ngIf="canBook()"><button type="button" class="btn btn-success">@</button></td>
+                    </ng-container>
+                    <ng-container *ngIf="url === 'ride'">
+                        <td>{{rowContent.rideStartCity}}</td>
+                        <td>{{rowContent.rideArrivalCity}}</td>
+                        <td>{{rowContent.rideStart}}</td>
+                        <td>{{rowContent.rideArrival}}</td>
+                        <td>{{rowContent.rideStartDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.rideArrivalDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.rideStartTime}}</td>
+                        <td>{{rowContent.rideArrivalTime}}</td>
+                        <td>{{rowContent.rideConveyance}}</td>
+                        <td>{{rowContent.ridePrice}}</td>
+                        <td>{{rowContent.rideSeat}}</td>
+                        <td *ngIf="canBook()"><button type="button" class="btn btn-success">@</button></td>
+                    </ng-container>
+            </tbody>
+            </table>
+        </div>
+    </ng-container>
 </div>
