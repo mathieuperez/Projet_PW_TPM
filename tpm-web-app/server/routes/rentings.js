@@ -111,7 +111,7 @@ router.patch('/:login/:id', (req, res) => {
                                                 res.status(500).json({success: false, message: 'Rent modification failed.'});
                                             }
                                             else {
-                                                    res.status(200).json({success: true, message: 'Rent modification successful'});
+                                                res.status(200).json({success: true, message: 'Rent modification successful'});
                                             }
                                         });
                                     }
@@ -131,7 +131,7 @@ router.patch('/:login/:id', (req, res) => {
 });
 
 
-
+/*
 router.delete('/:login', (req, res) => {
 
     let token = req.headers['access-token'];
@@ -170,33 +170,27 @@ router.delete('/:login', (req, res) => {
         }
     });
 });
+*/
 
 router.delete('/:login/:id', function(req, res, next) {
-    let id = req.params.id.toString();
+    let id = req.params.id;
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
-        Renting.findById({"_id": id, "login": login}, function(err, rentings){
+        Renting.findOneAndRemove({"_id": id}, function(err, rentings){
             if (err){
-                return next(err);
+                res.status(401).json({success: false, message: 'Deleting Rent failed.'});
             }
             else {
                 if (rentings) {
-                    if (err) {
-                        res.status(401).json({success: false, message: 'Deleting Rent failed.'});
-                    }
-                    else {
-                        res.status(200).json({success: true, message: 'Deleting Rent successful'});
-                    }
+                    res.status(200).json({success: true, message: 'Deleting Rent successful'});
                 }
                 else {
-                    res.status(409).json({success: false,message: 'There is no rent with this address and starting date.'});
+                    res.status(409).json({success: false,message: 'There is no rent with this id.'});
                 }
             }
         });
     });
-
-
 });
 
 
@@ -205,17 +199,24 @@ router.get('/:login', function(req, res, next) {
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
         Renting.find({"login": login}, function (err, rentings) {
-            if (err) return next(err);
-
-            res.json(rentings);
+            if (err){
+                res.status(401).json({success: false, message: 'Get Rent failed.'});
+            }
+            else {
+                res.status(200).json({success: true, message: 'Deleting Rent successful', rentings: rentings});
+            }
         });
     });
 });
 
 router.get('/', function(req, res, next) {
     Renting.find(function (err, rentings) {
-        if (err) return next(err);
-        res.json(rentings);
+        if (err){
+            res.status(401).json({success: false, message: 'Get Rent failed.'});
+        }
+        else {
+            res.status(200).json({success: true, message: 'Deleting Rent successful', rentings: rentings});
+        }
     });
 });
 

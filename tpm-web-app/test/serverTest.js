@@ -189,7 +189,6 @@ describe("Travel Agency API", function() {
 
         let localurl = url + "rentings/bisounours/";
         let authurl = url + "users/token";
-        let id;
 
 
         it("Bad request (missing Token) : returns status 401", function(done) {
@@ -258,7 +257,7 @@ describe("Travel Agency API", function() {
             });
         });
 
-/*
+
         it("Bad request (Duplicate) : returns status 409", function(done) {
             request.post({
                 url:     authurl,
@@ -270,21 +269,21 @@ describe("Travel Agency API", function() {
 
                 request.patch({
                     headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
-                    url:     localurl,
-                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "28/10/2017", time: 15, surface: 37}
+                    url:     localurl+id,
+                    form:    { country: "france", address: "3rue jean plaa", city: "Pau", price: 350, startDate: "10/02/2057", time: 15, surface: 37}
                 }, function(error, response, body) {
                     expect(response.statusCode).to.equal(409);
                     done();
                 });
 
             });
-        });*/
+        });
 
 
     });
 
 
-/*
+
 
         describe("DELETE Delete a renting", function() {
 
@@ -293,7 +292,7 @@ describe("Travel Agency API", function() {
 
             it("Bad request (missing Token) : returns status 401", function(done) {
                 request.delete({
-                    url:     localurl,
+                    url:     localurl+id,
                     form:    { login: "bisounours"}
                 }, function(error, response, body) {
                     expect(response.statusCode).to.equal(401);
@@ -311,7 +310,7 @@ describe("Travel Agency API", function() {
                     let bodyJson = JSON.parse(body);
                     request.delete({
                         headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : "badtoken"},
-                        url:     localurl,
+                        url:     localurl+id,
                         form:    { country: "france", startDate: "28/10/2017", time: 15, surface: 37}
                     }, function(error, response, body) {
                         expect(response.statusCode).to.equal(401);
@@ -332,10 +331,9 @@ describe("Travel Agency API", function() {
                     token = bodyJson.token;
                     request.delete({
                         headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
-                        url:     localurl,
+                        url:     localurl+id,
                         form:    { address: "3rue jean plaa", startDate: "28/10/2017"}
                     }, function(error, response, body) {
-                        console.log(JSON.parse(body).startDate);
                         expect(response.statusCode).to.equal(200);
                         done();
                     });
@@ -343,8 +341,30 @@ describe("Travel Agency API", function() {
                 });
             });
 
+
+
+            it("Bad request : returns status 401 (cast to objectId failed)", function(done) {
+                request.post({
+                    url:     authurl,
+                    form:    { login: "bisounours", password: "mperez3"}
+                }, function(error, response, body) {
+                    let bodyJson = JSON.parse(body);
+                    token = bodyJson.token;
+                    request.delete({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                        url:     localurl+"badId",
+                        form:    { address: "3rue jean plaa", startDate: "28/10/2017"}
+                    }, function(error, response, body) {
+                        expect(response.statusCode).to.equal(401);
+                        done();
+                    });
+
+                });
+            });
+
+
         });
-*/
+
 
     /*
 
