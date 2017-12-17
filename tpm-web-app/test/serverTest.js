@@ -123,7 +123,7 @@ describe("Travel Agency API", function() {
 
 
 
-        it("Bad request (missing Token) : returns status 401", function(done) {
+        it("Bad request (bad Token) : returns status 401", function(done) {
             request.post({
                 url:     authurl,
                 form:    { login: "bisounours", password: "mperez3"}
@@ -181,6 +181,7 @@ describe("Travel Agency API", function() {
 
             });
         });
+
     });
 
 
@@ -343,7 +344,7 @@ describe("Travel Agency API", function() {
 
 
 
-            it("Bad request : returns status 401 (cast to objectId failed)", function(done) {
+            it("Bad request : returns status 500 (cast to objectId failed)", function(done) {
                 request.post({
                     url:     authurl,
                     form:    { login: "bisounours", password: "mperez3"}
@@ -355,7 +356,7 @@ describe("Travel Agency API", function() {
                         url:     localurl+"badId",
                         form:    { address: "3rue jean plaa", startDate: "28/10/2017"}
                     }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(401);
+                        expect(response.statusCode).to.equal(500);
                         done();
                     });
 
