@@ -12,8 +12,8 @@ router.post('/:login', (req, res) => {
     trip.city = req.body.city;
     trip.country = req.body.country;
     trip.price = req.body.price;
-    trip.startDate = req.body.startDate;
-    trip.endDate = req.body.endDate;
+    trip.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
+    trip.endDate = new Date(''+ req.body.endDate.split('/')[2] + '-' + req.body.endDate.split('/')[1] + '-' + req.body.endDate.split('/')[0]);
     trip.startArea = req.body.startArea;
     trip.arrivalArea = req.body.arrivalArea;
     trip.time = req.body.time;
@@ -44,6 +44,8 @@ router.post('/:login', (req, res) => {
 
 router.patch('/:login/:id', function (req, res) {
     let trip = req.body;
+    trip.startDate = new Date(''+ trip.startDate.split('/')[2] + '-' + trip.startDate.split('/')[1] + '-' + trip.startDate.split('/')[0]);
+    trip.endDate = new Date(''+ trip.endDate.split('/')[2] + '-' + trip.endDate.split('/')[1] + '-' + trip.endDate.split('/')[0]);
     let token = req.headers['access-token'];
 
     let login = req.params.login;
@@ -65,7 +67,7 @@ router.patch('/:login/:id', function (req, res) {
                 success = true;
                 message = 'Updating Trip success.';
             }
-            res.status(status).json({success: success, message: message});
+            res.status(status).json({success: success, message: message, object: trips});
         });
     });
 });
