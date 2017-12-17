@@ -123,7 +123,7 @@ describe("Travel Agency API", function() {
 
 
 
-        it("Bad request (missing Token) : returns status 401", function(done) {
+        it("Bad request (bad Token) : returns status 401", function(done) {
             request.post({
                 url:     authurl,
                 form:    { login: "bisounours", password: "mperez3"}
@@ -181,6 +181,7 @@ describe("Travel Agency API", function() {
 
             });
         });
+
     });
 
 
@@ -343,7 +344,7 @@ describe("Travel Agency API", function() {
 
 
 
-            it("Bad request : returns status 401 (cast to objectId failed)", function(done) {
+            it("Bad request : returns status 500 (cast to objectId failed)", function(done) {
                 request.post({
                     url:     authurl,
                     form:    { login: "bisounours", password: "mperez3"}
@@ -355,7 +356,7 @@ describe("Travel Agency API", function() {
                         url:     localurl+"badId",
                         form:    { address: "3rue jean plaa", startDate: "28/10/2017"}
                     }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(401);
+                        expect(response.statusCode).to.equal(500);
                         done();
                     });
 
@@ -366,81 +367,188 @@ describe("Travel Agency API", function() {
         });
 
 
-    /*
+   describe("POST Create a ride", function() {
+        let localurl = url + "rides/bisounours";
+        let authurl = url + "users/token";
 
-    describe("POST Create a ride", function() {
-            let localurl = url + "rides/mperez3";
-            let authurl = url + "users/token";
-
-            it("Bad request (missing Token) : returns status 401", function(done) {
-                    request.post({
-                        url:     localurl,
-                        form:    { login: "bisounours"}
-                    }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(422);
-                        done();
-                    });
-            });
-
-            it("Bad request (bad Token) : returns status 401", function(done) {
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
                 request.post({
-                    headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                    url:     authurl,
-                    form:    { login: "bisounours", password: "mp"}
-                }, function(error, response, body) {
-                    let bodyJson = JSON.parse(body);
-                    request.post({
-                        headers: {'x-access-token' : bodyJson.token},
-                        url:     localurl,
-                        form:    { description: "ma_user_story_preferee", difficulte: "3"}
-                    }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(422);
-                        done();
-                    });
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(401);
+                    done();
+                });
+            });
+        });
 
+
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
+                request.post({
+                    headers: {'access-token' : 'badToken'},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}              
+                      }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(401);
+                    done();
+                });
+            });
+        });
+
+
+
+        it("Good request : returns status 200", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
+                request.post({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}         
+          }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    done();
                 });
             });
 
-            it("Good request : returns status 200", function(done) {
+        });
+
+
+        it("Bad request (Duplicate) : returns status 409", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
                 request.post({
-                    headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                    url:     authurl,
-                    form:    { login: "bisounours", password: "mperez3"}
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(409);
+                    done();
+                });
+
+            });
+        });
+    });
+
+
+
+   
+   describe("PATCH Modify a ride", function() {
+
+        let localurl = url + "rides/bisounours/";
+        let authurl = url + "users/token";
+
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
+                request.post({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : "badtoken"},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}                }, function(error, response, body2) {
+                    expect(response.statusCode).to.equal(401);
+                    done();
+                });
+            });
+        });
+
+
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
+                request.post({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : "badtoken"},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                 }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(401);
+                    done();
+                });
+            });
+        });
+
+
+        it("Good request : returns status 200", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
+                token = bodyJson.token;
+                request.post({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                    url:     localurl,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
                 }, function(error, response, body) {
                     let bodyJson = JSON.parse(body);
-                    request.post({
-                        headers: {'x-access-token' : bodyJson.token},
-                        url:     localurl,
-                        form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
-                    }, function(error, response, body) {
+                    id = bodyJson.ride._id;
+                    request.patch({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                        url:     localurl+id,
+                        form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                     }, function(error, response, body2) {
                         expect(response.statusCode).to.equal(200);
                         done();
                     });
-
                 });
+
             });
+        });
 
 
+        it("Bad request (Duplicate) : returns status 409", function(done) {
+            request.post({
+                url:     authurl,
+                form:    { login: "bisounours", password: "mperez3"}
+            }, function(error, response, body) {
+                let bodyJson = JSON.parse(body);
 
-            it("Bad request (Duplicate) : returns status 409", function(done) {
-                request.post({
-                    headers: {'content-type' : 'application/x-www-form-urlencoded'},
-                    url:     authurl,
-                    form:    { login: "bisounours", password: "mperez3"}
+                token = bodyJson.token;
+
+                request.patch({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                    url:     localurl+id,
+                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+
                 }, function(error, response, body) {
-                    let bodyJson = JSON.parse(body);
-                    //done();
-                    request.post({
-                        headers: {'x-access-token' : bodyJson.token},
-                        url:     localurl,
-                        form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
-                    }, function(error, response, body) {
-                        expect(response.statusCode).to.equal(409);
-                        done();
-                    });
-
+                    expect(response.statusCode).to.equal(409);
+                    done();
                 });
-            });*/
+
+            });
+        });
+
+
+    });
+
 
 
     describe("Trip tests", function() {
