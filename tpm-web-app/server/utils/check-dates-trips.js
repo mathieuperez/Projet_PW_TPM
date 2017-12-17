@@ -19,7 +19,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                 res.status(500).json(
                     {
                         success: false,
-                        message:'There was a problem with the database while checking if there is already a trip ending at this adress and time.'
+                        message:'There was a problem with the database while checking if there is already a trip ending at this address and time.'
                     }
                 );
             }
@@ -45,7 +45,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                                         res.status(500).json(
                                             {
                                                 success: false,
-                                                message: 'There was a problem with the database while checking if there is already a trip starting at this adress and time.'
+                                                message: 'There was a problem with the database while checking if there is already a trip starting at this address and time.'
                                             }
                                         );
                                     }
@@ -88,7 +88,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                                     res.status(500).json(
                                         {
                                             success: false,
-                                            message:'There was a problem with the database while checking if there is already a trip ending at this adress and time.'
+                                            message:'There was a problem with the database while checking if there is already a trip ending at this address and time.'
                                         }
                                     );
                                 }

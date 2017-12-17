@@ -155,7 +155,7 @@ router.get('/:login', function(req, res, next) {
     verifyauth(req, res, login, token, function () {
         Renting.find({"login": login}, function (err, rentings) {
             if (err){
-                res.status(401).json({success: false, message: 'Get Rentings failed.'});
+                res.status(500).json({success: false, message: 'Get Rentings failed.'});
             }
             else {
                 res.status(200).json({success: true, message: 'Get Rentings successful', rentings: rentings});
@@ -167,7 +167,7 @@ router.get('/:login', function(req, res, next) {
 router.get('/', function(req, res, next) {
     Renting.find(function (err, rentings) {
         if (err){
-            res.status(401).json({success: false, message: 'Get Rentings failed.'});
+            res.status(500).json({success: false, message: 'Get Rentings failed.'});
         }
         else {
             res.status(200).json({success: true, message: 'Get Rentings successful', rentings: rentings});

@@ -28,7 +28,7 @@ router.post('/:login', (req, res) => {
     checkdates(req, res, trip, token, trip._id, trip.login, function () {
         trip.save(function (err, result) {
             if (err) {
-                status = 401;
+                status = 500;
                 success = false;
                 message = 'Creating Trip failed.';
             }
@@ -58,7 +58,7 @@ router.patch('/:login/:id', function (req, res) {
     checkdates(req, res, trip, token, id, login, function () {
         Trip.findOneAndUpdate({"_id": id, "login": login}, trip, { new: true }, function (err, trips) {
             if (err) {
-                status = 401;
+                status = 500;
                 success = false;
                 message = 'Updating Trip failed.';
             }
@@ -72,18 +72,22 @@ router.patch('/:login/:id', function (req, res) {
     });
 });
 
-
 router.delete('/:login/:id', function(req, res, next) {
     let id = req.params.id.toString();
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
-        Trip.remove({"_id": id, "login": login}, function(err, trip){
+        Trip.findOneAndRemove({"_id": id}, function(err, trips){
             if (err){
-                return next(err);
+                res.status(500).json({success: false, message: 'Deleting Trip failed.'});
             }
             else {
-                res.json({success: true, message:"Trip deleted successful."});
+                if (trips) {
+                    res.status(200).json({success: true, message: 'Deleting Trip successful'});
+                }
+                else {
+                    res.status(409).json({success: false,message: 'There is no Trip with this id.'});
+                }
             }
         });
     });
@@ -94,20 +98,24 @@ router.get('/:login', function(req, res, next) {
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
         Trip.find({"login": login}, function (err, trips) {
-            if (err) {
-                return next(err);
+            if (err){
+                res.status(500).json({success: false, message: 'Get Trips failed.'});
             }
-            res.json(trips);
+            else {
+                res.status(200).json({success: true, message: 'Get Trips successful', trips: trips});
+            }
         });
     });
 });
 
 router.get('/', function(req, res, next) {
     Trip.find(function (err, trips) {
-        if (err) {
-            return next(err);
+        if (err){
+            res.status(500).json({success: false, message: 'Get Trips failed.'});
         }
-        res.json(trips);
+        else {
+            res.status(200).json({success: true, message: 'Get Trips successful', trips: trips});
+        }
     });
 });
 
