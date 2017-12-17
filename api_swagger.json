@@ -205,8 +205,8 @@
           "200" : {
             "description" : "Get Rentings successful"
           },
-          "401" : {
-            "description" : "Get rentings failed"
+          "500" : {
+            "description" : "Get Rentings failed"
           }
         }
       }
@@ -230,7 +230,10 @@
             "description" : "successful operation"
           },
           "401" : {
-            "description" : "No token provided / Failed to authenticate token / Get rentings failed"
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "500" : {
+            "description" : "Get Rentings failed"
           }
         }
       }
@@ -273,6 +276,193 @@
           },
           "500" : {
             "description" : "Deleting Rent failed"
+          }
+        }
+      }
+    },
+    "/api/trips/{login}" : {
+      "post" : {
+        "tags" : [ "trip" ],
+        "summary" : "Create trip",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "createTrip",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Created user object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Trip"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Creating Trip successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is already a trip with this address and date"
+          },
+          "422" : {
+            "description" : "Missing Arguments"
+          },
+          "500" : {
+            "description" : "Creating Trip failed / There was a problem with the database while checking if there is already a trip at this address and time"
+          }
+        }
+      }
+    },
+    "/api/trips/{login}/{id}" : {
+      "patch" : {
+        "tags" : [ "trip" ],
+        "summary" : "Modify trip",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "modifyTrip",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the trip to modify.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Modified trip",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Trip"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updating Trip successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is already a trip with this address and date"
+          },
+          "422" : {
+            "description" : "Missing Arguments"
+          },
+          "500" : {
+            "description" : "There was a problem with the database while checking if there is already a trip at this address and time / Updating Trip failed"
+          }
+        }
+      }
+    },
+    "/api/trips/" : {
+      "get" : {
+        "tags" : [ "trip" ],
+        "summary" : "Get all trips of a user",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "getTrips",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Get Trips successful"
+          },
+          "500" : {
+            "description" : "Get trips failed"
+          }
+        }
+      }
+    },
+    "/api/trips/{login}/" : {
+      "get" : {
+        "tags" : [ "trip" ],
+        "summary" : "Get trips by user login",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "getTripsByLogin",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The name that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token / Get trips failed"
+          },
+          "500" : {
+            "description" : "Get trips failed"
+          }
+        }
+      }
+    },
+    "/api/trips/{login}/{id} " : {
+      "delete" : {
+        "tags" : [ "trip" ],
+        "summary" : "Delete trip",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "deleteTrip",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the trip to modify.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deleting Trip successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is no trip with this address and date"
+          },
+          "500" : {
+            "description" : "Deleting Trip failed"
           }
         }
       }
@@ -423,6 +613,19 @@
         "login" : {
           "type" : "string"
         }
+      },
+      "example" : {
+        "country" : "country",
+        "startArea" : "startArea",
+        "endArea" : "endArea",
+        "address" : "address",
+        "city" : "city",
+        "endDate" : "endDate",
+        "price" : 0.80082819046101150206595775671303272247314453125,
+        "description" : "description",
+        "time" : 6.02745618307040320615897144307382404804229736328125,
+        "login" : "login",
+        "startDate" : "startDate"
       }
     }
   }
