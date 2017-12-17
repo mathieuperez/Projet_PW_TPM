@@ -61,9 +61,6 @@ router.patch('/:login/:id', (req, res) => {
     renting.surface = req.body.surface;
     renting.description = req.body.description;
 
-    /*oldRenting.address = req.params.oldAddress;
-    oldRenting.startDate = req.params.oldStartDate; //!!!!!!!! FORMAT: yyyy-mm-dd*/
-
     verifyauth(req, res, renting.login, token, function () {
         if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
             res.status(422).json({success: false, message:'Missing Arguments.'});
@@ -131,46 +128,6 @@ router.patch('/:login/:id', (req, res) => {
 });
 
 
-/*
-router.delete('/:login', (req, res) => {
-
-    let token = req.headers['access-token'];
-    var renting = new Renting();
-    renting.address = req.body.address;
-    renting.startDate = req.body.startDate;
-    var login = req.params.login;
-
-    console.log(renting.startDate);
-    verifyauth(req, res, login, token, function () {
-        if (renting.address == null || renting.startDate == null) {
-            res.status(422).json({success: false, message:'Missing Arguments.'});
-        }
-        else {
-            renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
-
-            Renting.findOneAndRemove({"startDate": renting.startDate,"address": renting.address}).exec(function (err, rentings) {
-                if (err) {
-                    res.status(500).json({success: false, message: 'There was a problem with the database while finding and removing the rent with this address and starting date.'});
-                }
-                else {
-                    if (rentings) {
-                        if (err) {
-                            res.status(401).json({success: false, message: 'Deleting Rent failed.'});
-                        }
-                        else {
-                            res.status(200).json({success: true, message: 'Deleting Rent successful'});
-                        }
-                    }
-                    else {
-                        res.status(409).json({success: false,message: 'There is no rent with this address and starting date.'});
-                    }
-                }
-            });
-
-        }
-    });
-});
-*/
 
 router.delete('/:login/:id', function(req, res, next) {
     let id = req.params.id;
@@ -200,10 +157,10 @@ router.get('/:login', function(req, res, next) {
     verifyauth(req, res, login, token, function () {
         Renting.find({"login": login}, function (err, rentings) {
             if (err){
-                res.status(401).json({success: false, message: 'Get Rent failed.'});
+                res.status(401).json({success: false, message: 'Get Rentings failed.'});
             }
             else {
-                res.status(200).json({success: true, message: 'Deleting Rent successful', rentings: rentings});
+                res.status(200).json({success: true, message: 'Get Rentings successful', rentings: rentings});
             }
         });
     });
@@ -212,10 +169,10 @@ router.get('/:login', function(req, res, next) {
 router.get('/', function(req, res, next) {
     Renting.find(function (err, rentings) {
         if (err){
-            res.status(401).json({success: false, message: 'Get Rent failed.'});
+            res.status(401).json({success: false, message: 'Get Rentings failed.'});
         }
         else {
-            res.status(200).json({success: true, message: 'Deleting Rent successful', rentings: rentings});
+            res.status(200).json({success: true, message: 'Get Rentings successful', rentings: rentings});
         }
     });
 });
