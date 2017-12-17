@@ -1,13 +1,12 @@
 let expect  = require("chai").expect;
 let request = require("request");
-let assert = require('chai').assert;
-let mocha = require('mocha');
 
 
 describe("Trip tests", function() {
     let url = "http://localhost:3000/api/";
     let token;
-/*
+    let tripId;
+
     describe("POST Create a agency", function() {
         var localurl = url + "users/";
 
@@ -94,8 +93,8 @@ describe("Trip tests", function() {
                             city: "test ville",
                             country: "test pays",
                             price: 100,
-                            startDate: "10/12/2017",
-                            endDate: "12/12/2017",
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 2,
@@ -118,8 +117,8 @@ describe("Trip tests", function() {
                             city: "test ville",
                             country: "test pays",
                             price: 100,
-                            startDate: "10/12/2017",
-                            endDate: "12/12/2017",
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 2,
@@ -141,8 +140,8 @@ describe("Trip tests", function() {
                 form:   {
                             address: "test adresse",
                             price: 100,
-                            startDate: "10/12/2017",
-                            endDate: "12/12/2017",
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 2,
@@ -166,8 +165,8 @@ describe("Trip tests", function() {
                             city: "test ville",
                             country: "test pays",
                             price: 100,
-                            startDate: "10/12/2017",
-                            endDate: "12/12/2017",
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 2,
@@ -175,6 +174,7 @@ describe("Trip tests", function() {
                         }
             }, function(error, response, body) {
                 expect(response.statusCode).to.equal(200);
+                tripId = JSON.parse(body).object._id;
                 done();
             });
         });
@@ -191,8 +191,8 @@ describe("Trip tests", function() {
                             city: "test ville",
                             country: "test pays",
                             price: 100,
-                            startDate: "10/12/2017",
-                            endDate: "12/12/2017",
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 2,
@@ -216,18 +216,202 @@ describe("Trip tests", function() {
                             city: "ville",
                             country: "pays",
                             price: 100,
-                            startDate: "11/12/2017",
-                            endDate: "15/12/2017",
+                            startDate: "12/11/2017",
+                            endDate: "12/13/2017",
                             startArea: "test",
                             arrivalArea: "test",
                             time: 4,
                             description: "test"
                         }
             }, function(error, response, body) {
-                console.log(body);
                 expect(response.statusCode).to.equal(409);
                 done();
             });
         });
-    });*/
+    });
+
+    describe("PATCH Change a trip", function() {
+        var localurl = url + "trips/testagence/";
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.patch({
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse",
+                            city: "test ville",
+                            country: "test pays",
+                            price: 100,
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 2,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.patch({
+                headers:{
+                            'access-token' : "tokenquipassepas"
+                        },
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse",
+                            city: "test ville",
+                            country: "test pays",
+                            price: 100,
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 2,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it("Bad Request (missing arguments) : returns status 422", function(done) {
+            request.patch({
+                headers:{
+                            'content-type' : 'application/x-www-form-urlencoded',
+                            'access-token': token
+                        },
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse",
+                            price: 100,
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 2,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(422);
+                done();
+            });
+        });
+
+        it("Good Request : returns status 200", function(done) {
+            request.patch({
+                headers:{
+                            'content-type' : 'application/x-www-form-urlencoded',
+                            'access-token': token
+                        },
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse modif",
+                            city: "test ville modif",
+                            country: "test pays",
+                            price: 100,
+                            startDate: "12/12/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 2,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+        it("Good Request : returns status 200 (second change)", function(done) {
+            request.patch({
+                headers:{
+                            'content-type' : 'application/x-www-form-urlencoded',
+                            'access-token': token
+                        },
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse modif 2",
+                            city: "test ville modif",
+                            country: "test pays",
+                            price: 100,
+                            startDate: "12/13/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 1,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+        it("Good Request : returns status 200 (no change but must pass)", function(done) {
+            request.patch({
+                headers:{
+                            'content-type' : 'application/x-www-form-urlencoded',
+                            'access-token': token
+                        },
+                url:    localurl + tripId,
+                form:   {
+                            address: "test adresse modif 2",
+                            city: "test ville modif",
+                            country: "test pays",
+                            price: 100,
+                            startDate: "12/13/2017",
+                            endDate: "12/14/2017",
+                            startArea: "test",
+                            arrivalArea: "test",
+                            time: 1,
+                            description: "test"
+                        }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+    });
+
+    describe("DELETE Change a trip", function() {
+        var localurl = url + "trips/testagence/";
+
+        it("Bad request (missing Token) : returns status 401", function(done) {
+            request.del({
+                url:    localurl + tripId,
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it("Bad request (bad Token) : returns status 401", function(done) {
+            request.del({
+                headers:{
+                            'access-token' : "tokenquipassepas"
+                        },
+                url:    localurl + tripId
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(401);
+                done();
+            });
+        });
+
+        it("Good Request : returns status 200", function(done) {
+            request.del({
+                headers:{
+                            'content-type' : 'application/x-www-form-urlencoded',
+                            'access-token': token
+                        },
+                url:    localurl + tripId
+            }, function(error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+    });
 });

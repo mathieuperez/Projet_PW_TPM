@@ -19,8 +19,8 @@ export class MyOffersIndividualComponent implements OnInit {
             'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description'
         ],
         'rideTable' : [
-            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination',
-            'Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes', 'Date'
+            'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination', 'Date de départ',
+            'Date d\'arrivée, Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes'
         ]
     };
 
@@ -93,12 +93,13 @@ export class MyOffersIndividualComponent implements OnInit {
             rideArrivalCity: new FormControl('', [ Validators.required ]),
             rideStart: new FormControl('', [ Validators.required ]),
             rideArrival: new FormControl('', [ Validators.required ]),
+            rideStartDate: new FormControl('', [ Validators.required ]),
+            rideArrivalDate: new FormControl('', [ Validators.required ]),
             rideStartTime: new FormControl('', [ Validators.required ]),
             rideArrivalTime: new FormControl('', [ Validators.required ]),
             rideConveyance: new FormControl('', [ Validators.required ]),
             ridePrice: new FormControl('', [ Validators.required ]),
-            rideSeat: new FormControl('', [ Validators.required ]),
-            rideDate: new FormControl('', [ Validators.required ])
+            rideSeat: new FormControl('', [ Validators.required ])
         });
 
         $(this.rentingModal.nativeElement).on('hidden.bs.modal', () => {
@@ -133,7 +134,7 @@ export class MyOffersIndividualComponent implements OnInit {
                 city: this.selectedRowRentings.city,
                 price: this.selectedRowRentings.price,
                 address: this.selectedRowRentings.address,
-                startDate: this.selectedRowRentings.startDate,
+                startDate: this.selectedRowRentings.startDate.toISOString().split('T')[0],
                 time: this.selectedRowRentings.time,
                 surface: this.selectedRowRentings.surface,
                 description: this.selectedRowRentings.description
@@ -156,7 +157,8 @@ export class MyOffersIndividualComponent implements OnInit {
                 rideConveyance: this.selectedRowRides.rideConveyance,
                 ridePrice: this.selectedRowRides.ridePrice,
                 rideSeat: this.selectedRowRides.rideSeat,
-                rideDate: this.selectedRowRides.rideDate
+                rideStartDate: this.selectedRowRides.rideStartDate.toISOString().split('T')[0],
+                rideArrivalDate: this.selectedRowRides.rideArrivalDate.toISOString().split('T')[0]
             });
             $(this.rideModal.nativeElement).modal('show');
             this.isModifyingRide = true;
@@ -183,8 +185,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rentingForm.valid && !this.rentingLoading) {
                 this.rentingLoading = true;
-                this.httpClient.post(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                this.httpClient.post(
+                    `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rentingForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -216,8 +218,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
             if (this.rideForm.valid && !this.rideLoading) {
                 this.rideLoading = true;
-                this.httpClient.post(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+                this.httpClient.post(
+                    `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}`,
                     this.rideForm.value, {
                         responseType: 'json',
                         headers: new HttpHeaders(
@@ -246,8 +248,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rentingForm.valid && !this.rentingLoading) {
             this.rentingLoading = true;
-            this.httpClient.patch(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
+            this.httpClient.patch(
+    `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
                 this.rentingForm.value, {
                     responseType: 'json'
                 }
@@ -271,8 +273,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
         if (this.rideForm.valid && !this.rideLoading) {
             this.rideLoading = true;
-            this.httpClient.patch(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
+            this.httpClient.patch(
+            `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`,
                 this.rideForm.value, {
                     responseType: 'json',
                     headers: new HttpHeaders(
@@ -366,7 +368,8 @@ export class MyOffersIndividualComponent implements OnInit {
         ).subscribe((response: any) => {
             if (response.length > 0) {
                 response.forEach(element => {
-                    element.rideDate = new Date(element.rideDate);
+                    element.rideStartDate = new Date(element.rideStartDate);
+                    element.rideArrivalDate = new Date(element.rideArrivalDate);
                 });
                 this.tableContent.rideTable = response;
                 this.areThereRides = true;
@@ -380,11 +383,14 @@ export class MyOffersIndividualComponent implements OnInit {
     public onSelectRenting(selectedItem: any, index: number) {
         this.selectedRowRentings = selectedItem;
         this.selectedRowRentingsIndex = index;
+
+        console.log(index);
     }
 
     public onSelectRide(selectedItem: any, index: number) {
         this.selectedRowRides = selectedItem;
         this.selectedRowRidesIndex = index;
+        console.log(index);
     }
 
     /**
@@ -493,5 +499,11 @@ export class MyOffersIndividualComponent implements OnInit {
      * Getter for the login FormControl.
      * @return {AbstractControl}
      */
-    public get rideDate (): AbstractControl { return this.rideForm.get('rideDate'); }
+    public get rideStartDate (): AbstractControl { return this.rideForm.get('rideStartDate'); }
+
+    /**
+     * Getter for the login FormControl.
+     * @return {AbstractControl}
+     */
+    public get rideArrivalDate (): AbstractControl { return this.rideForm.get('rideArrivalDate'); }
 }

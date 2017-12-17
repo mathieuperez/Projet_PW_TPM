@@ -8,7 +8,7 @@ const app = express();
 // API file for interacting with MongoDB
 const api = require('./routes/api');
 
-mongoose.connect('mongodb://localhost:27018/tpm-webdb', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/tpm-webdb', { useMongoClient: true });
 /*uri='mongodb://zakia:zakiaweb@ds135156.mlab.com:35156/tpm-webdb';
 mongoose.connect(uri, { useMongoClient: true });*/
 

@@ -79,8 +79,8 @@ export class MyOffersComponent implements OnInit {
                 city: this.selectedRowTrips.city,
                 country: this.selectedRowTrips.country,
                 price: this.selectedRowTrips.price,
-                startDate: this.selectedRowTrips.startDate,
-                endDate: this.selectedRowTrips.endDate,
+                startDate: this.selectedRowTrips.startDate.toISOString().split('T')[0],
+                endDate: this.selectedRowTrips.endDate.toISOString().split('T')[0],
                 startArea: this.selectedRowTrips.startArea,
                 arrivalArea: this.selectedRowTrips.arrivalArea,
                 time: this.selectedRowTrips.time,
@@ -131,7 +131,6 @@ export class MyOffersComponent implements OnInit {
 
     public modifyTripOffer(): void {
         this.tripSubmitted = true;
-        console.log(this.tripTableContent['_id']);
 
         if (this.tripForm.valid && !this.tripLoading) {
             this.tripLoading = true;

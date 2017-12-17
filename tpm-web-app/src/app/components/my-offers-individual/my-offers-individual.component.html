@@ -77,12 +77,13 @@
                         <td>{{rowContent.rideArrivalCity}}</td>
                         <td>{{rowContent.rideStart}}</td>
                         <td>{{rowContent.rideArrival}}</td>
+                        <td>{{rowContent.rideStartDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.rideArrivalDate.toLocaleDateString()}}</td>
                         <td>{{rowContent.rideStartTime}}</td>
                         <td>{{rowContent.rideArrivalTime}}</td>
                         <td>{{rowContent.rideConveyance}}</td>
                         <td>{{rowContent.ridePrice}}</td>
                         <td>{{rowContent.rideSeat}}</td>
-                        <td>{{rowContent.rideDate.toLocaleDateString()}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -388,7 +389,51 @@
                                 </div>
                                 <div class="col-12 text-danger"
                                     *ngIf="rideArrival.invalid && (rideArrival.dirty || rideArrival.touched || rideSubmitted)">
-                                    <span class="validation-message" *ngIf="rideArrival.errors.required">Le tarif est requis.</span>
+                                    <span class="validation-message" *ngIf="rideArrival.errors.required">Le lieu d'arrivée est requis.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="rideStartDate">Date de départ</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideStartDate.invalid && (rideStartDate.dirty || rideStartDate.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="rideStartDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="rideStartDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideStartDate.invalid && (rideStartDate.dirty || rideStartDate.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideStartDate.errors.required">La date de départ est requise.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 field-label-responsive">
+                            <label for="rideArrivalDate">Date d'arrivée</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback"
+                            [ngClass]="{ 'has-error': rideArrivalDate.invalid && (rideArrivalDate.dirty || rideArrivalDate.touched || rideSubmitted) }">
+                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                                    <input  type="date"
+                                            name="rideArrivalDate"
+                                            class="form-control"
+                                            placeholder="jj/mm/aaaa"
+                                            formControlName="rideArrivalDate">
+                                </div>
+                                <div class="col-12 text-danger"
+                                    *ngIf="rideArrivalDate.invalid && (rideArrivalDate.dirty || rideArrivalDate.touched || rideSubmitted)">
+                                    <span class="validation-message" *ngIf="rideArrivalDate.errors.required">La date d'arrivée est requise.</span>
                                 </div>
                             </div>
                         </div>
@@ -411,7 +456,6 @@
                                 <div class="col-12 text-danger"
                                     *ngIf="rideStartTime.invalid && (rideStartTime.dirty || rideStartTime.touched || rideSubmitted)">
                                     <span class="validation-message" *ngIf="rideStartTime.errors.required">L'heure de départ est requise.</span>
-                                    {{rideStartTime.errors | json}}
                                 </div>
                             </div>
                         </div>
@@ -500,28 +544,6 @@
                                 <div class="col-12 text-danger"
                                     *ngIf="rideSeat.invalid && (rideSeat.dirty || rideSeat.touched || rideSubmitted)">
                                     <span class="validation-message" *ngIf="rideSeat.errors.required">La durée est requise.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 field-label-responsive">
-                            <label for="country">Date</label>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group has-feedback"
-                            [ngClass]="{ 'has-error': rideDate.invalid && (rideDate.dirty || rideDate.touched || rideSubmitted) }">
-                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
-                                    <input  type="date"
-                                            name="rideDate"
-                                            class="form-control"
-                                            placeholder="jj/mm/aaaa"
-                                            formControlName="rideDate">
-                                </div>
-                                <div class="col-12 text-danger"
-                                    *ngIf="rideDate.invalid && (rideDate.dirty || rideDate.touched || rideSubmitted)">
-                                    <span class="validation-message" *ngIf="rideDate.errors.required">La date est requise.</span>
                                 </div>
                             </div>
                         </div>
