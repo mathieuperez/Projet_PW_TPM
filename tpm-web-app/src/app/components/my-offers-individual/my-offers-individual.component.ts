@@ -251,7 +251,11 @@ export class MyOffersIndividualComponent implements OnInit {
             this.httpClient.patch(
     `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
                 this.rentingForm.value, {
-                    responseType: 'json'
+                    responseType: 'json',
+                    headers: new HttpHeaders(
+                        { 'Content-Type': 'application/json',
+                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                    )
                 }
             ).subscribe( (response: any) => {
                 this.rentingLoading = false;

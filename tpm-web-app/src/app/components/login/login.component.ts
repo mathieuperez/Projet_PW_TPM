@@ -80,7 +80,6 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem(AppConstants.EMAIL_USER, response['user'].email);
                 localStorage.setItem(AppConstants.LOGIN_USER, response['user'].login);
                 localStorage.setItem(AppConstants.ROLE_USER, response['user'].role);
-                console.log('token : ' + response.token);
                 this.router.navigate(['/']);
             }, () => {
                 $(this.loginModal.nativeElement).modal('show');
