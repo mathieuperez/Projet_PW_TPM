@@ -506,14 +506,18 @@ describe("Travel Agency API", function() {
                 request.post({
                     headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
                     url:     localurl,
-                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                    form:    {  rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau",
+                                rideArrival: "bordeaux", rideStartDate: "12/07/2018", rideArrivalDate:"12/07/2018",
+                                rideStartTime:"12:59:00", rideArrivalTime:"17:59:00", rideConveyance:"bm",
+                                ridePrice: "55", rideSeat: "1"}
                 }, function(error, response, body) {
                     let bodyJson = JSON.parse(body);
                     id = bodyJson.ride._id;
+                    console.log("mon id de creation"+id+"arrivaltime:"+bodyJson.ride.rideArrivalTime);
                     request.patch({
                         headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
                         url:     localurl+id,
-                        form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                        form:    {  rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2026",rideArrivalDate:"12/05/2028", rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
                      }, function(error, response, body2) {
                         expect(response.statusCode).to.equal(200);
                         done();
@@ -530,15 +534,14 @@ describe("Travel Agency API", function() {
                 form:    { login: "bisounours", password: "mperez3"}
             }, function(error, response, body) {
                 let bodyJson = JSON.parse(body);
-
                 token = bodyJson.token;
 
                 request.patch({
                     headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
                     url:     localurl+id,
-                    form:    { rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2018",rideArrivalDate:"12/05/2018",rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
-
-                }, function(error, response, body) {
+                    form:    {  rideStartCity: "france", rideArrivalCity: "3rue jean plaa", rideStart: "Pau", rideArrival: "bordeaux",rideStartDate:"12/05/2026",rideArrivalDate:"12/05/2028", rideStartTime:"12:59:00",rideArrivalTime:"15:59:00",rideConveyance:"bm", ridePrice: "55", rideSeat: "1"}
+                    }, function(error, response, body) {
+                console.log("mon id qui devrait pas avoir changé"+id+"//");
                     expect(response.statusCode).to.equal(409);
                     done();
                 });
@@ -548,6 +551,87 @@ describe("Travel Agency API", function() {
 
 
     });
+
+
+   describe("DELETE Delete a ride", function() {
+
+            let localurl = url + "rides/bisounours/";
+            let authurl = url + "users/token";
+
+            it("Bad request (missing Token) : returns status 401", function(done) {
+                request.delete({
+                    url:     localurl+id,
+                    form:    { login: "bisounours"}
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.equal(401);
+                    done();
+                });
+            });
+
+
+            it("Bad request (bad Token) : returns status 401", function(done) {
+                request.post({
+                    headers: {'content-type' : 'application/x-www-form-urlencoded'},
+                    url:     authurl,
+                    form:    { login: "bisounours", password: "mp"}
+                }, function(error, response, body) {
+                    let bodyJson = JSON.parse(body);
+                    request.delete({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : "badtoken"},
+                        url:     localurl+id,
+                    }, function(error, response, body) {
+                        expect(response.statusCode).to.equal(401);
+                        done();
+                    });
+
+                });
+            });
+
+
+
+            it("Good request : returns status 200", function(done) {
+                request.post({
+                    url:     authurl,
+                    form:    { login: "bisounours", password: "mperez3"}
+                }, function(error, response, body) {
+                    let bodyJson = JSON.parse(body);
+                    token = bodyJson.token;
+                    request.delete({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                        url:     localurl+id,
+                    }, function(error, response, body) {
+                        expect(response.statusCode).to.equal(200);
+                        done();
+                    });
+
+                });
+            });
+
+
+
+            it("Bad request : returns status 500 (cast to objectId failed)", function(done) {
+                request.post({
+                    url:     authurl,
+                    form:    { login: "bisounours", password: "mperez3"}
+                }, function(error, response, body) {
+                    let bodyJson = JSON.parse(body);
+                    token = bodyJson.token;
+                    request.delete({
+                        headers: {'content-type' : 'application/x-www-form-urlencoded', 'access-token' : token},
+                        url:     localurl+"badId",
+                        
+                    }, function(error, response, body) {
+                        expect(response.statusCode).to.equal(500);
+                        done();
+                    });
+
+                });
+            });
+
+
+        });
+
+
 
 
 

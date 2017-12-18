@@ -29,21 +29,13 @@ router.post('/:login', (req, res) => {
     hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
     let hourArrival = req.body.rideArrivalTime;
     hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
-    console.log(hourStart);
     let token = req.headers['access-token'];
-    console.log("token"+token);
-    console.log("ride"+ride);
-
-    let status;
-    let success;
-    let message;
 
    verifyauth(req, res, ride.login, token, function () {
 
         if(ride.rideStartCity==null || ride.rideArrivalCity==null|| ride.rideStart==null || ride.rideArrival==null ||
             ride.ridePrice==null || ride.rideSeat==null || ride.rideStartDate==null || ride.rideArrivalDate==null || 
-            ride.rideStartTime==null || ride.rideArrivalTime==null || ride.rideConveyance==null){
-            console.log(ride);
+            ride.rideConveyance==null){
             res.status(422).json({success: false, message: 'Missing Arguments.'});
         } 
         else {
@@ -63,7 +55,7 @@ router.post('/:login', (req, res) => {
                     });
                 }
                 else{
-                    res.status(409).json({success: false,message: 'There is already a rent with this address and date.'});
+                    res.status(409).json({success: false,message: 'There is already a ride with this address and date.'});
                 }
             });
         }
@@ -84,15 +76,21 @@ router.patch('/:login/:id', (req, res) => {
     ride.rideArrival = req.body.rideArrival;
     ride.ridePrice = req.body.ridePrice;
     ride.rideSeat = req.body.rideSeat;
+    ride.rideStartDate = req.body.rideStartDate;
+    ride.rideArrivalDate=req.body.rideArrivalDate;
+    ride.rideConveyance=req.body.rideConveyance;
     ride.rideStartTime=req.body.rideStartTime;
     ride.rideArrivalTime=req.body.rideArrivalTime;
-    ride.rideConveyance=req.body.rideConveyance;
+    
+    let hourStart = req.body.rideStartTime;
+    hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
+    let hourArrival = req.body.rideArrivalTime;
+    hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
 
     verifyauth(req, res, ride.login, token, function () {
         if(ride.rideStartCity==null || ride.rideArrivalCity==null|| ride.rideStart==null || ride.rideArrival==null ||
-            ride.ridePrice==null || ride.rideSeat==null || ride.rideStartDate==null || ride.rideArrivalDate==null || 
-            ride.rideStartTime==null || ride.rideArrivalTime==null || ride.rideConveyance==null){
-            console.log(ride);
+            ride.ridePrice==null || ride.rideSeat==null || ride.rideStartDate==null || ride.rideArrivalDate==null
+            || ride.rideConveyance==null){
             res.status(422).json({success: false, message: 'Missing Arguments.'});
         } 
         
@@ -100,29 +98,34 @@ router.patch('/:login/:id', (req, res) => {
             ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
             ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
 
-            ride.findById(req.params.id, function (err, rides) {
+            Ride.findById(req.params.id, function (err, rides) {
                 if (err) {
-                    res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent with this address and starting date.'});
+                    res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a ride with this address and starting date.'});
                 }
                 else {
-                    oldride.rideStartDate = rides.rideStartDate;
-                    oldride.rideArrivalDate = rides.rideArrivalDate;
+                    oldRide.rideStartDate = rides.rideStartDate;
+                    oldRide.rideArrivalDate = rides.rideArrivalDate;
+                    oldRide.rideStartTime = rides.rideStartTime;
+                    oldRide.rideArrivalTime = rides.rideArrivalTime;
+
+                    console.log("start/"+oldRide.rideStartDate+"/arrival/"+oldRide.rideArrivalDate);
 
                     var dateProblem=0
                     verifyDate(req, res, ride, dateProblem, function(){
                         if (err) {
-                            res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent with this address and starting date.'});
+                            res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a ride with this address and starting date.'});
                         }
                         else {
+                            console.log("JE SUIS ICIIIII"+dateProblem);
                             if (dateProblem == 0){
-                                ride.findOneAndUpdate( {"_id": req.params.id}, {$set: {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
+                                Ride.findOneAndUpdate( {"_id": req.params.id}, {$set: {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
                                     "ridePrice": ride.ridePrice, "rideSeat": ride.rideSeat, "rideStartDate": ride.rideStartDate, "rideArrivalDate": ride.rideArrivalDate, "rideStartTime": ride.rideStartTime,
-                                    "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}}, function (err, rent) {
+                                    "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}}, function (err, rides) {
                                     if (err) {
                                         res.status(500).json({success: false, message: 'ride modification failed.'});
                                     }
                                     else {
-                                        res.status(200).json({success: true, message: 'ride modification successful'});
+                                        res.status(200).json({success: true, message: 'ride modification successful', ride: rides});
                                     }
                                 });
                             }
@@ -131,11 +134,11 @@ router.patch('/:login/:id', (req, res) => {
                             }
                             else if (dateProblem == 1) {
                                 let same=false;
-                                compareDate(ride, oldride, same, function(){
+                                compareDate(ride, oldRide, same, function(){
                                     if(same==true){
-                                        ride.findOneAndUpdate( {"_id": req.params.id}, {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
+                                        Ride.findOneAndUpdate( {"_id": req.params.id}, {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
                                     "ridePrice": ride.ridePrice, "rideSeat": ride.rideSeat, "rideStartDate": ride.rideStartDate, "rideArrivalDate": ride.rideArrivalDate, "rideStartTime": ride.rideStartTime,
-                                    "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}, function (err, rent) {
+                                    "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}, function (err, ride) {
                                             if (err) {
                                                 res.status(500).json({success: false, message: 'ride modification failed.'});
                                             }
@@ -163,22 +166,26 @@ router.patch('/:login/:id', (req, res) => {
 
 
 //suprimer un trajet
- router.delete('/:login/:id', function(req, res, next) {
-    let id = req.params.id();
+router.delete('/:login/:id', function(req, res, next) {
+    let id = req.params.id;
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
-        Ride.findOneAndRemove({"_id": id, "login": login}, function(err, ride){
+        Ride.findOneAndRemove({"_id": id}, function(err, rides){
             if (err){
-                return next(err);
+                res.status(500).json({success: false, message: 'Deleting Ride failed.'});
             }
             else {
-                res.json({success: true, message:"Ride deleted successful."});
+                if (rides) {
+                    res.status(200).json({success: true, message: 'Deleting Ride successful'});
+                }
+                else {
+                    res.status(409).json({success: false,message: 'There is no ride with this id.'});
+                }
             }
         });
     });
 });
-
 
   //Afficher les offres de trajets d'un particulier connecté
   router.get('/:login', function(req, res, next) {
@@ -201,6 +208,16 @@ router.get('/', function(req, res, next) {
 });
 
 function verifyDate(req, res, ride, dateProblem, next) {
+
+    let hourStart = ride.rideStartTime;
+    hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
+    let hourArrival = ride.rideArrivalTime;
+    hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
+
+    ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
+    ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
+
+
      Ride.find({"rideArrivalDate": {"$gt": ride.rideStartDate.getTime()-1, "$lt": ride.rideArrivalDate.getTime()+1}, "login": ride.login}).exec(function(err, rides){
         if (err) {
             res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a ride ending at this  time.'});
@@ -245,6 +262,23 @@ function verifyDate(req, res, ride, dateProblem, next) {
 
 function compareDate(ride, oldride, same, next) {
     
+    let hourStart = ride.rideStartTime;
+    hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
+    let hourArrival = ride.rideArrivalTime;
+    hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
+    
+    ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
+    ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
+
+
+    let oldhourStart = oldride.rideStartTime;
+    oldhourStart = oldhourStart.split(':')[0]*3600 + oldhourStart.split(':')[1]*60 ;
+    let oldhourArrival = oldride.rideArrivalTime;
+    oldhourArrival = oldhourArrival.split(':')[0]*3600 + oldhourArrival.split(':')[1]*60 ;
+    
+    oldride.rideStartDate=new Date().setTime(oldride.rideStartDate.getTime()+(oldhourStart*1000));
+    oldride.rideArrivalDate=new Date().setTime(oldride.rideArrivalDate.getTime()+(oldhourArrival*1000));
+
         if( ((ride.rideArrivalDate.getTime()) > (oldride.rideStartDate.getTime()-1)) && ((ride.rideArrivalDate.getTime()) < (oldride.rideArrivalDate.getTime()+1))){
             same=true;
             next()
