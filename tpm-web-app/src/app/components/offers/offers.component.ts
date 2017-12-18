@@ -20,7 +20,7 @@ export class OffersComponent implements OnInit {
 
     public url: string;
 
-    private pageTitle: string;
+    public pageTitle: string;
 
     public noResults: boolean;
 
@@ -117,9 +117,14 @@ export class OffersComponent implements OnInit {
                     if (city && country) {
                         if (this.tableContentCopy) {
                             this.tableContentCopy.forEach(element => {
-                                console.log(element.country + element.city);
-                                if (element.country === country.long_name && element.city === city.long_name) {
-                                    table.push(element);
+                                if (this.url === 'ride') {
+                                    if (element.rideStartCity === city.long_name) {
+                                        table.push(element);
+                                    }
+                                } else {
+                                    if (element.country === country.long_name && element.city === city.long_name) {
+                                        table.push(element);
+                                    }
                                 }
                             });
                             this.tableContent = table;
@@ -206,6 +211,7 @@ export class OffersComponent implements OnInit {
                     response.rides.forEach(element => {
                         element.rideStartDate = new Date(element.rideStartDate);
                         element.rideArrivalDate = new Date(element.rideArrivalDate);
+                        element.rideStartCity = element.rideStartCity.charAt(0).toUpperCase() + element.rideStartCity.slice(1);
                     });
                     this.tableContent = response.rides;
                     this.tableContentCopy = this.tableContent;

@@ -29,24 +29,24 @@ export class MyOffersIndividualComponent implements OnInit {
         'rideTable' : []
     };
 
-    private areThereRentings: boolean;
-    private areThereRides: boolean;
+    public areThereRentings: boolean;
+    public areThereRides: boolean;
 
     private isModifyingRenting: boolean;
     private isModifyingRide: boolean;
 
-    private rentingForm: FormGroup;
-    private rentingSubmitted: boolean;
+    public rentingForm: FormGroup;
+    public rentingSubmitted: boolean;
     private rentingError: boolean;
     private rentingLoading: boolean;
 
-    private rideForm: FormGroup;
-    private rideSubmitted: boolean;
+    public rideForm: FormGroup;
+    public rideSubmitted: boolean;
     private rideError: boolean;
     private rideLoading: boolean;
 
-    private rentingModalTitle: string;
-    private rideModalTitle: string;
+    public rentingModalTitle: string;
+    public rideModalTitle: string;
 
     @ViewChild('rentingModal')
     private rentingModal: ElementRef;
@@ -251,7 +251,11 @@ export class MyOffersIndividualComponent implements OnInit {
             this.httpClient.patch(
     `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`,
                 this.rentingForm.value, {
-                    responseType: 'json'
+                    responseType: 'json',
+                    headers: new HttpHeaders(
+                        { 'Content-Type': 'application/json',
+                          'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
+                    )
                 }
             ).subscribe( (response: any) => {
                 this.rentingLoading = false;

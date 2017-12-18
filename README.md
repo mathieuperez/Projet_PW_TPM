@@ -8,13 +8,13 @@
 * Mathieu Perez
 
 ## Rôles
-* **Utilisateur** : Personne utilisant l'application.
+* **Utilisateur** : Personne utilisant l'application. 
 * **Particulier** : Utilisateur connecté qui propose des offres de location et/ou de trajet.
 * **Agence** : Utilisateur connecté qui propose des offres de voyage(location+trajet).
 
 ## Cahier des Charges
 * L'application devra permetre à des prestataires de se créer un compte(email, password). Une fois connectées, ceux-ci pourront proposer des offres de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) et/ou de transport(tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages) en fonction de cases à cocher(trajet, location).
-* Un utilisateur devra voir une carte(API Maps) sur la page d'accueil. Il peut effecter une sélection sur la carte. Il peut également saisir une période de debut/fin de recherche. L'application affichera les offres de locations et de transports correspondant aux critères de la recherche. (BONUS: afficher les trajets blablacar ou SNCF si la recherche est en france)(BONUS: gerer L/T/L+T)
+* Un utilisateur devra voir une carte(API Maps) sur la page d'accueil. Il peut effecter une sélection sur la carte. Il peut également saisir une période de debut/fin de recherche. L'application affichera les offres de locations et de transports correspondant aux critères de la recherche. (BONUS: afficher les trajets blablacar ou SNCF si la recherche est en france)
 
 ## Backlog 
 ### Backlog Initial
@@ -37,4 +37,5 @@
 * Serveur: Nodejs
 * BD: MongoDB
 * Test: Protractor(test E2E angular)
+* Test: Mocha(test unitaire)
 

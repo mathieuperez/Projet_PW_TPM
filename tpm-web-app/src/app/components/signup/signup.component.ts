@@ -14,20 +14,20 @@ export class SignupComponent implements OnInit {
     /**
      * FormGroup for the signup form.
      */
-    private signupForm: FormGroup;
+    public signupForm: FormGroup;
 
     /**
      * True if the form has been submitted at least one.
      */
-    private signupSubmitted: boolean;
+    public signupSubmitted: boolean;
 
     /**
      * If true error for run again the login.
      */
-    private signupError: boolean;
-    private signupLoading: boolean;
+    public signupError: boolean;
+    public signupLoading: boolean;
 
-    private modalBody: string;
+    modalBody: string;
 
     @ViewChild('signupModal')
     private signupModal: ElementRef;

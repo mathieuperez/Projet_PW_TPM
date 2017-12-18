@@ -33,7 +33,6 @@ export class AppComponent implements OnInit {
 
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
-                console.log(val.url);
                 if (val.url !== '/') {
                     this.isHomePage = false;
                 } else {
@@ -93,7 +92,6 @@ export class AppComponent implements OnInit {
                 break;
             }
         } else {
-            this.pageTitle = 'TPM Application';
             this.pageText = 'Bienvenue sur une application de gestion d\'offres de voyages, de trajets et de locations !';
         }
     }
