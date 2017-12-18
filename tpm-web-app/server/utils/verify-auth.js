@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var app = express();
+let app = express();
 
 app.set('superSecret', "12345"); // secret variable
 
@@ -20,4 +20,4 @@ module.exports = (req, res, login, token, next) => {
     else {
         res.status(401).send({success: false,message: 'No token provided.'});
     }
-}
+};

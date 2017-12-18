@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-var trip = mongoose.Schema({
+let trip = mongoose.Schema({
     address: {type: String,required: true},
     city: { type: String,required: true},
     country: { type: String,required: true},

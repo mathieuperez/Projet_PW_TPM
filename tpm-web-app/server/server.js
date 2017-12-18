@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/tpm-webdb', { useMongoClient: true });
 /*uri='mongodb://zakia:zakiaweb@ds135156.mlab.com:35156/tpm-webdb';
 mongoose.connect(uri, { useMongoClient: true });*/
 
-var db = mongoose.connection;
+let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
 db.once('open', function (){
     console.log("Connexion à la base OK");

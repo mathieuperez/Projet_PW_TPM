@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-const User = require('../schemas/user');
 const Ride = require('../schemas/ride');
 const verifyauth = require('../utils/verify-auth');
 
-var app = express();
+let app = express();
 app.set('superSecret', "12345"); // secret variable
 
 //Ajouter un trajet
 router.post('/:login', (req, res) => {
-    var ride= new Ride();
+    let ride= new Ride();
     ride.rideStartCity= req.body.rideStartCity;
     ride.rideArrivalCity= req.body.rideArrivalCity;
     ride.rideStart = req.body.rideStart;
@@ -33,18 +30,18 @@ router.post('/:login', (req, res) => {
 
    verifyauth(req, res, ride.login, token, function () {
 
-        if(ride.rideStartCity==null || ride.rideArrivalCity==null|| ride.rideStart==null || ride.rideArrival==null ||
-            ride.ridePrice==null || ride.rideSeat==null || ride.rideStartDate==null || ride.rideArrivalDate==null || 
-            ride.rideConveyance==null){
+        if(ride.rideStartCity === undefined || ride.rideArrivalCity === undefined|| ride.rideStart === undefined || ride.rideArrival === undefined ||
+            ride.ridePrice === undefined || ride.rideSeat === undefined || ride.rideStartDate === undefined || ride.rideArrivalDate === undefined ||
+            ride.rideConveyance === undefined){
             res.status(422).json({success: false, message: 'Missing Arguments.'});
-        } 
+        }
         else {
             ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
             ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
-            var dateProblem=0;
+            let dateProblem=0;
 
-            verifyDate(req, res, ride, dateProblem, function(){
-                if(dateProblem==0){
+            verifyDate(res, ride, dateProblem, function(){
+                if(dateProblem === 0){
                     ride.save(function (err, result) {
                         if (err) {
                             res.status(401).json({success: false, message: 'Creating Ride failed.'});
@@ -66,10 +63,10 @@ router.post('/:login', (req, res) => {
 
 //modifier un trajet
 router.patch('/:login/:id', (req, res) => {
-    var oldRide=new Ride();
+    let oldRide=new Ride();
     oldRide.id = req.params.id;
     let token = req.headers['access-token'];
-    var ride= new Ride();
+    let ride= new Ride();
     ride.rideStartCity= req.body.rideStartCity;
     ride.rideArrivalCity= req.body.rideArrivalCity;
     ride.rideStart = req.body.rideStart;
@@ -81,19 +78,19 @@ router.patch('/:login/:id', (req, res) => {
     ride.rideConveyance=req.body.rideConveyance;
     ride.rideStartTime=req.body.rideStartTime;
     ride.rideArrivalTime=req.body.rideArrivalTime;
-    
+
     let hourStart = req.body.rideStartTime;
     hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
     let hourArrival = req.body.rideArrivalTime;
     hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
 
     verifyauth(req, res, ride.login, token, function () {
-        if(ride.rideStartCity==null || ride.rideArrivalCity==null|| ride.rideStart==null || ride.rideArrival==null ||
-            ride.ridePrice==null || ride.rideSeat==null || ride.rideStartDate==null || ride.rideArrivalDate==null
-            || ride.rideConveyance==null){
+        if(ride.rideStartCity === undefined || ride.rideArrivalCity === undefined|| ride.rideStart === undefined || ride.rideArrival === undefined ||
+            ride.ridePrice === undefined || ride.rideSeat === undefined || ride.rideStartDate === undefined || ride.rideArrivalDate === undefined
+            || ride.rideConveyance === undefined){
             res.status(422).json({success: false, message: 'Missing Arguments.'});
-        } 
-        
+        }
+
         else {
             ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
             ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
@@ -110,14 +107,14 @@ router.patch('/:login/:id', (req, res) => {
 
                     console.log("start/"+oldRide.rideStartDate+"/arrival/"+oldRide.rideArrivalDate);
 
-                    var dateProblem=0
-                    verifyDate(req, res, ride, dateProblem, function(){
+                    let dateProblem=0;
+                    verifyDate(res, ride, dateProblem, function(){
                         if (err) {
                             res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a ride with this address and starting date.'});
                         }
                         else {
                             console.log("JE SUIS ICIIIII"+dateProblem);
-                            if (dateProblem == 0){
+                            if (dateProblem === 0){
                                 Ride.findOneAndUpdate( {"_id": req.params.id}, {$set: {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
                                     "ridePrice": ride.ridePrice, "rideSeat": ride.rideSeat, "rideStartDate": ride.rideStartDate, "rideArrivalDate": ride.rideArrivalDate, "rideStartTime": ride.rideStartTime,
                                     "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}}, function (err, rides) {
@@ -132,10 +129,10 @@ router.patch('/:login/:id', (req, res) => {
                             else if (dateProblem > 1){
                                 res.status(409).json({success: false, message: 'There is already a ride with this date.'});
                             }
-                            else if (dateProblem == 1) {
+                            else if (dateProblem === 1) {
                                 let same=false;
                                 compareDate(ride, oldRide, same, function(){
-                                    if(same==true){
+                                    if(same === true){
                                         Ride.findOneAndUpdate( {"_id": req.params.id}, {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
                                     "ridePrice": ride.ridePrice, "rideSeat": ride.rideSeat, "rideStartDate": ride.rideStartDate, "rideArrivalDate": ride.rideArrivalDate, "rideStartTime": ride.rideStartTime,
                                     "rideArrivalTime": ride.rideArrivalTime,"rideConveyance": ride.rideConveyance}, function (err, ride) {
@@ -143,7 +140,12 @@ router.patch('/:login/:id', (req, res) => {
                                                 res.status(500).json({success: false, message: 'ride modification failed.'});
                                             }
                                             else {
-                                                res.status(200).json({success: true, message: 'ride modification successful'});
+                                                if(ride){
+                                                    res.status(200).json({success: true, message: 'Ride modification successful'});
+                                                }
+                                                else{
+                                                    res.status(500).json({success: true, message: 'Ride modification failed'});
+                                                }
                                             }
                                         });
                                     }
@@ -166,7 +168,7 @@ router.patch('/:login/:id', (req, res) => {
 
 
 //suprimer un trajet
-router.delete('/:login/:id', function(req, res, next) {
+router.delete('/:login/:id', function(req, res) {
     let id = req.params.id;
     let login = req.params.login;
     let token = req.headers['access-token'];
@@ -188,26 +190,34 @@ router.delete('/:login/:id', function(req, res, next) {
 });
 
   //Afficher les offres de trajets d'un particulier connecté
-  router.get('/:login', function(req, res, next) {
+  router.get('/:login', function(req, res) {
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
         Ride.find({"login": login}, function (err, rides) {
-            if (err) return next(err);
-            res.json(rides);
+            if (err){
+                res.status(500).json({success: false, message: 'Get Rides failed.'});
+            }
+            else {
+                res.status(200).json({success: true, message: 'Get Rides successful', rides: rides});
+            }
         });
     });
 });
 
 //afficher tous les trajets
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     Ride.find(function (err, rides) {
-        if (err) return next(err);
-        res.json(rides);
+        if (err){
+            res.status(500).json({success: false, message: 'Get Rides failed.'});
+        }
+        else {
+            res.status(200).json({success: true, message: 'Get Rides successful', rides: rides});
+        }
     });
 });
 
-function verifyDate(req, res, ride, dateProblem, next) {
+function verifyDate(res, ride, dateProblem, next) {
 
     let hourStart = ride.rideStartTime;
     hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
@@ -243,7 +253,7 @@ function verifyDate(req, res, ride, dateProblem, next) {
                             if (rides.length > 0) {
                                 dateProblem+=rides.length;
                             }
-                            if(dateProblem==0){
+                            if(dateProblem === 0){
                                 next();
                             }
                             else {
@@ -261,12 +271,12 @@ function verifyDate(req, res, ride, dateProblem, next) {
 
 
 function compareDate(ride, oldride, same, next) {
-    
+
     let hourStart = ride.rideStartTime;
     hourStart = hourStart.split(':')[0]*3600 + hourStart.split(':')[1]*60 ;
     let hourArrival = ride.rideArrivalTime;
     hourArrival = hourArrival.split(':')[0]*3600 + hourArrival.split(':')[1]*60 ;
-    
+
     ride.rideStartDate=new Date().setTime(ride.rideStartDate.getTime()+(hourStart*1000));
     ride.rideArrivalDate=new Date().setTime(ride.rideArrivalDate.getTime()+(hourArrival*1000));
 
@@ -275,7 +285,7 @@ function compareDate(ride, oldride, same, next) {
     oldhourStart = oldhourStart.split(':')[0]*3600 + oldhourStart.split(':')[1]*60 ;
     let oldhourArrival = oldride.rideArrivalTime;
     oldhourArrival = oldhourArrival.split(':')[0]*3600 + oldhourArrival.split(':')[1]*60 ;
-    
+
     oldride.rideStartDate=new Date().setTime(oldride.rideStartDate.getTime()+(oldhourStart*1000));
     oldride.rideArrivalDate=new Date().setTime(oldride.rideArrivalDate.getTime()+(oldhourArrival*1000));
 
@@ -295,7 +305,7 @@ function compareDate(ride, oldride, same, next) {
             next();
         }
 
-    
+
 }
 
 

@@ -4,7 +4,7 @@ const Renting = require('../schemas/renting');
 const verifyauth = require('../utils/verify-auth');
 
 router.post('/:login', (req, res) => {
-    var renting = new Renting();
+    let renting = new Renting();
     renting.country = req.body.country;
     renting.address = req.body.address;
     renting.city = req.body.city;
@@ -16,16 +16,16 @@ router.post('/:login', (req, res) => {
     let token = req.headers['access-token'];
 
     verifyauth(req, res, renting.login, token, function () {
-        if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
+        if (renting.country === undefined || renting.address === undefined || renting.city  === undefined || renting.price === undefined || req.body.startDate === undefined || renting.time === undefined || renting.surface === undefined) {
             res.status(422).json({success: false, message:'Missing Arguments.'});
         }
         else {
             renting.startDate = new Date(''+ req.body.startDate.split('/')[2] + '-' + req.body.startDate.split('/')[1] + '-' + req.body.startDate.split('/')[0]);
             renting.endDate=new Date().setTime(renting.startDate.getTime()+renting.time * 86400000);
-            var dateProblem=0;
+            let dateProblem=0;
 
-            verifyDate(req, res, renting, dateProblem, function(){
-                if(dateProblem==0){
+            verifyDate(res, renting, dateProblem, function(){
+                if(dateProblem === 0){
                     renting.save(function (err, result) {
                         if (err) {
                             res.status(500).json({success: false, message: 'Creating Rent failed.'});
@@ -46,10 +46,10 @@ router.post('/:login', (req, res) => {
 
 
 router.patch('/:login/:id', (req, res) => {
-    var oldRenting=new Renting();
+    let oldRenting=new Renting();
     oldRenting.id = req.params.id;
     let token = req.headers['access-token'];
-    var renting = new Renting();
+    let renting = new Renting();
     renting.login = req.params.login;
     renting.country = req.body.country;
     renting.address = req.body.address;
@@ -60,7 +60,7 @@ router.patch('/:login/:id', (req, res) => {
     renting.description = req.body.description;
 
     verifyauth(req, res, renting.login, token, function () {
-        if (renting.country == null || renting.address == null || renting.city  == null || renting.price == null || req.body.startDate == null || renting.time == null || renting.surface == null) {
+        if (renting.country === undefined || renting.address === undefined || renting.city  === undefined || renting.price === undefined || req.body.startDate === undefined || renting.time === undefined || renting.surface === undefined) {
             res.status(422).json({success: false, message:'Missing Arguments.'});
         }
         else {
@@ -76,37 +76,47 @@ router.patch('/:login/:id', (req, res) => {
                     oldRenting.startDate = rentings.startDate;
                     oldRenting.endDate = rentings.endDate;
 
-                    var dateProblem=0
-                    verifyDate(req, res, renting, dateProblem, function(){
+                    let dateProblem=0;
+                    verifyDate(res, renting, dateProblem, function(){
                         if (err) {
                             res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a rent with this address and starting date.'});
                         }
                         else {
-                            if (dateProblem == 0){
+                            if (dateProblem === 0){
                                 Renting.findOneAndUpdate( {"_id": req.params.id}, {$set: {"country": renting.country, "address": renting.address, "city": renting.city, "price": renting.price,
                                     "time": renting.time, "surface": renting.surface, "description": renting.description, "startDate": renting.startDate, "endDate": renting.endDate}}, function (err, rent) {
                                     if (err) {
                                         res.status(500).json({success: false, message: 'Rent modification failed.'});
                                     }
                                     else {
-                                        res.status(200).json({success: true, message: 'Rent modification successful'});
+                                        if(rent){
+                                            res.status(200).json({success: true, message: 'Rent modification successful'});
+                                        }
+                                        else{
+                                            res.status(500).json({success: true, message: 'Rent modification failed'});
+                                        }
                                     }
                                 });
                             }
                             else if (dateProblem > 1){
                                 res.status(409).json({success: false, message: 'There is already a Rent with this address and date.'});
                             }
-                            else if (dateProblem == 1) {
+                            else if (dateProblem === 1) {
                                 let same=false;
                                 compareDate(renting, oldRenting, same, function(){
-                                    if(same==true){
+                                    if(same===true){
                                         Renting.findOneAndUpdate( {"_id": req.params.id}, {"country": renting.country, "address": renting.address, "city": renting.city, "price": renting.price,
                                             "time": renting.time, "surface": renting.surface, "description": renting.description, "startDate": renting.startDate, "endDate": renting.endDate}, function (err, rent) {
                                             if (err) {
                                                 res.status(500).json({success: false, message: 'Rent modification failed.'});
                                             }
                                             else {
-                                                res.status(200).json({success: true, message: 'Rent modification successful'});
+                                                if(rent){
+                                                    res.status(200).json({success: true, message: 'Rent modification successful'});
+                                                }
+                                                else{
+                                                    res.status(500).json({success: true, message: 'Rent modification failed'});
+                                                }
                                             }
                                         });
                                     }
@@ -127,7 +137,7 @@ router.patch('/:login/:id', (req, res) => {
 
 
 
-router.delete('/:login/:id', function(req, res, next) {
+router.delete('/:login/:id', function(req, res) {
     let id = req.params.id;
     let login = req.params.login;
     let token = req.headers['access-token'];
@@ -149,7 +159,7 @@ router.delete('/:login/:id', function(req, res, next) {
 });
 
 
-router.get('/:login', function(req, res, next) {
+router.get('/:login', function(req, res) {
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
@@ -164,7 +174,7 @@ router.get('/:login', function(req, res, next) {
     });
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     Renting.find(function (err, rentings) {
         if (err){
             res.status(500).json({success: false, message: 'Get Rentings failed.'});
@@ -176,7 +186,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-function verifyDate(req, res, renting, dateProblem, next) {
+function verifyDate(res, renting, dateProblem, next) {
     Renting.find({"endDate": {"$gt": renting.startDate.getTime()-1, "$lt": renting.endDate.getTime()+1}, "address": renting.address, "login": renting.login}).exec(function(err, rentings){
         if (err) {
             res.status(500).json({success: false, message:'There was a problem with the database while checking if there is already a rent ending at this address and time.'});
@@ -202,7 +212,7 @@ function verifyDate(req, res, renting, dateProblem, next) {
                             if (rentings.length > 0) {
                                 dateProblem+=rentings.length;
                             }
-                            if(dateProblem==0){
+                            if(dateProblem === 0){
                                 next();
                             }
                             else {
@@ -219,7 +229,7 @@ function verifyDate(req, res, renting, dateProblem, next) {
 
 
 function compareDate(renting, oldRenting, same, next) {
-    if(renting.address==oldRenting.address){
+    if(renting.address===oldRenting.address){
         if( ((renting.endDate.getTime()) > (oldRenting.startDate.getTime()-1)) && ((renting.endDate.getTime()) < (oldRenting.endDate.getTime()+1))){
             same=true;
             next()

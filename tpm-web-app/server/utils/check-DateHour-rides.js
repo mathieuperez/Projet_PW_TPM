@@ -1,15 +1,13 @@
-const express = require('express');
 const Ride = require('../schemas/ride');
 const verifyauth = require('../utils/verify-auth');
-const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 let caseone = false;
 let casetwo = false;
 
 module.exports = (req, res, ride, token, rideId, login, next) => {
-     if(ride.rideStartCity==null || ride.rideArrivalCity==null|| ride.rideStart==null || ride.rideArrival==null ||
-      ride.ridePrice==null || ride.rideSeat==null || ride.rideDateStart==null || ride.rideDateArrival==null || 
-      ride.rideStartTime==null || ride.rideArrivalTime==null || ride.rideConveyance==null){
+     if(ride.rideStartCity === undefined || ride.rideArrivalCity === undefined|| ride.rideStart === undefined || ride.rideArrival === undefined ||
+      ride.ridePrice === undefined || ride.rideSeat === undefined || ride.rideDateStart === undefined || ride.rideDateArrival === undefined ||
+      ride.rideStartTime === undefined || ride.rideArrivalTime === undefined || ride.rideConveyance === undefined){
             console.log(ride);
             res.status(422).json({success: false, message: 'Missing Arguments.'});
     }
@@ -26,8 +24,8 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
             }
             else {
                 verifyauth(req, res, login, token, function () {
-                    if (rides.length == 0 || rides.length == 1) {
-                        if (rides.length == 1) {
+                    if (rides.length === 0 || rides.length === 1) {
+                        if (rides.length === 1) {
                             if (rides['0']._id != rideId) {
                                 next();
                             }
@@ -43,7 +41,7 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
                                         );
                                     }
                                     else {
-                                        if (rides.length == 0) {
+                                        if (rides.length === 0) {
                                             next();
                                         }
                                         else {
@@ -83,7 +81,7 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
                                     );
                                 }
                                 else {
-                                    if (rides.length == 0) {
+                                    if (rides.length === 0) {
                                         next();
                                     }
                                     else {
@@ -117,4 +115,4 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
             }
         });
     }
-}
+};

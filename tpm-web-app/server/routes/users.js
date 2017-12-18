@@ -4,18 +4,18 @@ const crypto = require('crypto');
 const User = require('../schemas/user');
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
-var app = express();
+let app = express();
 
 app.set('superSecret', "12345"); // secret variable
 
 router.post('/', (req, res) => {
-    var user = new User();
+    let user = new User();
     user.login = req.body.login;
     user.email = req.body.email;
     user.password = req.body.password;
     user.role = req.body.role;
 
-    if (user.email == null || user.login == null || user.password == null) {
+    if (user.email === undefined || user.login === undefined || user.password === undefined) {
         res.status(422).json({success: false, message:'Missing Arguments.'});
     }
     else {
@@ -24,13 +24,13 @@ router.post('/', (req, res) => {
                 res.status(500).json({success: false, message:'There was a problem with the database while checking if the email already exists.'});
             }
             else{
-                if (users.length == 0) {
+                if (users.length === 0) {
                     User.find().where('login').equals(user.login).exec(function(err, users){
                         if (err) {
                             res.status(500).json({success: false, message:'There was a problem with the database while checking if the login already exists.'});
                         }
                         else {
-                            if (users.length == 0) {
+                            if (users.length === 0) {
                                 user.password = crypto.createHmac('sha256', user.password)
                                                         .update('I love cupcakes')
                                                         .digest('hex');
@@ -39,7 +39,12 @@ router.post('/', (req, res) => {
                                         res.status(401).json({success: false, message: 'Register failed.'});
                                     }
                                     else{
-                                        res.status(200).json({success: true, message:'Register successful'});
+                                        if(user){
+                                            res.status(200).json({success: true, message: 'Register successful'});
+                                        }
+                                        else{
+                                            res.status(500).json({success: true, message: 'Register failed'});
+                                        }
                                     }
                                 });
                             }
@@ -58,12 +63,12 @@ router.post('/', (req, res) => {
 });
 
 router.post('/token', (req, res) => {
-    var user = new User();
+    let user = new User();
     res.setHeader('Content-Type', 'application/json');
     user.login = req.body.login;
     user.password = req.body.password;
 
-    if (user.login == null || user.password == null) {
+    if (user.login === undefined || user.password === undefined) {
         res.status(422).json({success: false, message: 'Missing arguments.'});
     }
     else {
@@ -72,7 +77,7 @@ router.post('/token', (req, res) => {
                     .digest('hex');
         User.findOne( {login: user.login, password: user.password } , (error, users ) => {
             if (users) {
-                var token = jwt.sign(users.toObject(), app.get('superSecret')); //24hours
+                let token = jwt.sign(users.toObject(), app.get('superSecret')); //24hours
                 res.status(200).json({success: true, message: 'Authentication succeeded', user: users, token: token});
             }
             else {

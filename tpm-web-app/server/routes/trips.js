@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../schemas/user');
 const Trip = require('../schemas/trip');
 const verifyauth = require('../utils/verify-auth');
 const checkdates = require('../utils/check-dates-trips');
-const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 router.post('/:login', (req, res) => {
-    var trip = new Trip();
+    let trip = new Trip();
     trip.address = req.body.address;
     trip.city = req.body.city;
     trip.country = req.body.country;
@@ -72,7 +70,7 @@ router.patch('/:login/:id', function (req, res) {
     });
 });
 
-router.delete('/:login/:id', function(req, res, next) {
+router.delete('/:login/:id', function(req, res) {
     let id = req.params.id.toString();
     let login = req.params.login;
     let token = req.headers['access-token'];
@@ -93,7 +91,7 @@ router.delete('/:login/:id', function(req, res, next) {
     });
 });
 
-router.get('/:login', function(req, res, next) {
+router.get('/:login', function(req, res) {
     let login = req.params.login;
     let token = req.headers['access-token'];
     verifyauth(req, res, login, token, function () {
@@ -108,7 +106,7 @@ router.get('/:login', function(req, res, next) {
     });
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     Trip.find(function (err, trips) {
         if (err){
             res.status(500).json({success: false, message: 'Get Trips failed.'});

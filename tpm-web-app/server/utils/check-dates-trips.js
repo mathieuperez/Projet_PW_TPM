@@ -1,15 +1,13 @@
-const express = require('express');
 const Trip = require('../schemas/trip');
 const verifyauth = require('../utils/verify-auth');
-const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 let caseone = false;
 let casetwo = false;
 
 module.exports = (req, res, trip, token, tripId, login, next) => {
     console.log("tripid = " + tripId);
-    if (trip.address == null || trip.city == null || trip.country  == null || trip.price == null || trip.startDate== null
-        || trip.endDate == null || trip.startArea == null || trip.arrivalArea == null || trip.time == null || login == null) {
+    if (trip.address === undefined || trip.city === undefined || trip.country  === undefined || trip.price === undefined || trip.startDate === undefined
+        || trip.endDate === undefined || trip.startArea === undefined || trip.arrivalArea === undefined || trip.time === undefined || login === undefined) {
             res.status(422).json({success: false, message: 'Missing Arguments.'});
     }
     else {
@@ -25,9 +23,9 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
             }
             else {
                 verifyauth(req, res, login, token, function () {
-                    if (trips.length == 0 || trips.length == 1) {
+                    if (trips.length === 0 || trips.length === 1) {
                         console.log("0 ou 1 voyage avec meme date (end)");
-                        if (trips.length == 1) {
+                        if (trips.length === 1) {
                             console.log("1 voyage avec meme date (end)");
                             if (trips['0']._id != tripId) {
                                 console.log("cas 1");
@@ -51,7 +49,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                                     }
                                     else {
                                         console.log("voyages avec meme date (start)");
-                                        if (trips.length == 0) {
+                                        if (trips.length === 0) {
                                             next();
                                         }
                                         else {
@@ -94,7 +92,7 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
                                 }
                                 else {
                                     console.log("0 ou 1 voyage avec meme date (start)");
-                                    if (trips.length == 0) {
+                                    if (trips.length === 0) {
                                         next();
                                     }
                                     else {
@@ -136,4 +134,4 @@ module.exports = (req, res, trip, token, tripId, login, next) => {
             }
         });
     }
-}
+};
