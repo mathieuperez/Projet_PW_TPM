@@ -15,6 +15,7 @@
 **Test** :
 <ul>
 <li>Protractor</li> 
+<li>Mocha</li> 
 </ul>
 
 ## Sprint 1
@@ -45,9 +46,9 @@
 | T10_M | Service REST POST  : Créer un utilisateur| Mathieu | 2 | 1 | :white_check_mark:
 | T11_M | Service REST POST  : Authentification | Zakia | 4 | 2 | :white_check_mark:
 | T12_M | Service REST POST  : Créer un trajet| Zakia | 2 | 4 | :white_check_mark:
-| T13_M | Service REST POST  : Créer une location| Zakia | 2 | 3 | :white_check_mark:
+| T13_M | Service REST POST  : Créer une location| Mathieu | 2 | 3 | :white_check_mark:
 | T14_M | Service REST GET  : Récupérer les trajets| Zakia | 2 | 5 | :white_check_mark:
-| T15_M | Service REST GET  : Récupérer les locations| Zakia | 2 | 5 | :white_check_mark:
+| T15_M | Service REST GET  : Récupérer les locations| Mathieu | 2 | 5 | :white_check_mark:
 | T16_M | Initialiser l'environnement de développement du framework Angular | Kevin | 1/2 | ∅ | :white_check_mark:
 | T17_DOC | La documentation des services "SWAGGER" | Mathieu | 1/2 | ∅ | :white_check_mark:
 | T18_TEST | Effectuer les tests : E2E(Protractor)| Mathieu | 4 | 1 et 2 | :x:
@@ -61,7 +62,3 @@
 ### Les dépendances entre les tâches.
 
 sur le [lien suivant](sprint1/dependances.md).
-
-### L'organisation des tâches : Timeline et Kanban
-
-sur le [lien suivant](sprint1/organisation.md).
