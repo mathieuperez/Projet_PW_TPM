@@ -23,22 +23,22 @@
 
 | ID | User Story | Difficulté | Priorité | Fait |
 | --- | --- | --- | --- | --- |
-| 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(email, password) | 2 | 1 | :white_check_mark:
-| 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(email, pw) | 3 | 1 | :white_check_mark: 
-| 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) | 3 | 2 | :white_check_mark: 
-| 5 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de trajet(tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages) | 3 | 2 | :white_check_mark: 
+| 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(login, email, password, role) | 2 | 1 | :white_check_mark:
+| 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(login, pw) | 3 | 1 | :white_check_mark: 
+| 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, ville, tarif , durée, date de début , surface et description) | 3 | 2 | :white_check_mark: 
+| 5 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de trajet(ville de départ, ville d'arrivée, adresse de départ, adresse d'arrivée, tarif, nombre de places, date et heure du départ, date et heure d'arrivée, type de transport) | 3 | 2 | :white_check_mark: 
 | 6 | En tant que ***Particulier***, je souhaite pouvoir lister mes offres| 1 | 3 | :white_check_mark: 
 
 ### Tâches
 
 | ID_Tache | Description | Affectation | Durée Estimée ( heure homme ) | US Associés | Etat |
 | --- | --- | --- | --- | --- | --- |
-| T1_P | Créer l'interface Front-end de connexion<br><ul><li>Création d'une interface permettant aux utilisateur de remplir les champs e-mail et mot de passe afin de se connecter</li></ul> | Mathieu | 2 | 1 | :white_check_mark:
-| T2_P | Créer l'interface Front-end de l'accueil<br><ul><li>un bouton de connexion</li><li>oblet vers les pages de recherches (locations, trajets, voyages)</li></ul> | Kevin | 2 | 1 | :white_check_mark:
-| T3_P | Créer l'interface Front-end de création d'un compte avec les champs : <br><ul><li>e-mail</li><li>Mot de passe</li><li>rôle(agence/Particulier)</li></ul> | Kevin | 3 | 1 | :white_check_mark:
-| T4_P | Créer l'interface Front-end de la gestion d'un trajet/location pour un particulier connecté<br><ul><li>Création d'une interface permettant aux particuliers de lister tout leurs offres de trajets/location </li></ul> <br><ul><li> Boutton "ajouter trajet"/ "ajouter location" qui permet a un particulier connecté d'ajouter un trajet/location </li></ul> | Kevin | 2 | 1 | :white_check_mark: 
-| T5_P | Créer l'interface Front-end de l'ajout d'un trajet pour un particulier connecté<br><ul><li>tarif par personne</li><li> date et heure du départ</li><li> durée estimée du trajet</li><li>prise de bagages</li></ul> | Kevin | 2 | 1 | :white_check_mark: 
-| T6_P | Créer l'interface Front-end de l'ajout d'une location pour un particulier connecté<br><ul><li>pays</li><li> adresse de location</li><li> tarif</li><li> durée du séjour</li><li>date de début</li><li>options du séjour</li></ul> | Kevin | 2 | 1 | :white_check_mark: 
+| T1_P | Créer l'interface Front-end de connexion<br><ul><li>Création d'une interface permettant aux utilisateur de remplir les champs login et mot de passe afin de se connecter</li></ul> | Mathieu | 2 | 1 | :white_check_mark:
+| T2_P | Créer l'interface Front-end de l'accueil<br><ul><li>un bouton de connexion</li><li>onglets vers les pages de recherches (locations, trajets, voyages)</li></ul> | Kevin | 2 | 1 | :white_check_mark:
+| T3_P | Créer l'interface Front-end de création d'un compte avec les champs : <br><ul><li>login</li><li>e-mail</li><li>Mot de passe</li><li>rôle(agence/Particulier)</li></ul> | Kevin | 3 | 1 | :white_check_mark:
+| T4_P | Créer l'interface Front-end de la gestion d'un trajet/location pour un particulier connecté<br><ul><li>Création d'une interface permettant aux particuliers de lister toutes leurs offres de trajets/location </li></ul> <br><ul><li> Boutton "ajouter trajet"/ "ajouter location" qui permet a un particulier connecté d'ajouter un trajet/location </li></ul> | Kevin | 2 | 1 | :white_check_mark: 
+| T5_P | Créer l'interface Front-end de l'ajout d'un trajet pour un particulier connecté<br><ul><li>ville de départ</li><li>ville d'arrivée</li><li>adresse de départ</li><li>adresse d'arrivée</li><li>tarif</li><li>nombre de places</li><li> date et heure du départ</li><li>date et heure d'arrivée</li><li>type de transport</li></ul> | Kevin | 2 | 1 | :white_check_mark: 
+| T6_P | Créer l'interface Front-end de l'ajout d'une location pour un particulier connecté<br><ul><li>pays</li><li> adresse de location</li><li>ville</li><li>tarif</li><li>durée du séjour</li><li>date de début</li><li>surface</li><li>description</li></ul> | Kevin | 2 | 1 | :white_check_mark: 
 | T7_B | Mise en service et test du serveur MongoDB<br><ul><li>Ajouter monk et s'en servir comme lien avec notre base de donnée MongoDB</li><li>Ouvrir un terminal et lancer la commande "mongod --dbpath bepp-project/api/node_modules/data/"</li></ul>| Tous | 3 | 1 et 2 | :white_check_mark:
 | T9_M | Mettre en place le coté serveur : l'Express et le NodeJS | Kevin | 4 | ∅ | :white_check_mark:
 | T10_PM | Définir les liaisons entre les placeholders et les services | Kevin | 4 | ∅ | :white_check_mark:
