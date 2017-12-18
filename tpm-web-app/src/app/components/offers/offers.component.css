@@ -1,8 +1,16 @@
-.table-responsive thead{
-    background-color: #bebebe;
-    border-color:#bebebe;
-}
-
 .table-responsive {
     max-height: 240px;
+}
+
+.btn-group {
+    width: 100%;
+    padding-block-start: 5%;
+}
+
+.btn-block {
+    margin-block-start: 100%;
+}
+
+.btn-date {
+    width: 50%;
 }

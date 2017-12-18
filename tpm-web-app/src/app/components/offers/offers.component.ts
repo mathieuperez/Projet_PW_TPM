@@ -1,9 +1,10 @@
+import { AppConstants } from './../../app-constants';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppConstants } from '../../app-constants';
 import { HttpClient } from '@angular/common/http';
 
 declare const google: any;
+declare const $: any;
 
 @Component({
   selector: 'app-offers',
@@ -21,20 +22,23 @@ export class OffersComponent implements OnInit {
 
     private pageTitle: string;
 
+    public noResults: boolean;
+
     public tableHead: string[];
     public tableContent: Array<{[x: string]: string}>;
     public tableContentCopy: Array<{[x: string]: string}>;
 
     private tableHeadContent = {
         'tripTable': [
-            'Pays', 'Ville', 'Adresse de location', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller',
-            'Lieu retour', 'Durée', 'Description'
+            'Pays', 'Ville', 'Adresse', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller',
+            'Lieu retour', 'Durée', 'Description', ''
         ],
         'rentingTable' : [
-            'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description'
+            'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description', ''
         ],
         'rideTable' : [
-            'Départ', 'Destination', 'Lieu de départ', 'Lieu de destination', 'Tarif', 'Places restantes', 'Date'
+            'Départ', 'Arrivée', 'Lieu de départ', 'Lieu de destination', 'Début le',
+            'Arrivée le', 'Heure', 'Heure', 'Transport', 'Tarif', 'Places restantes', ''
         ]
     };
 
@@ -48,6 +52,8 @@ export class OffersComponent implements OnInit {
 
         this.tableContentCopy = new Array<{[x: string]: string}>();
         this.tableContent = new Array<{[x: string]: string}>();
+
+        this.noResults = false;
 
         this.mapProperties = {
             center: new google.maps.LatLng(51.508742, -0.120850),
@@ -84,6 +90,13 @@ export class OffersComponent implements OnInit {
         this.markerMap.setMap(map);
     }
 
+    public resetAll(formvalue: any): void {
+        formvalue.reset();
+        this.noResults = false;
+        this.markerMap.setMap(null);
+        this.tableContent = this.tableContentCopy;
+    }
+
     public updateTable(position: any) {
         let city;
         let country;
@@ -109,26 +122,55 @@ export class OffersComponent implements OnInit {
                                 }
                             });
                             this.tableContent = table;
+                            this.noResults = false;
                         }
+                    } else {
+                        this.noResults = true;
                     }
                 } else {
-                    alert('No results found');
+                    this.noResults = true;
                 }
             } else {
-                alert('Geocoder failed due to: ' + status);
+                this.noResults = true;
             }
         });
     }
 
+    public searchByDate(datevalue: any): void {
+        const date = new Date(datevalue);
+        const table = new Array<{[x: string]: string}>();
+        let startDate;
+        let endDate;
+        this.tableContent.forEach(element => {
+            if (this.url === 'ride') {
+                startDate = new Date(element.rideStartDate);
+                endDate = new Date(element.rideArrivalDate);
+            } else if (this.url === 'renting') {
+                startDate = new Date(element.startDate);
+                endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24 * parseInt(element.time, 10)));
+                console.log(endDate);
+            } else {
+                startDate = new Date(element.startDate);
+                endDate = new Date(element.endDate);
+            }
+            if (date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
+                table.push(element);
+            }
+        });
+        this.tableContent = table;
+    }
+
     public getTrips(): void {
         this.httpClient.get('/api/trips/').subscribe((response: any) => {
-            if (response.length > 0) {
-                response.forEach(element => {
-                    element.startDate = new Date(element.startDate);
-                    element.endDate = new Date(element.endDate);
-                });
-                this.tableContent = response;
-                this.tableContentCopy = this.tableContent;
+            if (response.success === true) {
+                if (response.trips.length > 0) {
+                    response.trips.forEach(element => {
+                        element.startDate = new Date(element.startDate);
+                        element.endDate = new Date(element.endDate);
+                    });
+                    this.tableContent = response.trips;
+                    this.tableContentCopy = this.tableContent;
+                }
             }
         },
         (error: any) => {
@@ -138,12 +180,14 @@ export class OffersComponent implements OnInit {
 
     public getRentings(): void {
         this.httpClient.get('/api/rentings/').subscribe((response: any) => {
-            if (response.length > 0) {
-                response.forEach(element => {
-                    element.startDate = new Date(element.startDate);
-                });
-                this.tableContent = response;
-                this.tableContentCopy = this.tableContent;
+            if (response.success === true) {
+                if (response.rentings.length > 0) {
+                    response.rentings.forEach(element => {
+                        element.startDate = new Date(element.startDate);
+                    });
+                    this.tableContent = response.rentings;
+                    this.tableContentCopy = this.tableContent;
+                }
             }
         },
         (error: any) => {
@@ -159,7 +203,6 @@ export class OffersComponent implements OnInit {
                 });
                 this.tableContent = response;
                 this.tableContentCopy = this.tableContent;
-                console.log(this.tableContent);
             }
         },
         (error: any) => {
@@ -189,4 +232,8 @@ export class OffersComponent implements OnInit {
         }
     }
 
+    public canBook(): boolean {
+        return ((localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME) !== 'access_cookie')
+                && (localStorage.getItem(AppConstants.ROLE_USER) === 'Utilisateur'));
+    }
 }

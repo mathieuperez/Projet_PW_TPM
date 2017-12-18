@@ -309,7 +309,7 @@ export class MyOffersIndividualComponent implements OnInit {
             ).subscribe( (response: any) => {
                 if (response['success'] === true) {
                     alert('Votre offre de location a bien été supprimée.');
-                    this.getRideList();
+                    this.getRentingList();
                 } else {
                     alert('Une erreur est survenue lors de la modification de votre offre de location.');
                 }
@@ -346,11 +346,11 @@ export class MyOffersIndividualComponent implements OnInit {
                   'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
             )}
         ).subscribe((response: any) => {
-            if (response.length > 0) {
+            if (response.length > 0 && response.success === true) {
                 response.forEach(element => {
                     element.startDate = new Date(element.startDate);
                 });
-                this.tableContent.rentingTable = response;
+                this.tableContent.rentingTable = response.rentings;
                 this.areThereRentings = true;
             }
         },
@@ -383,14 +383,11 @@ export class MyOffersIndividualComponent implements OnInit {
     public onSelectRenting(selectedItem: any, index: number) {
         this.selectedRowRentings = selectedItem;
         this.selectedRowRentingsIndex = index;
-
-        console.log(index);
     }
 
     public onSelectRide(selectedItem: any, index: number) {
         this.selectedRowRides = selectedItem;
         this.selectedRowRidesIndex = index;
-        console.log(index);
     }
 
     /**
