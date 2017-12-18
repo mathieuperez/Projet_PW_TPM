@@ -280,6 +280,193 @@
         }
       }
     },
+    "/api/rides/{login}" : {
+      "post" : {
+        "tags" : [ "ride" ],
+        "summary" : "Create ride",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "createRide",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Created user object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Ride"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Creating Ride successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is already a ride with this address and date"
+          },
+          "422" : {
+            "description" : "Missing Arguments"
+          },
+          "500" : {
+            "description" : "Creating Ride failed / There was a problem with the database while checking if there is already a ride at this address and time"
+          }
+        }
+      }
+    },
+    "/api/rides/{login}/{id}" : {
+      "patch" : {
+        "tags" : [ "ride" ],
+        "summary" : "Modify ride",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "modifyRide",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the ride to modify.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Modified ride",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Ride"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updating Ride successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is already a ride with this address and date"
+          },
+          "422" : {
+            "description" : "Missing Arguments"
+          },
+          "500" : {
+            "description" : "There was a problem with the database while checking if there is already a ride at this address and time / Updating Ride failed"
+          }
+        }
+      }
+    },
+    "/api/rides/" : {
+      "get" : {
+        "tags" : [ "ride" ],
+        "summary" : "Get all rides of a user",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "getRides",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Get Rides successful"
+          },
+          "500" : {
+            "description" : "Get rides failed"
+          }
+        }
+      }
+    },
+    "/api/rides/{login}/" : {
+      "get" : {
+        "tags" : [ "ride" ],
+        "summary" : "Get rides by user login",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "getRidesByLogin",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The name that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token / Get rides failed"
+          },
+          "500" : {
+            "description" : "Get rides failed"
+          }
+        }
+      }
+    },
+    "/api/rides/{login}/{id} " : {
+      "delete" : {
+        "tags" : [ "ride" ],
+        "summary" : "Delete ride",
+        "description" : "This can only be done by a user who's signed in.",
+        "operationId" : "deleteRide",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "login",
+          "in" : "path",
+          "description" : "The login of the signed in user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the ride to modify.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "header",
+          "description" : "The token that needs to be checked",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deleting Ride successful"
+          },
+          "401" : {
+            "description" : "No token provided / Failed to authenticate token"
+          },
+          "409" : {
+            "description" : "There is no ride with this address and date"
+          },
+          "500" : {
+            "description" : "Deleting Ride failed"
+          }
+        }
+      }
+    },
     "/api/trips/{login}" : {
       "post" : {
         "tags" : [ "trip" ],
@@ -575,6 +762,19 @@
         "login" : {
           "type" : "string"
         }
+      },
+      "example" : {
+        "startCity" : "startCity",
+        "seat" : "seat",
+        "date" : "date",
+        "conveyance" : "conveyance",
+        "arrival" : "arrival",
+        "price" : 0.80082819046101150206595775671303272247314453125,
+        "arrivalTime" : "arrivalTime",
+        "start" : "start",
+        "startTime" : "startTime",
+        "arrivalCity" : "arrivalCity",
+        "login" : "login"
       }
     },
     "Trip" : {
