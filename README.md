@@ -8,7 +8,7 @@
 * Mathieu Perez
 
 ## Rôles
-* **Utilisateur** : Personne utilisant l'application.
+* **Utilisateur** : Personne utilisant l'application. 
 * **Particulier** : Utilisateur connecté qui propose des offres de location et/ou de trajet.
 * **Agence** : Utilisateur connecté qui propose des offres de voyage(location+trajet).
 
