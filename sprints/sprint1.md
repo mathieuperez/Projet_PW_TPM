@@ -46,17 +46,18 @@
 | T12_M | Service REST POST  : Authentification | Zakia | 4 | 2 | :white_check_mark:
 | T13_M | Service REST POST  : Créer un trajet| Zakia | 2 | 4 | :white_check_mark:
 | T14_M | Service REST POST  : Créer une location| Zakia | 2 | 3 | :white_check_mark:
-| T15_M | Service REST GET  : Récupérer les trajets et les locations| Zakia | 4 | 5 | :white_check_mark:
-| T16_M | Initialiser l'environnement de développement du framework Angular | Kevin | 1/2 | ∅ | :white_check_mark:
-| T17_DOC | La documentation des services "SWAGGER" | Mathieu | 1/2 | ∅ | :white_check_mark:
-| T18_TEST | Redaction des tests : E2E(Protractor)| Mathieu | 1 | 1 et 2 | :x:
-| T19_TEST | Effectuer les tests : E2E(Protractor)| Mathieu | 4 | 1 et 2 | :x:
-| T20_PM | Faire le lien entre l'interface de la tâche T1_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T21_PM | Faire le lien entre l'interface de la tâche T2_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
-| T22_PM | Faire le lien entre l'interface de la tâche T3_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T23_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
-| T24_PM | Faire le lien entre l'interface de la tâche T5_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T25_PM | Faire le lien entre l'interface de la tâche T6_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T15_M | Service REST GET  : Récupérer les trajets| Zakia | 2 | 5 | :white_check_mark:
+| T16_M | Service REST GET  : Récupérer les locations| Zakia | 2 | 5 | :white_check_mark:
+| T17_M | Initialiser l'environnement de développement du framework Angular | Kevin | 1/2 | ∅ | :white_check_mark:
+| T18_DOC | La documentation des services "SWAGGER" | Mathieu | 1/2 | ∅ | :white_check_mark:
+| T19_TEST | Redaction des tests : E2E(Protractor)| Mathieu | 1 | 1 et 2 | :x:
+| T20_TEST | Effectuer les tests : E2E(Protractor)| Mathieu | 4 | 1 et 2 | :x:
+| T21_PM | Faire le lien entre l'interface de la tâche T1_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T22_PM | Faire le lien entre l'interface de la tâche T2_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T23_PM | Faire le lien entre l'interface de la tâche T3_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T24_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T25_PM | Faire le lien entre l'interface de la tâche T5_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T26_PM | Faire le lien entre l'interface de la tâche T6_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
 
 
 ### Les tests E2E
