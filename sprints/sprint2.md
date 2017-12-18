@@ -61,7 +61,7 @@
 | T24_M | Service REST DELETE  : Supprimer un voyage| Zakia | 1 | 7 | :white_check_mark:
 | T25_DOC | La documentation des services "SWAGGER" | Mathieu | 2 | ∅ | :white_check_mark:
 | T26_TEST | Faire les tests : E2E(Protractor)| Zakia | 4 | Toutes(1-10) | :x:
-| T27_TEST | Faire les tests : TU (Mocha)| Mathieu | 5 | 1, 2, 4, 6, 7 | :xwhite_check_mark
+| T27_TEST | Faire les tests : TU (Mocha)| Mathieu | 5 | 1, 2, 4, 6, 7 | :white_check_mark:
 | T28_TEST | Faire les tests : TU (Mocha)| Zakia | 3 | 5, 6, 7 | :white_check_mark:
 | T29_TEST | Faire les tests : TU (Mocha)| Kevin | 3 | 8, 9, 10 | :white_check_mark:
 | T30_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
