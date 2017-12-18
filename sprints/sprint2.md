@@ -15,6 +15,7 @@
 **Test** :
 <ul>
 <li>Protractor</li> 
+<li>Mocha</li> 
 </ul>
 
 ## Sprint 2
@@ -59,20 +60,17 @@
 | T23_M | Service REST GET  : Récupérer les voyages| Zakia | 1 | 5 | :white_check_mark:
 | T24_M | Service REST DELETE  : Supprimer un voyage| Zakia | 1 | 7 | :white_check_mark:
 | T25_DOC | La documentation des services "SWAGGER" | Mathieu | 2 | ∅ | :white_check_mark:
-| T26_TEST | Redaction des tests : E2E(Protractor)| Mathieu | 1 | 1 et 2 | :x:
-| T27_TEST | Effectuer les tests : E2E(Protractor)| Mathieu | 4 | 1 et 2 | :x:
-| T28_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T29_PM | Faire le lien entre l'interface de la tâche T5_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
-| T30_PM | Faire le lien entre l'interface de la tâche T6_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T31_PM | Faire le lien entre l'interface de la tâche T7_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
-| T32_PM | Faire le lien entre l'interface de la tâche T8_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-| T33_PM | Faire le lien entre l'interface de la tâche T9_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
-| T34_PM | Faire le lien entre l'interface de la tâche T10_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
-
-
-### Les tests E2E
-
-sur le [lien suivant](sprint2/tests.md).
+| T26_TEST | Faire les tests : E2E(Protractor)| Zakia | 4 | Toutes(1-10) | :x:
+| T27_TEST | Faire les tests : TU (Mocha)| Mathieu | 5 | 1, 2, 4, 6, 7 | :xwhite_check_mark
+| T28_TEST | Faire les tests : TU (Mocha)| Zakia | 3 | 5, 6, 7 | :white_check_mark:
+| T29_TEST | Faire les tests : TU (Mocha)| Kevin | 3 | 8, 9, 10 | :white_check_mark:
+| T30_PM | Faire le lien entre l'interface de la tâche T4_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T31_PM | Faire le lien entre l'interface de la tâche T5_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T32_PM | Faire le lien entre l'interface de la tâche T6_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T33_PM | Faire le lien entre l'interface de la tâche T7_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T34_PM | Faire le lien entre l'interface de la tâche T8_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
+| T35_PM | Faire le lien entre l'interface de la tâche T9_P et les services de l'api | Tous | 1 | 1 | :white_check_mark:
+| T36_PM | Faire le lien entre l'interface de la tâche T10_P et les services de l'api | Tous | 1 | 2 | :white_check_mark:
 
 ### Les dépendances entre les tâches.
 
