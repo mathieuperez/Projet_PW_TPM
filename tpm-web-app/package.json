@@ -10,7 +10,7 @@
     "test": "./node_modules/.bin/mocha",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "cd tpm-web-app/ && ng build--aot -prod"
+    "postinstall": "ng build--aot -prod"
   },
   "engines": {
       "node": "~8.9.0",
