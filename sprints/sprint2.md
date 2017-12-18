@@ -75,7 +75,3 @@
 ### Les dépendances entre les tâches.
 
 sur le [lien suivant](sprint2/dependance.md).
-
-### L'organisation des tâches : Timeline et Kanban
-
-sur le [lien suivant](sprint2/organisation.md).
