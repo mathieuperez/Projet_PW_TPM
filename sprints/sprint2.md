@@ -55,10 +55,10 @@
 | T18_M | Service REST DELETE  : Supprimer un voyage| Kevin | 1 | 10 | :white_check_mark:
 | T19_M | Service REST Patch  : Modifier une location| Mathieu | 5 | 7 | :white_check_mark:
 | T20_M | Service REST GET  : Récupérer les locations| Mathieu | 1 | 5 | :white_check_mark:
-| T21_M | Service REST DELETE  : Supprimer un voyage| Mathieu | 1 | 7 | :white_check_mark:
-| T22_M | Service REST Patch  : Modifier un voyage| Zakia | 5 | 7 | :white_check_mark:
-| T23_M | Service REST GET  : Récupérer les voyages| Zakia | 1 | 5 | :white_check_mark:
-| T24_M | Service REST DELETE  : Supprimer un voyage| Zakia | 1 | 7 | :white_check_mark:
+| T21_M | Service REST DELETE  : Supprimer une location| Mathieu | 1 | 7 | :white_check_mark:
+| T22_M | Service REST Patch  : Modifier un trajet| Zakia | 5 | 7 | :white_check_mark:
+| T23_M | Service REST GET  : Récupérer les trajets| Zakia | 1 | 5 | :white_check_mark:
+| T24_M | Service REST DELETE  : Supprimer un trajet| Zakia | 1 | 7 | :white_check_mark:
 | T25_DOC | La documentation des services "SWAGGER" | Mathieu | 2 | ∅ | :white_check_mark:
 | T26_TEST | Faire les tests : E2E(Protractor)| Zakia | 4 | Toutes(1-10) | :x:
 | T27_TEST | Faire les tests : TU (Mocha)| Mathieu | 5 | 1, 2, 4, 6, 7 | :white_check_mark:
