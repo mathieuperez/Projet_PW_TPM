@@ -25,9 +25,9 @@
 | --- | --- | --- | --- | --- |
 | 1 | En tant que ***Utilisateur***, je souhaite pouvoir m'inscrire sur l'application(email, password) | 2 | 1 | :white_check_mark:
 | 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(email, pw) | 3 | 1 | :white_check_mark: 
-| 3 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) | 3 | 2 | :white_check_mark: 
-| 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de trajet(tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages) | 3 | 2 | :white_check_mark: 
-| 5 | En tant que ***Particulier***, je souhaite pouvoir lister mes offres| 1 | 3 | :white_check_mark: 
+| 4 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de locations(pays, adresse de location, tarif , durée, date de début et options du séjour) | 3 | 2 | :white_check_mark: 
+| 5 | En tant que ***Particulier***, je souhaite pouvoir créer une offre de trajet(tarif par personne, date et heure du départ, durée estimée du trajet, prise de bagages) | 3 | 2 | :white_check_mark: 
+| 6 | En tant que ***Particulier***, je souhaite pouvoir lister mes offres| 1 | 3 | :white_check_mark: 
 
 ### Tâches
 
