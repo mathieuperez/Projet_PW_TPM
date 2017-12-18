@@ -24,7 +24,6 @@
 
 | ID | User Story | Difficulté | Priorité | Fait |
 | --- | --- | --- | --- | --- |
-| 2 | En tant que ***Utilisateur***, je souhaite pouvoir me connecter/déconnecter(login, pw) | 3 | 1 | :white_check_mark: 
 | 3 | En tant que ***Utilisateur***, je souhaite pouvoir rechercher des offres: Trajet/Location/Voyage (à partir d'une zone géographique, d'une date deb/fin) | 8 | 2 | :white_check_mark:
 | 7 | En tant que ***Particulier***, je souhaite pouvoir modifier/supprimer une de mes offres depuis la liste | 5 | 3 | :white_check_mark: 
 | 8 | En tant qu'***Agence***, je souhaite pouvoir créer une offre de Voyage(pays, ville, adresse de location, tarif, date de l'aller, date du retour, lieu de départ, lieu d'arrivée, durée du voyage, description) | 3 | 2 | :white_check_mark: 
