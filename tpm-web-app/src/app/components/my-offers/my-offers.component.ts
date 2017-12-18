@@ -17,16 +17,16 @@ export class MyOffersComponent implements OnInit {
 
     private tripTableContent;
 
-    private areThereTrips: boolean;
+    public areThereTrips: boolean;
 
     private isModifyingTrip: boolean;
 
-    private tripForm: FormGroup;
-    private tripSubmitted: boolean;
+    public tripForm: FormGroup;
+    public tripSubmitted: boolean;
     private tripError: boolean;
-    private tripLoading: boolean;
+    public tripLoading: boolean;
 
-    private tripModalTitle: string;
+    public tripModalTitle: string;
 
     @ViewChild('tripModal')
     private tripModal: ElementRef;

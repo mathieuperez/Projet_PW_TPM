@@ -20,7 +20,7 @@ export class OffersComponent implements OnInit {
 
     public url: string;
 
-    private pageTitle: string;
+    public pageTitle: string;
 
     public noResults: boolean;
 
