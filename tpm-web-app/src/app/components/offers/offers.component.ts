@@ -30,11 +30,11 @@ export class OffersComponent implements OnInit {
 
     private tableHeadContent = {
         'tripTable': [
-            'Pays', 'Ville', 'Adresse', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller',
+            'Adresse', 'Ville', 'Pays', 'Tarif', 'Date aller', 'Date retour', 'Lieu aller',
             'Lieu retour', 'Durée', 'Description', ''
         ],
         'rentingTable' : [
-            'Pays', 'Ville', 'Adresse', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description', ''
+            'Adresse', 'Ville', 'Pays', 'Tarif', 'Date début', 'Durée', 'Surface', 'Description', ''
         ],
         'rideTable' : [
             'Départ', 'Arrivée', 'Lieu de départ', 'Lieu de destination', 'Début le',
@@ -117,6 +117,7 @@ export class OffersComponent implements OnInit {
                     if (city && country) {
                         if (this.tableContentCopy) {
                             this.tableContentCopy.forEach(element => {
+                                console.log(element.country + element.city);
                                 if (element.country === country.long_name && element.city === city.long_name) {
                                     table.push(element);
                                 }
@@ -148,7 +149,6 @@ export class OffersComponent implements OnInit {
             } else if (this.url === 'renting') {
                 startDate = new Date(element.startDate);
                 endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24 * parseInt(element.time, 10)));
-                console.log(endDate);
             } else {
                 startDate = new Date(element.startDate);
                 endDate = new Date(element.endDate);
@@ -167,6 +167,8 @@ export class OffersComponent implements OnInit {
                     response.trips.forEach(element => {
                         element.startDate = new Date(element.startDate);
                         element.endDate = new Date(element.endDate);
+                        element.country = element.country.charAt(0).toUpperCase() + element.country.slice(1);
+                        element.city = element.city.charAt(0).toUpperCase() + element.city.slice(1);
                     });
                     this.tableContent = response.trips;
                     this.tableContentCopy = this.tableContent;
@@ -184,6 +186,8 @@ export class OffersComponent implements OnInit {
                 if (response.rentings.length > 0) {
                     response.rentings.forEach(element => {
                         element.startDate = new Date(element.startDate);
+                        element.country = element.country.charAt(0).toUpperCase() + element.country.slice(1);
+                        element.city = element.city.charAt(0).toUpperCase() + element.city.slice(1);
                     });
                     this.tableContent = response.rentings;
                     this.tableContentCopy = this.tableContent;
@@ -197,12 +201,15 @@ export class OffersComponent implements OnInit {
 
     public getRides(): void {
         this.httpClient.get('/api/rides/').subscribe((response: any) => {
-            if (response.length > 0) {
-                response.forEach(element => {
-                    element.rideDate = new Date(element.rideDate);
-                });
-                this.tableContent = response;
-                this.tableContentCopy = this.tableContent;
+            if (response.success === true) {
+                if (response.rides.length > 0) {
+                    response.rides.forEach(element => {
+                        element.rideStartDate = new Date(element.rideStartDate);
+                        element.rideArrivalDate = new Date(element.rideArrivalDate);
+                    });
+                    this.tableContent = response.rides;
+                    this.tableContentCopy = this.tableContent;
+                }
             }
         },
         (error: any) => {

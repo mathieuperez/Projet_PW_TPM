@@ -1,0 +1,106 @@
+<div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <h2>Mes réservations</h2>
+        <hr>
+    </div>
+    <div class="col-md-12">
+        <h5>Voyages</h5>
+    </div>
+    <div class="col-md-12" *ngIf="tripTableContent.length === 0">
+        <p class="lead">
+            Vous n'avez effectué aucune réservation de voyages.
+        </p>
+    </div>
+    <ng-container *ngIf="tripTableContent.length > 0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th *ngFor="let obj of tableHead.tripTable">{{ obj }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rowContent of tripTableContent">
+                        <td>{{rowContent.address}}</td>
+                        <td>{{rowContent.city}}</td>
+                        <td>{{rowContent.country}}</td>
+                        <td>{{rowContent.price}}</td>
+                        <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.endDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.startArea}}</td>
+                        <td>{{rowContent.arrivalArea}}</td>
+                        <td><button type="button" class="btn btn-danger">-</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <hr>
+        <h5>Trajets</h5>
+    </div>
+    <div class="col-md-12" *ngIf="rideTableContent.length === 0">
+        <p class="lead">
+            Vous n'avez effectué aucune réservation de trajets.
+        </p>
+    </div>
+    <ng-container *ngIf="rideTableContent.length > 0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th *ngFor="let obj of tableHead.rideTable">{{ obj }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rowContent of rideTableContent">
+                        <td>{{rowContent.rideStartCity}}</td>
+                        <td>{{rowContent.rideArrivalCity}}</td>
+                        <td>{{rowContent.rideStartDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.rideArrivalDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.rideStartTime}}</td>
+                        <td>{{rowContent.rideArrivalTime}}</td>
+                        <td>{{rowContent.rideConveyance}}</td>
+                        <td>{{rowContent.ridePrice}}</td>
+                        <td><button type="button" class="btn btn-danger">-</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+    <div class="col-md-3"></div>
+    <div class="col-md-12">
+        <hr>
+        <h5>Locations</h5>
+    </div>
+    <div class="col-md-12" *ngIf="rentingTableContent.length === 0">
+        <p class="lead">
+            Vous n'avez effectué aucune réservation de locations.
+        </p>
+    </div>
+    <ng-container *ngIf="rentingTableContent.length > 0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th *ngFor="let obj of tableHead.rentingTable">{{ obj }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rowContent of rentingTableContent">
+                        <td>{{rowContent.country}}</td>
+                        <td>{{rowContent.city}}</td>
+                        <td>{{rowContent.address}}</td>
+                        <td>{{rowContent.price}}</td>
+                        <td>{{rowContent.startDate.toLocaleDateString()}}</td>
+                        <td>{{rowContent.time}}</td>
+                        <td>{{rowContent.surface}}</td>
+                        <td><button type="button" class="btn btn-danger">-</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+</div>

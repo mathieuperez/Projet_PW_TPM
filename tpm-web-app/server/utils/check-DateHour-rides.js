@@ -8,13 +8,11 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
      if(ride.rideStartCity === undefined || ride.rideArrivalCity === undefined|| ride.rideStart === undefined || ride.rideArrival === undefined ||
       ride.ridePrice === undefined || ride.rideSeat === undefined || ride.rideDateStart === undefined || ride.rideDateArrival === undefined ||
       ride.rideStartTime === undefined || ride.rideArrivalTime === undefined || ride.rideConveyance === undefined){
-            console.log(ride);
             res.status(422).json({success: false, message: 'Missing Arguments.'});
     }
     else {
         Ride.find({"rideDateArrival": {"$gte": ride.rideDateStart, "$lt": ride.rideDateArrival}}).exec(function(err, rides){
             if (err) {
-                console.log("<<<<<<<<<<<<<");
                 res.status(500).json(
                     {
                         success: false,
@@ -32,7 +30,6 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
                             else {
                                 Ride.find({"rideDateStart": {"$gte": ride.rideDateStart,"$lt": ride.rideDateArrival}}).exec(function (err, rides) {
                                     if (err) {
-                console.log("<<<<<<<<<<<<<22222");
                                         res.status(500).json(
                                             {
                                                 success: false,
@@ -71,8 +68,6 @@ module.exports = (req, res, ride, token, rideId, login, next) => {
                         } else {
                             Ride.find({"rideDateStart": {"$gte": ride.rideDateStart,"$lt": ride.rideDateArrival}}).exec(function (err, rides) {
                                 if (err) {
-
-                console.log("<<<<<<<<<<<<<3333333");
                                     res.status(500).json(
                                         {
                                             success: false,

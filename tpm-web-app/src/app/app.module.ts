@@ -1,3 +1,6 @@
+import { UnauthGuard } from './guards/unauth-guard.guard';
+import { AuthAgencyGuard } from './guards/auth-agency-guard.guard';
+import { AuthUserGuard } from './guards/auth-user-guard.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -15,6 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OffersComponent } from './components/offers/offers.component';
 import { MyOffersComponent } from './components/my-offers/my-offers.component';
 import { MyOffersIndividualComponent } from './components/my-offers-individual/my-offers-individual.component';
+import { BookingComponent } from './components/booking/booking.component';
+import { AuthIndividualGuard } from './guards/auth-individual-guard.guard';
 
 
 @NgModule({
@@ -24,7 +29,8 @@ import { MyOffersIndividualComponent } from './components/my-offers-individual/m
     LoginComponent,
     OffersComponent,
     MyOffersComponent,
-    MyOffersIndividualComponent
+    MyOffersIndividualComponent,
+    BookingComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +39,12 @@ import { MyOffersIndividualComponent } from './components/my-offers-individual/m
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule
+  ],
+  providers: [
+    AuthUserGuard,
+    AuthIndividualGuard,
+    AuthAgencyGuard,
+    UnauthGuard
   ],
   bootstrap: [AppComponent]
 })

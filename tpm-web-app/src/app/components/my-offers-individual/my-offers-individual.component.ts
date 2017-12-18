@@ -20,7 +20,7 @@ export class MyOffersIndividualComponent implements OnInit {
         ],
         'rideTable' : [
             'Ville de départ', 'Ville de destination', 'Lieu de départ', 'Lieu de destination', 'Date de départ',
-            'Date d\'arrivée, Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes'
+            'Date d\'arrivée', 'Heure de départ', 'Heure d\'arrivée', 'Transport', 'Tarif', 'Places restantes'
         ]
     };
 
@@ -200,8 +200,8 @@ export class MyOffersIndividualComponent implements OnInit {
                         this.rentingLoading = false;
                         alert('Votre offre de location a bien été ajoutée.');
                         this.rentingForm.reset();
-                        this.getRentingList();
                         $(this.rentingModal.nativeElement).modal('hide');
+                        this.getRentingList();
                     } else {
                         alert('Une erreur est survenue lors de la création de votre offre de location.');
                     }
@@ -233,8 +233,8 @@ export class MyOffersIndividualComponent implements OnInit {
                         this.rideLoading = false;
                         alert('Votre offre de trajet a bien été ajoutée.');
                         this.rideForm.reset();
-                        this.getRideList();
                         $(this.rideModal.nativeElement).modal('hide');
+                        this.getRideList();
                     } else {
                         alert('Une erreur est survenue lors de la création de votre offre de trajet.');
                     }
@@ -299,8 +299,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
     public deleteRenting(): void {
         if (this.selectedRowRentings) {
-            this.httpClient.delete(`/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                    ${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`, {
+            this.httpClient.delete(
+    `/api/rentings/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rentingTable[this.selectedRowRentingsIndex]._id}`, {
                                         headers: new HttpHeaders(
                                             { 'Content-Type': 'application/json',
                                               'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
@@ -320,8 +320,8 @@ export class MyOffersIndividualComponent implements OnInit {
 
     public deleteRide(): void {
         if (this.selectedRowRides) {
-            this.httpClient.delete(`/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/
-                                ${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`, {
+            this.httpClient.delete(
+            `/api/rides/${localStorage.getItem(AppConstants.LOGIN_USER)}/${this.tableContent.rideTable[this.selectedRowRidesIndex]._id}`, {
                                     headers: new HttpHeaders(
                                         { 'Content-Type': 'application/json',
                                           'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
@@ -346,12 +346,14 @@ export class MyOffersIndividualComponent implements OnInit {
                   'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
             )}
         ).subscribe((response: any) => {
-            if (response.length > 0 && response.success === true) {
-                response.forEach(element => {
-                    element.startDate = new Date(element.startDate);
-                });
-                this.tableContent.rentingTable = response.rentings;
-                this.areThereRentings = true;
+            if (response.success === true) {
+                if (response.rentings.length > 0) {
+                    response.rentings.forEach(element => {
+                        element.startDate = new Date(element.startDate);
+                    });
+                    this.tableContent.rentingTable = response.rentings;
+                    this.areThereRentings = true;
+                }
             }
         },
         (error: any) => {
@@ -366,13 +368,15 @@ export class MyOffersIndividualComponent implements OnInit {
                   'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
             )}
         ).subscribe((response: any) => {
-            if (response.length > 0) {
-                response.forEach(element => {
-                    element.rideStartDate = new Date(element.rideStartDate);
-                    element.rideArrivalDate = new Date(element.rideArrivalDate);
-                });
-                this.tableContent.rideTable = response;
-                this.areThereRides = true;
+            if (response.success === true) {
+                if (response.rides.length > 0) {
+                    response.rides.forEach(element => {
+                        element.rideStartDate = new Date(element.rideStartDate);
+                        element.rideArrivalDate = new Date(element.rideArrivalDate);
+                    });
+                    this.tableContent.rideTable = response.rides;
+                    this.areThereRides = true;
+                }
             }
         },
         (error: any) => {

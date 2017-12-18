@@ -14,6 +14,9 @@
           <div *ngIf="(getUserRole() === 'role_user') || (getUserRole() === 'Utilisateur')">
               <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/offers/renting" >Nos locations</a></li>
           </div>
+          <div *ngIf="isLoggedIn() && (getUserRole() === 'Utilisateur')">
+              <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/booking" >Mes réservations</a></li>
+          </div>
           <div *ngIf="(getUserRole() === 'Agence')">
               <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/my-offers-agency" >Mes offres</a></li>
           </div>
@@ -37,4 +40,29 @@
         </ul>
     </div>
 </nav>
+
+<ng-container *ngIf="isHomePage">
+    <div class="card text-center mx-auto" style="margin-top:60px;">
+        <div class="card-header">
+        Accueil
+        </div>
+        <div class="card mb-3">
+            <img class="card-img-top" src='assets/images/banniere-voyage.png' alt="Card image cap">
+        </div>
+        <div class="card-body">
+            <h4 class="card-title">{{ pageTitle }}</h4>
+            <p class="card-text" [innerHtml]="pageText"></p>
+            <ng-container *ngIf="isLoggedIn()">
+                <ng-container *ngIf="getUserRole() === 'Utilisateur'">
+                    <a routerLink="/offers/trip" class="btn btn-primary">Voyages</a>
+                    <a routerLink="/offers/ride" class="btn btn-primary">Trajets</a>
+                    <a routerLink="/offers/renting" class="btn btn-primary">Locations</a>
+                </ng-container>
+                <a *ngIf="getUserRole() === 'Particulier'" routerLink="/my-offers-individual" class="btn btn-primary">Mes offres</a>
+                <a *ngIf="getUserRole() === 'Agence'" routerLink="/my-offers-agency" class="btn btn-primary">Mes offres</a>
+            </ng-container>
+            <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn btn-primary">Se connecter</a>
+        </div>
+    </div>
+</ng-container>
 <router-outlet></router-outlet>

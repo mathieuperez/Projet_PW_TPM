@@ -189,13 +189,15 @@ export class MyOffersComponent implements OnInit {
                   'access-token':  localStorage.getItem(AppConstants.ACCESS_COOKIE_NAME)}
             )}
         ).subscribe((response: any) => {
-            if (response.length > 0) {
-                response.forEach(element => {
-                    element.startDate = new Date(element.startDate);
-                    element.endDate = new Date(element.endDate);
-                });
-                this.tripTableContent = response;
-                this.areThereTrips = true;
+            if (response.success === true) {
+                if (response.trips.length > 0) {
+                    response.trips.forEach(element => {
+                        element.startDate = new Date(element.startDate);
+                        element.endDate = new Date(element.endDate);
+                    });
+                    this.tripTableContent = response.trips;
+                    this.areThereTrips = true;
+                }
             }
         },
         (error: any) => {

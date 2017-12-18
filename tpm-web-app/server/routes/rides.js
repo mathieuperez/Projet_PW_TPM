@@ -105,15 +105,12 @@ router.patch('/:login/:id', (req, res) => {
                     oldRide.rideStartTime = rides.rideStartTime;
                     oldRide.rideArrivalTime = rides.rideArrivalTime;
 
-                    console.log("start/"+oldRide.rideStartDate+"/arrival/"+oldRide.rideArrivalDate);
-
                     let dateProblem=0;
                     verifyDate(res, ride, dateProblem, function(){
                         if (err) {
                             res.status(500).json({success: false, message: 'There was a problem with the database while checking if there is already a ride with this address and starting date.'});
                         }
                         else {
-                            console.log("JE SUIS ICIIIII"+dateProblem);
                             if (dateProblem === 0){
                                 Ride.findOneAndUpdate( {"_id": req.params.id}, {$set: {"rideStartCity": ride.rideStartCity, "rideArrivalCity": ride.rideArrivalCity, "rideStart": ride.rideStart, "rideArrival": ride.rideArrival,
                                     "ridePrice": ride.ridePrice, "rideSeat": ride.rideSeat, "rideStartDate": ride.rideStartDate, "rideArrivalDate": ride.rideArrivalDate, "rideStartTime": ride.rideStartTime,

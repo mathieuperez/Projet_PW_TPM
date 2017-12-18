@@ -71,9 +71,9 @@
                         <td *ngIf="canBook()"><button type="button" class="btn btn-success">@</button></td>
                     </ng-container>
                     <ng-container *ngIf="url === 'renting'">
-                        <td>{{rowContent.country}}</td>
-                        <td>{{rowContent.city}}</td>
                         <td>{{rowContent.address}}</td>
+                        <td>{{rowContent.city}}</td>
+                        <td>{{rowContent.country}}</td>
                         <td>{{rowContent.price}}</td>
                         <td>{{rowContent.startDate.toLocaleDateString()}}</td>
                         <td>{{rowContent.time}}</td>
